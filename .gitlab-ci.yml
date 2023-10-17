@@ -21,6 +21,7 @@ test:
 
   script:
     - pytest --cov=laia tests
+
   parallel:
     matrix:
       - IMAGE:
