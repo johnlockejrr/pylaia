@@ -41,10 +41,4 @@ Build the documentation using `mkdocs serve -v`. You can then write in [Markdown
 
 ### Linter
 
-This documentation is subject to linting using:
-
-- `doc8`, the linting rules applied can be found on [its documentation][1],
-- `mdformat`, the formatting rules applied can be found on [its documentation][2].
-
-[1]: https://doc8.readthedocs.io/en/latest/readme.html#usage
-[2]: https://mdformat.readthedocs.io/en/stable/users/style.html
+This documentation is subject to linting using `doc8`, the linting rules applied can be found on [its documentation](https://doc8.readthedocs.io/en/latest/readme.html#usage).
