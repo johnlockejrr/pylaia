@@ -14,4 +14,4 @@ Once the dataset is formatted and `pylaia` is installed and in your environment,
 : To predict using a trained PyLaia model. Under construction.
 
 `pylaia-htr-netout`
-: To predict an image using a trained DAN model. Under construction.
+: To dump features from a PyLaia model. Under construction.
