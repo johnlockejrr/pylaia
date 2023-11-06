@@ -1,10 +1,34 @@
 # Dataset formatting
 
-To train PyLaia, you need line images and their corresponding transcription. The dataset should be split into three sets: training, validation, and test sets.
+To train PyLaia, you need line images and their corresponding transcriptions. The dataset should be divided into three sets: training, validation and test sets.
+
+The dataset should be formatted as follows:
+```
+# Images
+├── images
+    ├── train/
+    ├── val/
+    └── test/
+# Tokenized transcriptions
+├── train.txt
+├── val.txt
+├── test.txt
+# Image ids
+├── train_ids.txt
+├── val_ids.txt
+├── test_ids.txt
+# Symbol list
+└── syms.txt
+```
 
 ## Images
 
-By default, images should be resized to a fixed height (recommended value is 128 pixels). PyLaia can also support variable size images `--fixed-height 0`.
+By default, images should be resized to a fixed height (recommended value: 128 pixels). This can be done using [ImageMagick's `mogrify`](https://imagemagick.org/script/mogrify.php) function:
+```
+mogrify -resize x128 images/*.jpg
+``````
+
+Note that PyLaia can also support variable size images by setting `--fixed_input_height 0` during [model initialization](../initialization/index.md).
 
 ## Tokenized transcriptions
 
@@ -18,7 +42,7 @@ train/im02 a t <space> o p d r i v e <space> d e t <space> o m s k r e v n e <sp
 train/im03 « F r u <space> I n g e r » , <space> a t <space> s e n d e <space> m i g <space> s a m m e
 ```
 
-### Image names
+## Image names
 
 Three additional files `{train|val|test}.txt` are required to run predictions. They should list image names without transcriptions.
 
@@ -32,7 +56,7 @@ train/im03
 
 ## List of symbols
 
-Finally, a file named `syms.txt` mapping tokens from the training set and their index is required, beginning by the `<ctc>` token. 
+Finally, a file named `syms.txt` is required, mapping tokens from the training set and their index, starting with the `<ctc>` token. 
 
 Example:
 
