@@ -56,7 +56,7 @@ train/im03
 
 ## List of symbols
 
-Finally, a file named `syms.txt` is required, mapping tokens from the training set and their index, starting with the `<ctc>` token. 
+Finally, a file named `syms.txt` is required, mapping tokens from the training set and their index, starting with the `<ctc>` token.
 
 Example:
 
