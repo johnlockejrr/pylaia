@@ -14,7 +14,6 @@ theme:
   - navigation.indexes
   - navigation.instant
   - navigation.instant.progress
-  - navigation.tabs
 
   palette:
     # Palette toggle for light mode
@@ -36,8 +35,15 @@ plugins:
 - autorefs
 
 nav:
-  - Home: index.md
-
+  - Home:
+    - index.md
+  - Original paper: original_paper.md
+  - Get started:
+    - get_started/index.md
+    - Development: get_started/development.md
+  - Usage:
+    - usage/index.md
+    - Model initialization: usage/initialization/index.md
 
 copyright:  Copyright &copy; Teklia
 
