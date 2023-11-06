@@ -10,7 +10,7 @@ To install PyLaia from [PyPi](https://pypi.org/project/pylaia/), use this comman
 pip install pylaia
 ```
 
-## Manually
+## From source
 
 To install PyLaia manually, you need to first clone via:
 
@@ -28,5 +28,5 @@ pip install .
 
 Get started with:
 
-- [Developments](development.md)
+- [Development](development.md)
 - [Usage](../usage/index.md)
