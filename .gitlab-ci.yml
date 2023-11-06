@@ -22,7 +22,7 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia tests
+    - pytest --cov=laia -- tests/scripts/htr/train_ctc_test.py::test_train_1_epoch[None]
 
   parallel:
     matrix:

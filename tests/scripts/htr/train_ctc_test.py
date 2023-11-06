@@ -79,6 +79,9 @@ def test_train_1_epoch(tmpdir, accelerator):
         args.append(f"--trainer.gpus={torch.cuda.device_count()}")
 
     stdout, stderr = call_script(script.__file__, args)
+    print(stdout)
+    print()
+    print(stderr)
     assert not stdout
     assert "as top 1" in stderr
     assert "Saving latest checkpoint" in stderr
