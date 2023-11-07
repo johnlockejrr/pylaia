@@ -1,6 +1,6 @@
 # Usage
 
-Before using PyLaia, you need to format your dataset in a specific format (under construction).
+Before using PyLaia, you need to format your dataset in a specific format. See [this page](./datasets/index.md).
 
 Once the dataset is formatted and `pylaia` is installed and in your environment, you may use the following commands:
 

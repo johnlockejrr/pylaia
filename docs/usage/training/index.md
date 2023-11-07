@@ -8,7 +8,7 @@ This command trains a PyLaia architecture on a dataset.
 
 It requires:
 
-- a [formatted dataset](),
+- a [formatted dataset](../datasets/index.md),
 - the `model` pickled file created during [model initialization](../initialization/index.md).
 
 ## Parameters
