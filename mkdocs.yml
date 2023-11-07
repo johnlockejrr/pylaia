@@ -37,6 +37,9 @@ plugins:
 nav:
   - Home: index.md
   - Releases: releases.md
+  - Usage:
+    - Dataset: usage/datasets/index.md
+
 
 copyright:  Copyright &copy; Teklia
 
