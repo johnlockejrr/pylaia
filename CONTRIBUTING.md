@@ -22,14 +22,12 @@ All types of contributions are encouraged and valued. See the [Table of Contents
   - [Your First Code Contribution](#your-first-code-contribution)
   - [Improving The Documentation](#improving-the-documentation)
 
-
 ## Code of Conduct
 
 This project and everyone participating in it is governed by the
 [PyLaia Code of Conduct](https://gitlab.teklia.com/atr/pylaiablob/master/CODE_OF_CONDUCT.md).
 By participating, you are expected to uphold this code. Please report unacceptable behavior
 to <contact@teklia.com>.
-
 
 ## I Have a Question
 
@@ -44,7 +42,6 @@ If you then still feel the need to ask a question and need clarification, we rec
 - Provide project and platform versions (nodejs, npm, etc), depending on what seems relevant.
 
 We will then take care of the issue as soon as possible.
-
 
 ## I Want To Contribute
 
@@ -87,7 +84,6 @@ Once it's filed:
 - A team member will try to reproduce the issue with your provided steps. If there are no reproduction steps or no obvious way to reproduce the issue, the team will ask you for those steps and mark the issue as `Needs repro`. Bugs with the `needs-repro` tag will not be addressed until they are reproduced.
 - If the team is able to reproduce the issue, it will be marked `Needs fix`, as well as possibly other tags (such as `P1`), and the issue will be left to be [implemented by someone](#your-first-code-contribution).
 
-
 ### Suggesting Enhancements
 
 This section guides you through submitting an enhancement suggestion for PyLaia, **including completely new features and minor improvements to existing functionality**. Following these guidelines will help maintainers and the community to understand your suggestion and find related suggestions.
@@ -112,6 +108,7 @@ Enhancement suggestions are tracked as [GitLab issues](https://gitlab.teklia.com
 - **Explain why this enhancement would be useful** to most PyLaia users. You may also want to point out the other projects that solved it better and which could serve as inspiration.
 
 ### Your First Code Contribution
+
 - Create a virtual environment, you can use [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/).
 - Install dependencies in edtiable mode, through `pip install --editable ".[dev, test]"`.
 - Install **pre-commit**, through `pip install pre-commit`
@@ -120,6 +117,7 @@ Enhancement suggestions are tracked as [GitLab issues](https://gitlab.teklia.com
 - Run the test suite (including a coverage report), through `pytest --cov=laia tests`
 
 ### Improving The Documentation
+
 - Create a virtual environment, you can use [virtualenvwrapper](https://virtualenvwrapper.readthedocs.io/en/latest/) or [conda](https://docs.conda.io/en/latest/).
 - Install dependencies, through `pip install ".[doc]"`.
 - Visualize the current documentation, through `mkdocs serve -v`.
