@@ -39,6 +39,3 @@ pip install .[docs]
 
 Build the documentation using `mkdocs serve -v`. You can then write in [Markdown](https://www.markdownguide.org/) in the relevant `docs/*.md` files, and see live output on http://localhost:8000.
 
-### Linter
-
-This documentation is subject to linting using `doc8`, the linting rules applied can be found on [its documentation](https://doc8.readthedocs.io/en/latest/readme.html#usage).
