@@ -42,11 +42,11 @@ The following Python scripts will be installed in your system:
 
 If you want to contribute new feature or found a text that is incorrectly segmented using pySBD, then please head to [CONTRIBUTING.md](https://gitlab.teklia.com/atr/pylaia/-/blob/master/CONTRIBUTING.md) to know more and follow these steps.
 
-1.  Fork it ( <https://gitlab.teklia.com/atr/pylaia/-/forks/new> )
-2.  Create your feature branch (`git checkout -b my-new-feature`)
-3.  Commit your changes (`git commit -am 'Add some feature'`)
-4.  Push to the branch (`git push origin my-new-feature`)
-5.  Create a new Merge Request ( <https://gitlab.teklia.com/atr/pylaia/-/merge_requests/new> )
+1. Fork it ( <https://gitlab.teklia.com/atr/pylaia/-/forks/new> )
+1. Create your feature branch (`git checkout -b my-new-feature`)
+1. Commit your changes (`git commit -am 'Add some feature'`)
+1. Push to the branch (`git push origin my-new-feature`)
+1. Create a new Merge Request ( <https://gitlab.teklia.com/atr/pylaia/-/merge_requests/new> )
 
 ### Code of conduct
 
@@ -59,7 +59,7 @@ Work in this toolkit was financially supported by the [Pattern Recognition and H
 
 ## BibTeX
 
-```
+```text
 @misc{puigcerver2018pylaia,
   author = {Joan Puigcerver and Carlos Mocholí},
   title = {PyLaia},

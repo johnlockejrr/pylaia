@@ -1,23 +1,26 @@
 # Releases
 
-
 ## 1.0.7
 
 Released on **18 October 2023** &bull; View on [Gitlab](https://gitlab.teklia.com/atr/pylaia/-/releases/1.0.7)
 
 ### Feature
+
 - When using a language model, a confidence score is now returned based on the log-likelyhood of the hypothesis.
 
 ### Documentation
+
 A public documentation is now available on <https://atr.pages.teklia.com/pylaia/>. It's still under construction but next releases will add more and more content.
 
 ### Dependencies
+
 - Bumped [pytorch-lightning](https://pypi.org/project/pytorch-lightning/) to version `1.1.7`
 - Bumped GitHub action [codecov/codecov-action](https://github.com/codecov/codecov-action) to version `3`
 - Bumped GitHub action [actions/setup-python](https://github.com/actions/setup-python) to version `4`
 - Bumped GitHub action [actions/checkout](https://github.com/actions/checkout) to version `4`
 
 ### Development
+
 - Releases are now built more easily through a Makefile.
 - The documentation is also redeployed after each push on `master` branch.
 - Fixed a test that behaved differently locally and during CI.
@@ -27,15 +30,19 @@ A public documentation is now available on <https://atr.pages.teklia.com/pylaia/
 Released on **12 September 2023** &bull; View on [Github](https://github.com/jpuigcerver/PyLaia/releases/tag/1.0.6)
 
 ### Feature
+
 - During training, too small images are now padded to be able to pass the multiple convolution layers.
 
 ### Documentation
+
 - Fixed typos.
 
 ### Dependencies
+
 - Replaced [deprecated Pillow resampling method](https://pillow.readthedocs.io/en/stable/releasenotes/2.7.0.html#antialias-renamed-to-lanczos) `Image.ANTIALIAS` to `Image.Resample.Lanczos`.
 
 ### Development
+
 - Pre-commit hooks were updated.
 
 ## 1.0.5
@@ -43,6 +50,7 @@ Released on **12 September 2023** &bull; View on [Github](https://github.com/jpu
 Released on **29 March 2023** &bull; View on [Github](https://github.com/jpuigcerver/PyLaia/releases/tag/1.0.5)
 
 ### Dependencies
+
 - Requires `torch` version `1.13.0` or `1.13.1`.
 - Requires `torchvision` version `0.14.0` or `0.14.1` (depending on `torch` version).
 
@@ -51,6 +59,7 @@ Released on **29 March 2023** &bull; View on [Github](https://github.com/jpuigce
 Released on **4 January 2023** &bull; View on [Github](https://github.com/jpuigcerver/PyLaia/releases/tag/1.0.4)
 
 ### Dependencies
+
 - Requires `torch` version `1.13.0`.
 
 ## 1.0.3
@@ -58,13 +67,16 @@ Released on **4 January 2023** &bull; View on [Github](https://github.com/jpuigc
 Released on **12 December 2022** &bull; View on [Github](https://github.com/jpuigcerver/PyLaia/releases/tag/1.0.3)
 
 ### Feature
+
 - Now able to decode using a trained Language model through beam search decoding.
 - Exposes [torch Dataloaders's num_workers](https://pytorch.org/docs/stable/data.html#multi-process-data-loading) parameter on the Python training function to limit resource usage when needed.
 
 ### Dependencies
+
 - Added dependency to `torchaudio` version `0.13.0`.
 
 ### Development
+
 - Package version is now tracked through the `VERSION` file.
 
 ## 1.0.2
@@ -72,6 +84,7 @@ Released on **12 December 2022** &bull; View on [Github](https://github.com/jpui
 Released on **7 December 2022** &bull; View on [Github](https://github.com/jpuigcerver/PyLaia/releases/tag/1.0.2)
 
 ### Dependencies
+
 - Pinned dependency to `pytorch-lightning` to version `1.1.0`.
 
 ## 1.0.1
@@ -115,7 +128,7 @@ Released on **2 December 2020** &bull; View on [Github](https://github.com/jpuig
 
 ### Removed
 
-- Remove egs directory. These live now at https://github.com/carmocca/PyLaia-examples
+- Remove egs directory. These live now at <https://github.com/carmocca/PyLaia-examples>
 - Remove Baidu's CTC loss in favor of PyTorch's
 - Remove PHOC code. Please open an issue if you were using it
 - Remove Dortmund code. Please open an issue if you were using it
