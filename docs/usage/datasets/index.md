@@ -9,14 +9,18 @@ The dataset should be formatted as follows:
     ├── train/
     ├── val/
     └── test/
-# Tokenized transcriptions
+# Tokenized transcriptions (used for training)
 ├── train.txt
 ├── val.txt
 ├── test.txt
-# Image ids
+# Image ids (used for prediction)
 ├── train_ids.txt
 ├── val_ids.txt
 ├── test_ids.txt
+# Transcriptions (used for evaluation)
+├── train_text.txt
+├── val_text.txt
+├── test_text.txt
 # Symbol list
 └── syms.txt
 ```
@@ -26,7 +30,7 @@ The dataset should be formatted as follows:
 By default, images should be resized to a fixed height (recommended value: 128 pixels). This can be done using [ImageMagick's `mogrify`](https://imagemagick.org/script/mogrify.php) function:
 ```
 mogrify -resize x128 images/*.jpg
-``````
+```
 
 Note that PyLaia can also support variable size images by setting `--fixed_input_height 0` during [model initialization](../initialization/index.md).
 
@@ -44,7 +48,7 @@ train/im03 « F r u <space> I n g e r » , <space> a t <space> s e n d e <space>
 
 ## Image names
 
-Three additional files `{train|val|test}.txt` are required to run predictions. They should list image names without transcriptions.
+Three additional files `{train|val|test}_ids.txt` are required to run predictions. They should list image names without transcriptions.
 
 Example:
 
@@ -52,6 +56,18 @@ Example:
 train/im01
 train/im02
 train/im03
+```
+
+## Transcriptions
+
+Finally, three files `{train|val|test}_text.txt` are required to evaluate your models. They should map image names and non-tokenized transcriptions.
+
+Example:
+
+```sh
+train/im01 for det tilfælde det skulde lykkes Dig
+train/im02 at opdrive det omskrevne expl: af
+train/im03 «Fru Inger», at sende mig samme
 ```
 
 ## List of symbols
