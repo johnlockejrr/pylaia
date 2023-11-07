@@ -1,15 +1,15 @@
-# Training 
+# Training
 
 The `pylaia-htr-train-ctc` command can be used to train a PyLaia model. To know more about the options of this command, use `pylaia-htr-train-ctc --help`.
 
 ## Purpose
 
-This command trains a PyLaia architecture on a dataset. 
+This command trains a PyLaia architecture on a dataset.
 
 It requires:
 
 - a [formatted dataset](),
-- the `model` pickled file created during [model initialization](../initialization/index.md). 
+- the `model` pickled file created during [model initialization](../initialization/index.md).
 
 ## Parameters
 
