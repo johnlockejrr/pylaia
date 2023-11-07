@@ -22,12 +22,10 @@ Get started by having a look at our [Wiki](https://github.com/jpuigcerver/PyLaia
 
 ## Installation
 
-In order to install PyLaia, follow this recipe:
+To install PyLaia from PyPi:
 
 ```bash
-git clone https://github.com/jpuigcerver/PyLaia
-cd PyLaia
-pip install -e .
+pip install pylaia
 ```
 
 Please note that the CUDA version of nnutils ([`nnutils-pytorch-cuda`](https://pypi.org/project/nnutils-pytorch-cuda/)) is installed by default. If you do not have a GPU, you should install the CPU version ([`nnutils-pytorch`](https://pypi.org/project/nnutils-pytorch/)).
