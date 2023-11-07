@@ -9,7 +9,7 @@ This command trains a PyLaia architecture on a dataset.
 It requires:
 
 - a [formatted dataset](../datasets/index.md),
-- the `model` pickled file created during [model initialization](../initialization/index.md).
+- the pickled `model` file created during [model initialization](../initialization/index.md).
 
 ## Parameters
 
@@ -17,13 +17,13 @@ The full list of parameters is detailed in this section.
 
 ### General parameters
 
-| Parameter      | Description                                                                                                     | Type   | Default |
-| -------------- | --------------------------------------------------------------------------------------------------------------- | ------ | ------- |
-| `syms`         | Positional argument. Path to a file mapping characters to integers. The CTC symbol must be mapped to integer 0. | `str`  |         |
-| `img_dirs`     | Directories containing line images.                                                                             | `str`  |         |
-| `tr_txt_table` | Path to a file mapping training image ids and tokenized transcription.                                          | `str`  |         |
-| `va_txt_table` | Path to a file mapping validation image ids and tokenized transcription.                                        | `str`  |         |
-| `config`       | Path to a JSON configuration file                                                                               | `json` |         |
+| Parameter      | Description                                                                                                         | Type   | Default |
+| -------------- | ------------------------------------------------------------------------------------------------------------------- | ------ | ------- |
+| `syms`         | Positional argument. Path to a file mapping characters to integers. The CTC symbol **must** be mapped to integer 0. | `str`  |         |
+| `img_dirs`     | Positional argument. Directories containing line images.                                                            | `str`  |         |
+| `tr_txt_table` | Positional argument. Path to a file mapping training image ids and tokenized transcription.                         | `str`  |         |
+| `va_txt_table` | Positional argument. Path to a file mapping validation image ids and tokenized transcription.                       | `str`  |         |
+| `config`       | Path to a JSON configuration file                                                                                   | `json` |         |
 
 ### Common parameters
 
@@ -86,12 +86,12 @@ The full list of parameters is detailed in this section.
 
 ### Trainer arguments
 
-Pytorch Lighning `Trainer` flags can also be set using the `--trainer` argument. See [the documentation](https://lightning.ai/docs/pytorch/stable/common/trainer.html#trainer-flags).
+Pytorch Lighning `Trainer` flags can also be set using the `--trainer` argument. See [the documentation](https://github.com/Lightning-AI/lightning/blob/1.7.0/docs/source-pytorch/common/trainer.rst#trainer-flags).
 
 
 ## Examples
 
-The model can be configured using command-line arguments or a YAML configuration file. Note that CLI arguments override the values from the configuration file.
+The model can be trained using command-line arguments or a YAML configuration file. Note that CLI arguments override the values from the configuration file.
 
 
 ### Example with Command Line Arguments (CLI)
