@@ -80,9 +80,10 @@ The full list of parameters is detailed in this section.
 Pytorch Lighning `Trainer` flags can also be set using the `--trainer` argument. See [the documentation](https://github.com/Lightning-AI/lightning/blob/1.7.0/docs/source-pytorch/common/trainer.rst#trainer-flags).
 
 This flag is mostly useful to define whether to predict on CPU or GPU.
-* CPU: `--traing.gpus 0`
-* Single GPU `--traing.gpus 1` to use with `--training.auto_select True`
-* Multiple GPUs `--traing.gpus n` with `n>1` to use with `--training.auto_select True`
+
+* `--traing.gpus 0` to run on CPU,
+* `--traing.gpus n` to run on `n` GPUs (use with `--training.auto_select True` for auto-selection),
+* `--traing.gpus -1` to run on all GPUs.
 
 
 ## Examples
