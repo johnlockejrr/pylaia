@@ -45,6 +45,7 @@ nav:
     - Dataset: usage/datasets/index.md
     - Model initialization: usage/initialization/index.md
     - Training: usage/training/index.md
+    - Prediction: usage/prediction/index.md
   - Releases: releases.md
 
 copyright:  Copyright &copy; Teklia
