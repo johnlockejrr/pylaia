@@ -9,7 +9,7 @@ This command uses a trained PyLaia model to predict on a dataset.
 It requires:
 
 - a [list of image ids](../datasets/index.md#image-names),
-- the pickled `model` file created during [model initialization](../initialization/index.md).
+- the pickled `model` file created during [model initialization](../initialization/index.md),
 - the weights `*.ckpt` of the trained model created during [model training](../training/index.md).
 
 ## Parameters
@@ -43,26 +43,26 @@ The full list of parameters is detailed in this section.
 
 ### Decode arguments
 
-| Name                     | Description                                                                                                               | Type            | Default   |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------- | --------------- | --------- |
-| `decode.include_img_ids` | Include the associated image ids in the decoding/segmentation output                                                      | `bool`          | `True`    |
-| `decode.separator`       | String to use as a separator between the image ids and the decoding/segmentation output.                                  | `str`           | ` `       |
-| `decode.join_string`     | String to use to join the decoding output.                                                                                | `Optional[str]` | ` `       |
-| `decode.use_symbols`     | Convert the decoding output to symbols instead of symbol index.                                                           | `bool`          | `True`    |
-| `decode.convert_spaces`  | Whether or not to convert spaces.                                                                                         | `bool`          | `False`   |
-| `decode.input_space`     | Replace the space by this symbol if `convert_spaces` is set. Used for word segmentation and confidence score computation. | `str`           | `<space>` |
-| `decode.output_space`     | Space symbol to display during decoding. | `str`           | ` ` |
-| `decode.segmentation`     | Use CTC alignment to estimate character or word segmentation. Should be `char` or `word`. | `Optional[str]`           | `None ` |
-| `decode.temperature`     | Temperature parameters used to scale the logits. | `float`           | `1.0` |
-| `decode.print_line_confidence_scores`     | Whether to print line confidence scores. | `bool`           | `False` |
-| `decode.print_line_confidence_scores`     | Whether to print word confidence scores. | `bool`           | `False` |
-| `decode.use_language_model`     | Whether to decode with an external language model. | `bool`           | `False` |
-| `decode.language_model_path`     | Path to a KenLM or ARPA n-gram language model. | `str`           | `None` |
-| `decode.language_model_weight`     | Weight of the language model. | `float`           | `None` |
-| `decode.tokens_path`     | Path to a file containing valid tokens. If using a file, the expected format is for tokens mapping to the same index to be on the same line. The `ctc` symbol should be at index 0. | `str`           | `None` |
-| `decode.lexicon_path`     | Path to a lexicon file containing the possible words and corresponding spellings. | `str`           | `None` |
-| `decode.unk_token`     | String representing unknown characters. | `str`           | `<unk>` |
-| `decode.blank_token`     | String representing the blank/ctc symbol. | `str`           | `<ctc>` |
+| Name                                  | Description                                                                                                                                                                         | Type            | Default   |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------- |
+| `decode.include_img_ids`              | Include the associated image ids in the decoding/segmentation output                                                                                                                | `bool`          | `True`    |
+| `decode.separator`                    | String to use as a separator between the image ids and the decoding/segmentation output.                                                                                            | `str`           | ` `       |
+| `decode.join_string`                  | String to use to join the decoding output.                                                                                                                                          | `Optional[str]` | ` `       |
+| `decode.use_symbols`                  | Convert the decoding output to symbols instead of symbol index.                                                                                                                     | `bool`          | `True`    |
+| `decode.convert_spaces`               | Whether or not to convert spaces.                                                                                                                                                   | `bool`          | `False`   |
+| `decode.input_space`                  | Replace the space by this symbol if `convert_spaces` is set. Used for word segmentation and confidence score computation.                                                           | `str`           | `<space>` |
+| `decode.output_space`                 | Space symbol to display during decoding.                                                                                                                                            | `str`           | ` `       |
+| `decode.segmentation`                 | Use CTC alignment to estimate character or word segmentation. Should be `char` or `word`.                                                                                           | `Optional[str]` | `None `   |
+| `decode.temperature`                  | Temperature parameters used to scale the logits.                                                                                                                                    | `float`         | `1.0`     |
+| `decode.print_line_confidence_scores` | Whether to print line confidence scores.                                                                                                                                            | `bool`          | `False`   |
+| `decode.print_line_confidence_scores` | Whether to print word confidence scores.                                                                                                                                            | `bool`          | `False`   |
+| `decode.use_language_model`           | Whether to decode with an external language model.                                                                                                                                  | `bool`          | `False`   |
+| `decode.language_model_path`          | Path to a KenLM or ARPA n-gram language model.                                                                                                                                      | `str`           | `None`    |
+| `decode.language_model_weight`        | Weight of the language model.                                                                                                                                                       | `float`         | `None`    |
+| `decode.tokens_path`                  | Path to a file containing valid tokens. If using a file, the expected format is for tokens mapping to the same index to be on the same line. The `ctc` symbol should be at index 0. | `str`           | `None`    |
+| `decode.lexicon_path`                 | Path to a lexicon file containing the possible words and corresponding spellings.                                                                                                   | `str`           | `None`    |
+| `decode.unk_token`                    | String representing unknown characters.                                                                                                                                             | `str`           | `<unk>`   |
+| `decode.blank_token`                  | String representing the blank/ctc symbol.                                                                                                                                           | `str`           | `<ctc>`   |
 
 
 ### Logging arguments
@@ -79,22 +79,25 @@ The full list of parameters is detailed in this section.
 
 Pytorch Lighning `Trainer` flags can also be set using the `--trainer` argument. See [the documentation](https://github.com/Lightning-AI/lightning/blob/1.7.0/docs/source-pytorch/common/trainer.rst#trainer-flags).
 
+This flag is mostly useful to define whether to predict on CPU or GPU.
+* CPU: `--traing.gpus 0`
+* Single GPU `--traing.gpus 1` to use with `--training.auto_select True`
+* Multiple GPUs `--traing.gpus n` with `n>1` to use with `--training.auto_select True`
+
 
 ## Examples
 
 The model can be trained using command-line arguments or a YAML configuration file. Note that CLI arguments override the values from the configuration file.
 
-
 ### Predict using a model from Hugging Face
 
 First, clone a trained model from Hugging Face:
-
 ```bash
 git clone https://huggingface.co/Teklia/pylaia-huginmunin
 ```
 
 List image names in `img_list.txt`:
-```
+```text
 docs/assets/219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f
 docs/assets/219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4
 ```
@@ -109,28 +112,22 @@ pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ \
 ```
 
 Expected output:
-```
-[2023-11-13 12:36:31,110 INFO laia.common.loader] Using checkpoint "pylaia-huginmunin/weights.ckpt"
-[2023-11-13 12:36:31,142 INFO laia.common.loader] Loaded model pylaia-huginmunin/model
-GPU available: False, used: False
-TPU available: None, using: 0 TPU cores
+```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f o g <space> V a l s t a d <space> k a n <space> v i <space> v i s t
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 i k k e <space> g j ø r e <space> R e g n i n g <space> p a a ,
-Decoding: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.67it/s]
 ```
 
-Note that by default, each token is separated by a space, and the space symbol is represented by `decode.input_space` (default: `<space>`)
+Note that by default, each token is separated by a space, and the space symbol is represented by `--decode.input_space` (default: `"<space>"`).
 
 ### Predict with a YAML configuration file
 
 Run the following command to predict a model on CPU using:
-```sh
+```bash
 pylaia-htr-decode-ctc --config config_decode_model.yaml
 ```
 
-Where `config_decode_model.yaml` is:
-
-```yaml
+With the following configuration file:
+```yaml title="config_decode_model.yaml"
 syms: pylaia-huginmunin/syms.txt
 img_list: img_list.txt
 img_dirs:
@@ -146,14 +143,9 @@ trainer:
 ```
 
 Expected output:
-```
-[2023-11-13 12:35:21,590 INFO laia.common.loader] Using checkpoint "pylaia-huginmunin/weights.ckpt"
-[2023-11-13 12:35:21,622 INFO laia.common.loader] Loaded model pylaia-huginmunin/model
-GPU available: False, used: False
-TPU available: None, using: 0 TPU cores
+```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f og Valstad kan vi vist
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 ikke gjøre Regning paa,
-Decoding: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.82it/s]
 ```
 
 Note that setting `--decode.join_string ""` and `--decode.convert_spaces True` will display the text well formatted.
@@ -165,37 +157,27 @@ PyLaia estimate character probability for each timestep. It is possible to print
 #### Line confidence scores
 
 Run the following command to predict with line confidence scores:
-```sh
+```bash
 pylaia-htr-decode-ctc --config config_decode_model.yaml --decode.print_line_confidence_score True
 ```
 
 Expected output:
-```
-[2023-11-13 12:48:43,929 INFO laia.common.loader] Using checkpoint "pylaia-huginmunin/weights.ckpt"
-[2023-11-13 12:48:43,962 INFO laia.common.loader] Loaded model pylaia-huginmunin/model
-GPU available: False, used: False
-TPU available: None, using: 0 TPU cores
+```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f 0.99 og Valstad kan vi vist
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 0.98 ikke gjøre Regning paa,
-Decoding: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.15it/s]
 ```
 
 #### Word confidence scores
 
 Run the following command to predict with word confidence scores:
-```sh
+```bash
 pylaia-htr-decode-ctc --config config_decode_model.yaml --decode.print_word_confidence_score True
 ```
 
 Expected output:
-```
-[2023-11-13 12:53:53,418 INFO laia.common.loader] Using checkpoint "pylaia-huginmunin/weights.ckpt"
-[2023-11-13 12:53:53,450 INFO laia.common.loader] Loaded model pylaia-huginmunin/model
-GPU available: False, used: False
-TPU available: None, using: 0 TPU cores
+```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f ['1.00', '1.00', '1.00', '1.00', '1.00'] og Valstad kan vi vist
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 ['1.00', '0.91', '1.00', '0.99'] ikke gjøre Regning paa,
-Decoding: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.63it/s]
 ```
 
 #### Temperature scaling
@@ -203,33 +185,27 @@ Decoding: 100%|█████████████████████�
 PyLaia tends to output overly confident probabilities. [Temperature scaling](https://arxiv.org/pdf/1706.04599.pdf) can be used to improve the reliability of confidence scores. The best temperature can be determined with a grid search algorithm by maximizing the correlation between 1-CER and confidence scores.
 
 Run the following command to predict callibrated word confidence scores with `temperature=3.0`
-```sh
+```bash
 pylaia-htr-decode-ctc --config config_decode_model.yaml --decode.print_word_confidence_score True --decode.temperature 3.0
 ```
 
 Expected output:
-```
-[2023-11-13 12:55:13,883 INFO laia.common.loader] Using checkpoint "pylaia-huginmunin/weights.ckpt"
-[2023-11-13 12:55:13,913 INFO laia.common.loader] Loaded model pylaia-huginmunin/model
-GPU available: False, used: False
-TPU available: None, using: 0 TPU cores
+```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f ['0.93', '0.85', '0.87', '0.93', '0.85'] og Valstad kan vi vist
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 ['0.93', '0.84', '0.86', '0.83'] ikke gjøre Regning paa,
-Decoding: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.29it/s]
 ```
 
 ### Predict with a language model
 
-PyLaia support KenLM and ARPA language models.
+PyLaia supports KenLM and ARPA language models.
 
-Run the following command to predict a model with an external language model:
-```sh
+Once the n-gram model is built, run the following command to combine it to your PyLaia model:
+```bash
 pylaia-htr-decode-ctc --config config_decode_model_lm.yaml
 ```
 
-Where `config_decode_model_lm.yaml` is:
-
-```yaml
+With the following configuration file:
+```yaml title="config_decode_model_lm.yaml"
 syms: pylaia-huginmunin/syms.txt
 img_list: img_list.txt
 img_dirs:
@@ -251,50 +227,37 @@ trainer:
 ```
 
 Expected output:
-```
-[2023-11-13 13:01:02,670 INFO laia.common.loader] Using checkpoint "pylaia-huginmunin/weights.ckpt"
-[2023-11-13 13:01:02,702 INFO laia.common.loader] Loaded model pylaia-huginmunin/model
-Loading the LM will be faster if you build a binary file.
-Reading pylaia-huginmunin/language_model.arpa.gz
-----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
-The ARPA file is missing <unk>.  Substituting log10 probability -100.
-****************************************************************************************************
-GPU available: False, used: False
-TPU available: None, using: 0 TPU cores
+```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f 0.90 og Valstad kan vi vist
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 0.89 ikke gjøre Regning paa,
-
-Decoding: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.56it/s]
 ```
 
 ### Predict with CTC alignement
 
-It is possible to estimate text localization based on CTC alignements.
+It is possible to estimate text localization based on CTC alignements. It returns a list texts with their estimated coordinates: `(text, x1, y1, x2, y2)`.
 
 #### Character level
 
-To output character localization, use this command:
-```
+To output character localization, use the `--decode.segmentation char` option:
+```bash
 pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ --common.model_filename pylaia-huginmunin/model --decode.segmentation char --img_dir [docs/assets] pylaia-huginmunin/syms.txt img_list.txt
 ```
 
 Expected output:
-```
+```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f [('o', 1, 1, 31, 128), ('g', 32, 1, 79, 128), ('<space>', 80, 1, 143, 128), ('V', 144, 1, 167, 128), ('a', 168, 1, 223, 128), ('l', 224, 1, 255, 128), ('s', 256, 1, 279, 128), ('t', 280, 1, 327, 128), ('a', 328, 1, 367, 128), ('d', 368, 1, 407, 128), ('<space>', 408, 1, 496, 128), ('k', 497, 1, 512, 128), ('a', 513, 1, 576, 128), ('n', 577, 1, 624, 128), ('<space>', 625, 1, 712, 128), ('v', 713, 1, 728, 128), ('i', 729, 1, 776, 128), ('<space>', 777, 1, 808, 128), ('v', 809, 1, 824, 128), ('i', 825, 1, 872, 128), ('s', 873, 1, 912, 128), ('t', 913, 1, 944, 128)]
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 [('i', 1, 1, 23, 128), ('k', 24, 1, 71, 128), ('k', 72, 1, 135, 128), ('e', 136, 1, 191, 128), ('<space>', 192, 1, 248, 128), ('g', 249, 1, 264, 128), ('j', 265, 1, 312, 128), ('ø', 313, 1, 336, 128), ('r', 337, 1, 376, 128), ('e', 377, 1, 408, 128), ('<space>', 409, 1, 481, 128), ('R', 482, 1, 497, 128), ('e', 498, 1, 545, 128), ('g', 546, 1, 569, 128), ('n', 570, 1, 601, 128), ('i', 602, 1, 665, 128), ('n', 666, 1, 706, 128), ('g', 707, 1, 762, 128), ('<space>', 763, 1, 794, 128), ('p', 795, 1, 802, 128), ('a', 803, 1, 850, 128), ('a', 851, 1, 890, 128), (',', 891, 1, 914, 128)]
-Decoding: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.48it/s]
 ```
 
 #### Word level
 
-To output word localization, use this command:
-```
+To output word localization, use the `--decode.segmentation word` option:
+```bash
 pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ --common.model_filename pylaia-huginmunin/model --decode.segmentation word --img_dir [docs/assets] pylaia-huginmunin/syms.txt img_list.txt
 ```
 
 Expected output:
-```
+```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f [('og', 1, 1, 79, 128), ('<space>', 80, 1, 143, 128), ('Valstad', 144, 1, 407, 128), ('<space>', 408, 1, 496, 128), ('kan', 497, 1, 624, 128), ('<space>', 625, 1, 712, 128), ('vi', 713, 1, 776, 128), ('<space>', 777, 1, 808, 128), ('vist', 809, 1, 944, 128)]
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 [('ikke', 1, 1, 191, 128), ('<space>', 192, 1, 248, 128), ('gjøre', 249, 1, 408, 128), ('<space>', 409, 1, 481, 128), ('Regning', 482, 1, 762, 128), ('<space>', 763, 1, 794, 128), ('paa,', 795, 1, 914, 128)]
-Decoding: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  2.38it/s]
 ```

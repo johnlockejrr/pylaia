@@ -55,3 +55,6 @@ extra:
     - icon: fontawesome/brands/github
       name: Git repository for this project
       link: https://gitlab.teklia.com/atr/pylaia
+
+markdown_extensions:
+  - pymdownx.superfences
