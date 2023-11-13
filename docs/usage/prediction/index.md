@@ -158,7 +158,8 @@ PyLaia estimate character probability for each timestep. It is possible to print
 
 Run the following command to predict with line confidence scores:
 ```bash
-pylaia-htr-decode-ctc --config config_decode_model.yaml --decode.print_line_confidence_score True
+pylaia-htr-decode-ctc --config config_decode_model.yaml \
+                      --decode.print_line_confidence_score True
 ```
 
 Expected output:
@@ -171,7 +172,8 @@ Expected output:
 
 Run the following command to predict with word confidence scores:
 ```bash
-pylaia-htr-decode-ctc --config config_decode_model.yaml --decode.print_word_confidence_score True
+pylaia-htr-decode-ctc --config config_decode_model.yaml \
+                      --decode.print_word_confidence_score True
 ```
 
 Expected output:
@@ -186,7 +188,9 @@ PyLaia tends to output overly confident probabilities. [Temperature scaling](htt
 
 Run the following command to predict callibrated word confidence scores with `temperature=3.0`
 ```bash
-pylaia-htr-decode-ctc --config config_decode_model.yaml --decode.print_word_confidence_score True --decode.temperature 3.0
+pylaia-htr-decode-ctc --config config_decode_model.yaml \
+                      --decode.print_word_confidence_score True \
+                      --decode.temperature 3.0
 ```
 
 Expected output:
@@ -234,13 +238,18 @@ Expected output:
 
 ### Predict with CTC alignement
 
-It is possible to estimate text localization based on CTC alignements. It returns a list texts with their estimated coordinates: `(text, x1, y1, x2, y2)`.
+It is possible to estimate text localization based on CTC alignements with the `--decode.segmentation` option. It returns a list texts with their estimated coordinates: `(text, x1, y1, x2, y2)`.
 
 #### Character level
 
 To output character localization, use the `--decode.segmentation char` option:
 ```bash
-pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ --common.model_filename pylaia-huginmunin/model --decode.segmentation char --img_dir [docs/assets] pylaia-huginmunin/syms.txt img_list.txt
+pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ \
+                      --common.model_filename pylaia-huginmunin/model \
+                      --decode.segmentation char \
+                      --img_dir [docs/assets] \
+                      pylaia-huginmunin/syms.txt \
+                      img_list.txt
 ```
 
 Expected output:
@@ -253,7 +262,12 @@ Expected output:
 
 To output word localization, use the `--decode.segmentation word` option:
 ```bash
-pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ --common.model_filename pylaia-huginmunin/model --decode.segmentation word --img_dir [docs/assets] pylaia-huginmunin/syms.txt img_list.txt
+pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ \
+                      --common.model_filename pylaia-huginmunin/model \
+                      --decode.segmentation word \
+                      --img_dir [docs/assets] \
+                      pylaia-huginmunin/syms.txt \
+                      img_list.txt
 ```
 
 Expected output:
