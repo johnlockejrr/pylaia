@@ -77,13 +77,13 @@ The full list of parameters is detailed in this section.
 
 ### Trainer arguments
 
-Pytorch Lighning `Trainer` flags can also be set using the `--trainer` argument. See [the documentation](https://github.com/Lightning-AI/lightning/blob/1.7.0/docs/source-pytorch/common/trainer.rst#trainer-flags).
+Pytorch Lightning `Trainer` flags can also be set using the `--trainer` argument. See [the documentation](https://github.com/Lightning-AI/lightning/blob/1.7.0/docs/source-pytorch/common/trainer.rst#trainer-flags).
 
 This flag is mostly useful to define whether to predict on CPU or GPU.
 
-* `--traing.gpus 0` to run on CPU,
-* `--traing.gpus n` to run on `n` GPUs (use with `--training.auto_select True` for auto-selection),
-* `--traing.gpus -1` to run on all GPUs.
+* `--trainer.gpus 0` to run on CPU,
+* `--trainer.gpus n` to run on `n` GPUs (use with `--training.auto_select True` for auto-selection),
+* `--trainer.gpus -1` to run on all GPUs.
 
 
 ## Examples
@@ -153,7 +153,7 @@ Note that setting `--decode.join_string ""` and `--decode.convert_spaces True` w
 
 ### Predict with confidence scores
 
-PyLaia estimate character probability for each timestep. It is possible to print the pribability at line or word level.
+PyLaia estimate character probability for each timestep. It is possible to print the probability at line or word level.
 
 #### Line confidence scores
 
@@ -239,7 +239,7 @@ Expected output:
 
 ### Predict with CTC alignement
 
-It is possible to estimate text localization based on CTC alignements with the `--decode.segmentation` option. It returns a list texts with their estimated coordinates: `(text, x1, y1, x2, y2)`.
+It is possible to estimate text localization based on CTC alignments with the `--decode.segmentation` option. It returns a list texts with their estimated coordinates: `(text, x1, y1, x2, y2)`.
 
 #### Character level
 
