@@ -60,3 +60,4 @@ extra:
 
 markdown_extensions:
   - pymdownx.superfences
+  - admonition
