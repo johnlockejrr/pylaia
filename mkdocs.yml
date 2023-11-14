@@ -47,7 +47,7 @@ nav:
     - Model initialization: usage/initialization/index.md
     - Training: usage/training/index.md
     - Prediction: usage/prediction/index.md
-    - Train an explicit language model: usage/language_models/index.md
+    - Explicit language modeling: usage/language_models/index.md
   - Releases: releases.md
 
 copyright:  Copyright &copy; Teklia

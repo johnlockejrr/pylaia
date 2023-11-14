@@ -1,21 +1,24 @@
-# Training an explicit language model
+# Explicit language modeling with n-grams
 
 PyLaia supports lattice rescoring using a statistical language model.
 This documentation gives instructions to build a language model with [kenlm](https://kheafield.com/code/kenlm/). Note that you can also use [SRILM](http://www.speech.sri.com/projects/srilm/).
 
-## Install kenlm
+To decode with a language model, you need:
+
+* [a language model](./index.md#build-the-language-model)
+* [a list of tokens](./index.md#list-of-tokens)
+* [a lexicon](./index.md#lexicon)
+
+## Build the language model
+
+### Install kenlm
 
 To build the language model, you first need to install and compile [kenlm](https://github.com/kpu/kenlm) by following the instructions detailed in the [README](https://github.com/kpu/kenlm#compiling).
 
 
-## Generate resources to train the language model
+### Generate resources to train the language model
 
-To train a language model, you need to generate a text file containing the training text tokenized at character, subword or word level. You need:
-* a corpus
-* a list of tokens
-* a lexicon
-
-### Corpus
+To train a language model, you need to generate a corpus containing the training text tokenized at character, subword or word level.
 
 #### Characters
 
@@ -49,7 +52,93 @@ kommer <space> der <space> mange <space> reisende <space> venner <space> eller <
 Ossbahr <space> maa <space> være <space> sammen <space> med <space> Hedberg <space> ofte <space> ogsaa <space> . <space> Men <space> vi <space> kan <space> leve
 ```
 
-### Tokens
+### Train the language model
+
+Once your corpus is created, you can estimate the n-gram model.
+
+#### Characters
+
+At character-level, we recommend building a 6-gram model. Use the following command:
+
+```sh
+bin/lmplz --order 6 \
+    --text my_dataset/language_model/corpus_characters.txt \
+    --arpa my_dataset/language_model/model_characters.arpa \
+    --discount_fallback
+```
+
+Note that the `--discount_fallback` option can be removed if your corpus is very large.
+
+The following message should be displayed if the language model was built successfully:
+
+```sh
+=== 1/5 Counting and sorting n-grams ===
+Reading language_model/corpus.txt
+----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
+****************************************************************************************************
+Unigram tokens 111629 types 109
+=== 2/5 Calculating and sorting adjusted counts ===
+Chain sizes: 1:1308 2:784852864 3:1471599104 4:2354558464 5:3433731328 6:4709116928
+Statistics:
+1 109 D1=0.586207 D2=0.534483 D3+=1.5931
+2 1734 D1=0.538462 D2=1.09853 D3+=1.381
+3 7957 D1=0.641102 D2=1.02894 D3+=1.37957
+4 17189 D1=0.747894 D2=1.20483 D3+=1.41084
+5 25640 D1=0.812458 D2=1.2726 D3+=1.57601
+6 32153 D1=0.727411 D2=1.13511 D3+=1.42722
+Memory estimate for binary LM:
+type      kB
+probing 1798 assuming -p 1.5
+probing 2107 assuming -r models -p 1.5
+trie     696 without quantization
+trie     313 assuming -q 8 -b 8 quantization
+trie     648 assuming -a 22 array pointer compression
+trie     266 assuming -a 22 -q 8 -b 8 array pointer compression and quantization
+=== 3/5 Calculating and sorting initial probabilities ===
+Chain sizes: 1:1308 2:27744 3:159140 4:412536 5:717920 6:1028896
+----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
+####################################################################################################
+=== 4/5 Calculating and writing order-interpolated probabilities ===
+Chain sizes: 1:1308 2:27744 3:159140 4:412536 5:717920 6:1028896
+----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
+####################################################################################################
+=== 5/5 Writing ARPA model ===
+----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
+****************************************************************************************************
+Name:lmplz	VmPeak:12643224 kB	VmRSS:6344 kB	RSSMax:1969316 kB	user:0.196445	sys:0.514686	CPU:0.711161	real:0.682693
+```
+
+#### Subwords
+
+At subword-level, we recommend building a 6-gram model. Use the following command:
+
+```sh
+bin/lmplz --order 6 \
+    --text my_dataset/language_model/corpus_subwords.txt \
+    --arpa my_dataset/language_model/model_subwords.arpa \
+    --discount_fallback
+```
+
+Note that the `--discount_fallback` option can be removed if your corpus is very large.
+
+#### Words
+
+At word-level, we recommend building a 3-gram model. Use the following command:
+
+```sh
+bin/lmplz --order 3 \
+    --text my_dataset/language_model/corpus_words.txt \
+    --arpa my_dataset/language_model/model_words.arpa \
+    --discount_fallback
+```
+
+Note that the `--discount_fallback` option can be removed if your corpus is very large.
+
+## Predict with a language model
+
+Once the language model is trained, you need to generate a list of tokens and a lexicon.
+
+### List of tokens
 
 The list of tokens `tokens.txt` lists all the tokens that can be predicted by PyLaia.
 Note that it is very similar to `syms.txt`, but without any index: `cut -d' ' -f 1 syms.txt > tokens.txt`
@@ -113,88 +202,6 @@ eller e l l e r
 <space> <space>
 ```
 
-## Build the language model
+### Predict with PyLaia
 
-Once your corpus is created, you can estimate the n-gram model.
-
-### Character-level
-
-At character-level, we recommend building a 6-gram model. Use the following command:
-
-```sh
-bin/lmplz --order 6 \
-    --text my_dataset/language_model/corpus_characters.txt \
-    --arpa my_dataset/language_model/model_characters.arpa \
-    --discount_fallback
-```
-
-Note that the `--discount_fallback` option can be removed if your corpus is very large.
-
-The following message should be displayed if the language model was built successfully:
-
-```sh
-=== 1/5 Counting and sorting n-grams ===
-Reading language_model/corpus.txt
-----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
-****************************************************************************************************
-Unigram tokens 111629 types 109
-=== 2/5 Calculating and sorting adjusted counts ===
-Chain sizes: 1:1308 2:784852864 3:1471599104 4:2354558464 5:3433731328 6:4709116928
-Statistics:
-1 109 D1=0.586207 D2=0.534483 D3+=1.5931
-2 1734 D1=0.538462 D2=1.09853 D3+=1.381
-3 7957 D1=0.641102 D2=1.02894 D3+=1.37957
-4 17189 D1=0.747894 D2=1.20483 D3+=1.41084
-5 25640 D1=0.812458 D2=1.2726 D3+=1.57601
-6 32153 D1=0.727411 D2=1.13511 D3+=1.42722
-Memory estimate for binary LM:
-type      kB
-probing 1798 assuming -p 1.5
-probing 2107 assuming -r models -p 1.5
-trie     696 without quantization
-trie     313 assuming -q 8 -b 8 quantization
-trie     648 assuming -a 22 array pointer compression
-trie     266 assuming -a 22 -q 8 -b 8 array pointer compression and quantization
-=== 3/5 Calculating and sorting initial probabilities ===
-Chain sizes: 1:1308 2:27744 3:159140 4:412536 5:717920 6:1028896
-----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
-####################################################################################################
-=== 4/5 Calculating and writing order-interpolated probabilities ===
-Chain sizes: 1:1308 2:27744 3:159140 4:412536 5:717920 6:1028896
-----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
-####################################################################################################
-=== 5/5 Writing ARPA model ===
-----5---10---15---20---25---30---35---40---45---50---55---60---65---70---75---80---85---90---95--100
-****************************************************************************************************
-Name:lmplz	VmPeak:12643224 kB	VmRSS:6344 kB	RSSMax:1969316 kB	user:0.196445	sys:0.514686	CPU:0.711161	real:0.682693
-```
-
-### Subword-level
-
-At subword-level, we recommend building a 6-gram model. Use the following command:
-
-```sh
-bin/lmplz --order 6 \
-    --text my_dataset/language_model/corpus_subwords.txt \
-    --arpa my_dataset/language_model/model_subwords.arpa \
-    --discount_fallback
-```
-
-Note that the `--discount_fallback` option can be removed if your corpus is very large.
-
-### Word-level
-
-At word-level, we recommend building a 3-gram model. Use the following command:
-
-```sh
-bin/lmplz --order 3 \
-    --text my_dataset/language_model/corpus_words.txt \
-    --arpa my_dataset/language_model/model_words.arpa \
-    --discount_fallback
-```
-
-Note that the `--discount_fallback` option can be removed if your corpus is very large.
-
-## Predict with a language model
-
-See the [dedicated example]().
+See the [dedicated example](../prediction/index.md#predict-with-a-language-model).
