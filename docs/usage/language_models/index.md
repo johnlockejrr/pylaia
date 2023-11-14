@@ -1,7 +1,10 @@
 # Explicit language modeling with n-grams
 
 PyLaia supports lattice rescoring using a statistical language model.
-This documentation gives instructions to build a language model with [kenlm](https://kheafield.com/code/kenlm/). Note that you can also use [SRILM](http://www.speech.sri.com/projects/srilm/).
+This documentation gives instructions to build a language model with [kenlm](https://kheafield.com/code/kenlm/).
+
+!!! note
+    You can also use [SRILM](http://www.speech.sri.com/projects/srilm/) to build an ARPA language model.
 
 To decode with a language model, you need:
 
@@ -15,7 +18,6 @@ To decode with a language model, you need:
 
 To build the language model, you first need to install and compile [kenlm](https://github.com/kpu/kenlm) by following the instructions detailed in the [README](https://github.com/kpu/kenlm#compiling).
 
-
 ### Generate resources to train the language model
 
 To train a language model, you need to generate a corpus containing the training text tokenized at character, subword or word level.
@@ -23,7 +25,7 @@ To train a language model, you need to generate a corpus containing the training
 #### Characters
 
 Here is a sample of text tokenized at character-level (`corpus_characters.txt`).
-```text
+```text title="corpus_characters.txt"
 u d e <space> i <space> r e s t a u r a n t e r ,
 v æ r e t <space> u h y r e <space> m e g e t <space> s a m m e n , <space> o f t e <space> t i l <space> m a a l t i d e r <space> o g <space> t i l <space> t h e <space> h o s <space> O s s b a h r ,
 v i <space> s i d d e r <space> v e d <space> k a m i n e n <space> d e r <space> o g <space> s n a k k e r , <space> h v i l k e t <space> e r <space> m e g e t <space> m o r s o m t . <space> N u
@@ -34,7 +36,7 @@ O s s b a h r <space> m a a <space> v æ r e <space> s a m m e n <space> m e d <
 #### Subwords
 
 Here is a sample of text tokenized at subword-level (`corpus_subwords.txt`).
-```text
+```text title="corpus_subwords.txt"
 ud e <space> i <space> r e st au r ant er ,
 været <space> u h y r e <space> meget <space> sammen , <space> ofte <space> til <space> ma altid er <space> og <space> til <space> th e <space> hos <space> O s s ba h r ,
 vi <space> sidde r <space> ved <space> ka min en <space> der <space> og <space> snakke r , <space> hvilket <space> er <space> meget <space> morsomt . <space> Nu
@@ -44,7 +46,7 @@ O s s ba h r <space> maa <space> være <space> sammen <space> med <space> H e d 
 
 #### Words
 Here is a sample of text tokenized at word-level (`corpus_words.txt`).
-```text
+```text title="corpus_words.txt"
 ude <space> i <space> restauranter <space> ,
 været <space> uhyre <space> meget <space> sammen <space> , <space> ofte <space> til <space> maaltider <space> og <space> til <space> the <space> hos <space> Ossbahr <space> ,
 vi <space> sidder <space> ved <space> kaminen <space> der <space> og <space> snakker <space> , <space> hvilket <space> er <space> meget <space> morsomt <space> . <space> Nu
@@ -67,7 +69,8 @@ bin/lmplz --order 6 \
     --discount_fallback
 ```
 
-Note that the `--discount_fallback` option can be removed if your corpus is very large.
+!!! note
+    The `--discount_fallback` option can be removed if your corpus is very large.
 
 The following message should be displayed if the language model was built successfully:
 
@@ -119,7 +122,8 @@ bin/lmplz --order 6 \
     --discount_fallback
 ```
 
-Note that the `--discount_fallback` option can be removed if your corpus is very large.
+!!! note
+    The `--discount_fallback` option can be removed if your corpus is very large.
 
 #### Words
 
@@ -132,7 +136,8 @@ bin/lmplz --order 3 \
     --discount_fallback
 ```
 
-Note that the `--discount_fallback` option can be removed if your corpus is very large.
+!!! note
+    The `--discount_fallback` option can be removed if your corpus is very large.
 
 ## Predict with a language model
 
@@ -141,11 +146,15 @@ Once the language model is trained, you need to generate a list of tokens and a 
 ### List of tokens
 
 The list of tokens `tokens.txt` lists all the tokens that can be predicted by PyLaia.
-Note that it is very similar to `syms.txt`, but without any index: `cut -d' ' -f 1 syms.txt > tokens.txt`
+It should be similar to `syms.txt`, but without any index, and can be generated with this command:
+```bash
+cut -d' ' -f 1 syms.txt > tokens.txt
+```
 
-Note that this file does not depend on the tokenization level.
+!!! note
+    This file does not depend on the tokenization level.
 
-```text
+```text title="tokens.txt"
 <ctc>
 .
 ,
@@ -162,8 +171,9 @@ The lexicon lists all the words in the vocabulary and its decomposition in token
 
 #### Characters
 
-At character-level, words are simply characters, so the `lexicon.txt` file should look like this:
-```text
+At character-level, words are simply characters, so the `lexicon_characters.txt` file should map characters to characters:
+
+```text title="lexicon_characters.txt"
 <ctc> <ctc>
 . .
 , ,
@@ -175,9 +185,9 @@ c c
 ```
 
 #### Subwords
-At subword-level, the `lexicon.txt` file should look like this:
+At subword-level, the `lexicon_subwords.txt` file should map subwords with their character decomposition:
 
-```text
+```text title="lexicon_subwords.txt"
 <ctc> <ctc>
 . .
 , ,
@@ -189,9 +199,9 @@ au a u
 ```
 
 #### Words
-At word-level, the `lexicon.txt` file should look like this:
+At word-level, the `lexicon_words.txt` file should map words with their character decomposition:
 
-```text
+```text title="lexicon_words.txt"
 <ctc> <ctc>
 . .
 , ,

@@ -3,7 +3,7 @@
 To train PyLaia, you need line images and their corresponding transcriptions. The dataset should be divided into three sets: training, validation and test sets.
 
 The dataset should be formatted as follows:
-```
+```bash
 # Images
 ├── images
     ├── train/
@@ -42,7 +42,7 @@ Two files `{train|val}.txt` are required to train the model. They should map ima
 
 Example:
 
-```sh
+```text title="train.txt"
 train/im01 f o r <space> d e t <space> t i l f æ l d e <space> d e t <space> s k u l d e <space> l y k k e s <space> D i g
 train/im02 a t <space> o p d r i v e <space> d e t <space> o m s k r e v n e <space> e x p l : <space> a f
 train/im03 « F r u <space> I n g e r » , <space> a t <space> s e n d e <space> m i g <space> s a m m e
@@ -53,7 +53,7 @@ train/im03 « F r u <space> I n g e r » , <space> a t <space> s e n d e <space>
 Three files `{train|val|test}_text.txt` are required to evaluate your models. They should map image names and non-tokenized transcriptions.
 
 Example:
-```bash
+```text title="train_text.txt"
 train/im01 for det tilfælde det skulde lykkes Dig
 train/im02 at opdrive det omskrevne expl: af
 train/im03 «Fru Inger», at sende mig samme
@@ -61,12 +61,13 @@ train/im03 «Fru Inger», at sende mig samme
 
 ### Image list
 
-Three files `{train|val|test}_ids.txt` are required to run predictions. They should list image names without transcriptions.
-
-Note: these lists of ids can be obtained with: `cut -d' ' -f1 train_text.txt > train_ids.txt`
+Three files `{train|val|test}_ids.txt` are required to run predictions. They should list image names without transcriptions and can be obtained with:
+```bash
+cut -d' ' -f1 train_text.txt > train_ids.txt
+```
 
 Example:
-```bash
+```text title="train_ids.txt"
 train/im01
 train/im02
 train/im03
@@ -78,7 +79,7 @@ Finally, a file named `syms.txt` is required, mapping tokens from the training s
 
 Example:
 
-```text
+```text title="syms.txt"
 <ctc> 0
 ! 1
 " 2
