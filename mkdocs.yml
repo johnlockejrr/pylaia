@@ -48,6 +48,7 @@ nav:
     - Training: usage/training/index.md
     - Prediction: usage/prediction/index.md
     - Explicit language modeling: usage/language_models/index.md
+    - Netout: usage/netout/index.md
   - Releases: releases.md
 
 copyright:  Copyright &copy; Teklia
