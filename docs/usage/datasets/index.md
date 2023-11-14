@@ -9,14 +9,13 @@ The dataset should be formatted as follows:
     ├── train/
     ├── val/
     └── test/
-# Tokenized transcriptions (used for training)
-├── train.txt
-├── val.txt
-├── test.txt
 # Image ids (used for prediction)
 ├── train_ids.txt
 ├── val_ids.txt
 ├── test_ids.txt
+# Tokenized transcriptions (used for training)
+├── train.txt
+├── val.txt
 # Transcriptions (used for evaluation)
 ├── train_text.txt
 ├── val_text.txt
@@ -34,9 +33,12 @@ mogrify -resize x128 images/*.jpg
 
 Note that PyLaia can also support variable size images by setting `--fixed_input_height 0` during [model initialization](../initialization/index.md).
 
-## Tokenized transcriptions
 
-Three files `{train|val|test}.txt` are required to train the model. They should map image names and tokenized transcriptions.
+## Ground truth
+
+### Tokenized transcriptions
+
+Two files `{train|val}.txt` are required to train the model. They should map image names and tokenized transcriptions for the training and validation sets.
 
 Example:
 
@@ -46,37 +48,37 @@ train/im02 a t <space> o p d r i v e <space> d e t <space> o m s k r e v n e <sp
 train/im03 « F r u <space> I n g e r » , <space> a t <space> s e n d e <space> m i g <space> s a m m e
 ```
 
-## Image names
+### Transcriptions
 
-Three additional files `{train|val|test}_ids.txt` are required to run predictions. They should list image names without transcriptions.
-
-Example:
-
-```sh
-train/im01
-train/im02
-train/im03
-```
-
-## Transcriptions
-
-Finally, three files `{train|val|test}_text.txt` are required to evaluate your models. They should map image names and non-tokenized transcriptions.
+Three files `{train|val|test}_text.txt` are required to evaluate your models. They should map image names and non-tokenized transcriptions.
 
 Example:
-
-```sh
+```bash
 train/im01 for det tilfælde det skulde lykkes Dig
 train/im02 at opdrive det omskrevne expl: af
 train/im03 «Fru Inger», at sende mig samme
 ```
 
-## List of symbols
+### Image list
+
+Three files `{train|val|test}_ids.txt` are required to run predictions. They should list image names without transcriptions.
+
+Note: these lists of ids can be obtained with: `cut -d' ' -f1 train_text.txt > train_ids.txt`
+
+Example:
+```bash
+train/im01
+train/im02
+train/im03
+```
+
+### Symbol list
 
 Finally, a file named `syms.txt` is required, mapping tokens from the training set and their index, starting with the `<ctc>` token.
 
 Example:
 
-```
+```text
 <ctc> 0
 ! 1
 " 2
