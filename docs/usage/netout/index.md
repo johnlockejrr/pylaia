@@ -3,14 +3,11 @@
 The `pylaia-htr-netout` command can be used to dump the features extracted by PyLaia for a set of text-lines. To know more about the options of this command, use `pylaia-htr-netout --help`.
 
 !!! warning
-    This command was initially designed to combine PyLaia and Kaldi. Since 2022, combining PyLaia with language models can be achieved more easily by
-
-    1. [creating a language model with KenLM](../language_models/index.md)
-    2. [predicting with `pylaia-htr-decode-ctc`](../prediction/index.md#predict-with-a-language-model).
+    This command was initially designed to combine PyLaia and Kaldi. Since December 2022, combining PyLaia with language models can be achieved more easily by [building a language model with KenLM](../language_models/index.md) and [predicting with `pylaia-htr-decode-ctc`](../prediction/index.md#predict-with-a-language-model).
 
 ## Purpose
 
-This command outputs the feature matrix computed by PyLaia and the lattice in Kaldi format for a given dataset.
+This command outputs the feature matrix and lattice computed by PyLaia in Kaldi format for a given dataset.
 
 It requires:
 
