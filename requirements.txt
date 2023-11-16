@@ -6,7 +6,7 @@ matplotlib
 # cpu version: nnutils-pytorch
 nnutils-pytorch-cuda
 pytorch-lightning==1.1.7
-torch>=1.13,<1.14
+torch==2.1.1
 torchvision>=0.14,<0.15
 torchaudio>=0.13,<0.14
 jsonargparse[signatures]==4.7
