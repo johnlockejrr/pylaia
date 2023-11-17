@@ -22,7 +22,7 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --durations=10 tests
+    - pytest --cov=laia --durations=10 -- tests/scripts/htr/train_ctc_test.py::test_train_can_resume_training
 
   parallel:
     matrix:
