@@ -1,6 +1,6 @@
 textdistance==4.6.0
 natsort==8.4.0
-numpy
+numpy==1.26.2
 scipy
 matplotlib
 # cpu version: nnutils-pytorch
