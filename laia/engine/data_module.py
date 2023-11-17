@@ -109,6 +109,7 @@ class DataModule(pl.LightningDataModule):
 
     def train_dataloader(self) -> DataLoader:
         assert self.tr_ds is not None
+        print("HELLO", self.trainer.on_gpu)
         return DataLoader(
             dataset=self.tr_ds,
             batch_size=self.batch_size,
