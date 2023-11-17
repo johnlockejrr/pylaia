@@ -14,6 +14,7 @@ test:
 
   variables:
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+    OMP_NUM_THREADS: 1
 
   before_script:
     - pip install .[test]
@@ -22,7 +23,7 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --durations=10 -- tests/scripts/htr/train_ctc_test.py::test_train_can_resume_training
+    - pytest --cov=laia --durations=10
 
   parallel:
     matrix:
