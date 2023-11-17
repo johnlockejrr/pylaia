@@ -2,7 +2,7 @@ textdistance==4.6.0
 natsort==8.4.0
 numpy
 scipy
-matplotlib
+matplotlib==3.8.1
 # cpu version: nnutils-pytorch
 nnutils-pytorch-cuda
 pytorch-lightning==1.1.7
