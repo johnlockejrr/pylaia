@@ -89,9 +89,18 @@ class CTCLanguageDecoder:
 
         # Normalize confidence score
         out["prob-htr"] = [
-            np.exp(
-                hypothesis[0].score / ((self.language_model_weight + 1) * length.item())
+            CTCLanguageDecoder.compute_scores(
+                tokens=hypothesis[0].tokens.tolist(),
+                timesteps=hypothesis[0].timesteps.tolist(),
+                probs=features,
             )
-            for hypothesis, length in zip(hypotheses, batch_sizes)
+            for hypothesis, features in zip(hypotheses, batch_features)
         ]
         return out
+
+    @staticmethod
+    def compute_scores(tokens, timesteps, probs):
+        sequence_prob = []
+        for token, timestep in zip(tokens[1:-1], timesteps[1:-1]):
+            sequence_prob.append(probs[timestep - 1, token].exp())
+        return np.mean(sequence_prob)
