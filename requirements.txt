@@ -7,6 +7,6 @@ nnutils-pytorch-cuda
 pytorch-lightning==1.1.7
 torch>=1.13,<1.14
 torchvision>=0.14,<0.15
-torchaudio>=0.13,<0.14
+torchaudio==2.1.1
 jsonargparse[signatures]==4.7
 imagesize==1.4.1
