@@ -17,6 +17,8 @@ test:
     # Limit number of threads for parallel regions
     OMP_NUM_THREADS: 1
 
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+
   before_script:
     - pip install .[test]
 
@@ -24,7 +26,13 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --durations=10 tests
+    - pytest --cov=laia --cov-report xml:coverage."$IMAGE".xml --durations=10 tests
+
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.python:3.10.xml
 
   parallel:
     matrix:
