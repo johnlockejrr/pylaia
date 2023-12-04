@@ -17,6 +17,8 @@ test:
     # Limit number of threads for parallel regions
     OMP_NUM_THREADS: 1
 
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+
   before_script:
     - pip install .[test]
 
