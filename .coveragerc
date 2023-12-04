@@ -1,6 +1,7 @@
 [paths]
 source =
    laia
+   */site-packages
 
 [run]
 branch = true
