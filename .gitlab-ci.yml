@@ -24,7 +24,7 @@ test:
     - schedules
 
   script:
-    - pytest --cov --cov-report term xml:coverage.xml --cov-config=.coveragerc --durations=10 tests
+    - pytest --cov --cov-report xml:coverage.xml --cov-config=.coveragerc --durations=10 tests
 
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
