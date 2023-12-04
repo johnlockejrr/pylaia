@@ -26,13 +26,7 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --cov-report xml:coverage."$IMAGE".xml --durations=10 tests
-
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage.python:3.10.xml
+    - pytest --cov=laia --durations=10 tests
 
   parallel:
     matrix:
