@@ -6,7 +6,7 @@ matplotlib==3.8.0
 nnutils-pytorch-cuda
 pytorch-lightning==1.2.0
 torch>=1.13,<1.14
-torchvision>=0.14,<0.15
+torchvision==0.16.1
 torchaudio>=0.13,<0.14
 jsonargparse[signatures]==4.7
 imagesize==1.4.1
