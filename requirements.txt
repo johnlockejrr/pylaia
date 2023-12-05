@@ -8,5 +8,5 @@ pytorch-lightning==1.2.0
 torch>=1.13,<1.14
 torchvision>=0.14,<0.15
 torchaudio>=0.13,<0.14
-jsonargparse[signatures]==4.7
+jsonargparse==4.27.1
 imagesize==1.4.1
