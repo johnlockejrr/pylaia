@@ -89,6 +89,7 @@ class ProgressBar(pl.callbacks.ProgressBar):
     def on_epoch_start(self, trainer, *args, **kwargs):
         # skip parent
         super(pl.callbacks.ProgressBar, self).on_epoch_start(trainer, *args, **kwargs)
+        # Might need to rename this method? move the code?
         if not self.main_progress_bar.disable:
             self.main_progress_bar.reset(convert_inf(self.total_train_batches))
         self.main_progress_bar.set_description_str(f"TR - E{trainer.current_epoch}")
