@@ -1,0 +1,6 @@
+.tox
+.git
+.github
+.pytest_cache
+ci
+docs
