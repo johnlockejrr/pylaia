@@ -1,0 +1,17 @@
+[tool.coverage.paths]
+source = [
+   "laia",
+   "*/site-packages",
+]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+source = ["laia"]
+
+[tool.coverage.report]
+show_missing = false
+precision = 2
+
+[tool.coverage.xml]
+output = "coverage.xml"
