@@ -2,6 +2,7 @@
 source = [
    "laia/",
    "*/site-packages/",
+   "*/lib/python*/site-packages/"
 ]
 
 [tool.coverage.run]
