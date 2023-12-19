@@ -1,13 +1,16 @@
 [tool.coverage.paths]
 source = [
-   "laia",
-   "*/site-packages",
+   "laia/",
+   "*/site-packages/",
 ]
 
 [tool.coverage.run]
 branch = true
 parallel = true
-source = ["laia"]
+include = [
+   "laia/*",
+   "tests/*"
+]
 
 [tool.coverage.report]
 show_missing = false
