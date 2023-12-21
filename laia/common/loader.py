@@ -10,6 +10,7 @@ import pytorch_lightning as pl
 import torch
 
 from laia.common.logging import get_logger
+from laia.utils.hf import download_from_huggingface
 
 _logger = get_logger(__name__)
 
@@ -128,9 +129,27 @@ class ModelLoader(ObjectLoader):
         return f
 
     @staticmethod
-    def prepare_checkpoint(checkpoint: str, exp_dirpath: str, monitor: str) -> str:
+    def from_pretrained(model_id: str) -> "ModelLoader":
+        # Load model
+        return ModelLoader("").load_by(download_from_huggingface(model_id))
+
+    @staticmethod
+    def prepare_checkpoint(
+        checkpoint: Optional[str], exp_dirpath: str, monitor: str
+    ) -> str:
         if checkpoint:
             checkpoint_path = os.path.join(exp_dirpath, checkpoint)
+            if not os.path.exists(checkpoint_path):
+                _logger.info(
+                    f'Could not find the checkpoint locally "{checkpoint_path}"'
+                )
+                _logger.info("Trying to download from HuggingFace")
+                # Try to load from HF
+                return os.path.join(
+                    download_from_huggingface(checkpoint_path[len(exp_dirpath) + 1 :]),
+                    "model",
+                )
+
             found = ModelLoader.choose_by(checkpoint_path)
             err_msg = f'Could not find the checkpoint "{checkpoint_path}"'
         else:
