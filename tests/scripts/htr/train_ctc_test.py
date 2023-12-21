@@ -70,7 +70,7 @@ def test_train_1_epoch(tmpdir, accelerator):
         data_module.root / "tr.gt",
         data_module.root / "va.gt",
         f"--common.train_path={tmpdir}",
-        "--data.batch_size=3",
+        "--data.batch_size=1",
         "--train.checkpoint_k=1",
         "--trainer.max_epochs=1",
     ]
@@ -102,7 +102,7 @@ def test_train_half_precision(tmpdir):
         data_module.root / "tr.gt",
         data_module.root / "va.gt",
         f"--common.train_path={tmpdir}",
-        f"--data.batch_size=3",
+        f"--data.batch_size=1",
         "--trainer.fast_dev_run=true",
         "--trainer.precision=16",
         "--trainer.gpus=1",
@@ -124,7 +124,7 @@ def test_train_can_resume_training(tmpdir, caplog):
     ]
     kwargs = {
         "common": CommonArgs(train_path=tmpdir),
-        "data": DataArgs(batch_size=3),
+        "data": DataArgs(batch_size=1),
         "optimizer": OptimizerArgs(name="SGD"),
         "train": TrainArgs(augment_training=True),
         "trainer": TrainerArgs(
@@ -151,7 +151,7 @@ def test_train_early_stops(tmpdir, caplog):
         data_module.root / "tr.gt",
         data_module.root / "va.gt",
         common=CommonArgs(train_path=tmpdir),
-        data=DataArgs(batch_size=3),
+        data=DataArgs(batch_size=1),
         train=TrainArgs(early_stopping_patience=2),
         trainer=TrainerArgs(
             progress_bar_refresh_rate=0, weights_summary=None, max_epochs=5
@@ -175,7 +175,7 @@ def test_train_with_scheduler(tmpdir, caplog):
         data_module.root / "tr.gt",
         data_module.root / "va.gt",
         common=CommonArgs(train_path=tmpdir),
-        data=DataArgs(batch_size=3),
+        data=DataArgs(batch_size=1),
         optimizer=OptimizerArgs(learning_rate=1),
         scheduler=SchedulerArgs(active=True, patience=0, monitor="va_wer", factor=0.5),
         trainer=TrainerArgs(
