@@ -1,6 +1,7 @@
 [tool.coverage.paths]
 source = [
    "laia/",
+   "tests/",
    "*/site-packages/",
    "*/lib/python*/site-packages/"
 ]
