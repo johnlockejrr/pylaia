@@ -22,7 +22,7 @@ precision = 2
 output = "coverage.xml"
 
 [tool.pytest.ini_options]
-addopts = [
-    "--import-mode=importlib",
-]
+# addopts = [
+#     "--import-mode=importlib",
+# ]
 pythonpath = "."
