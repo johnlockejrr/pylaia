@@ -8,12 +8,8 @@ test:
   image: $IMAGE
 
   stage: test
-  cache:
-    paths:
-      - .cache/pip
 
   variables:
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
     # Limit number of threads for parallel regions
     OMP_NUM_THREADS: 1
 
@@ -24,7 +20,9 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --durations=10 tests
+    - pytest --cov=laia --cov-report term --durations=10 tests
+
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
 
   parallel:
     matrix:
