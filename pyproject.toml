@@ -1,0 +1,28 @@
+[tool.coverage.paths]
+source = [
+   "laia/",
+   "tests/",
+   "*/site-packages/",
+   "*/lib/python*/site-packages/"
+]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+include = [
+   "laia/*",
+   "tests/*"
+]
+
+[tool.coverage.report]
+show_missing = false
+precision = 2
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+pythonpath = "."
