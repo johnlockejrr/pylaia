@@ -20,7 +20,7 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --cov-report xml:coverage-"$IMAGE".xml --durations=10 tests
+    - pytest --cov=laia --cov-report term --cov-report xml:coverage-"$IMAGE".xml --durations=10 tests
 
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
