@@ -5,7 +5,7 @@ stages:
   - release
 
 test:
-  image: python:$IMAGE
+  image: $IMAGE
 
   stage: test
 
@@ -20,20 +20,15 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --cov-report term --cov-report xml:coverage-"$IMAGE".xml --durations=10 tests
+    - pytest --cov=laia --cov-report term --durations=10 tests
 
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: coverage-3.10.xml
 
   parallel:
     matrix:
       - IMAGE:
-        - "3.9"
-        - "3.10"
+        - python:3.9
+        - python:3.10
 
 lint:
   image: python:3.10
