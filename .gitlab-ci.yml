@@ -5,15 +5,11 @@ stages:
   - release
 
 test:
-  image: $IMAGE
+  image: python:$IMAGE
 
   stage: test
-  cache:
-    paths:
-      - .cache/pip
 
   variables:
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
     # Limit number of threads for parallel regions
     OMP_NUM_THREADS: 1
 
@@ -24,13 +20,20 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --durations=10 tests
+    - pytest --cov=laia --cov-report xml:coverage-"$IMAGE".xml --durations=10 tests
+
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage-3.10.xml
 
   parallel:
     matrix:
       - IMAGE:
-        - python:3.9
-        - python:3.10
+        - "3.9"
+        - "3.10"
 
 lint:
   image: python:3.10
