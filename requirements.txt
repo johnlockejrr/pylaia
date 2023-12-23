@@ -1,6 +1,6 @@
 textdistance==4.6.0
 natsort==8.4.0
-scipy==1.11.3
+scipy==1.11.4
 matplotlib==3.8.2
 # cpu version: nnutils-pytorch
 nnutils-pytorch-cuda
