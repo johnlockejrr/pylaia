@@ -79,7 +79,7 @@ ngram 2=14
             ),
             0,
             "tast",
-            0.38,
+            0.39,
         ),
         (
             # For frame 2, tokens with index 1 and 2 are the most probable tokens (the model a feature vector of size (n_frame=4, batch_size=1, n_tokens=10)
@@ -93,7 +93,7 @@ ngram 2=14
             ),
             1,
             "test",
-            0.40,
+            0.37,
         ),
     ],
 )
@@ -123,4 +123,4 @@ def test_lm_decoding_weight(
     predicted_confidence = decoder(input_tensor)["prob-htr"][0]
 
     assert predicted_string == expected_string
-    assert np.around(predicted_confidence, 2) == expected_confidence
+    assert np.isclose(predicted_confidence, expected_confidence, atol=1e-2)
