@@ -42,6 +42,7 @@ class CTCLanguageDecoder:
             blank_token=blank_token,
             unk_word=unk_token,
             sil_token=sil_token,
+            nbest=10,
         )
         self.temperature = temperature
         self.language_model_weight = language_model_weight
@@ -88,10 +89,42 @@ class CTCLanguageDecoder:
         out["hyp"] = [hypothesis[0].tokens.tolist() for hypothesis in hypotheses]
 
         # Normalize confidence score
+        # out["prob-htr"] = [
+        #     CTCLanguageDecoder.compute_scores_from_initial_matrix(
+        #         tokens=hypothesis[0].tokens.tolist(),
+        #         timesteps=hypothesis[0].timesteps.tolist(),
+        #         probs=features,
+        #     )
+        #     for hypothesis, features in zip(hypotheses, batch_features)
+        # ]
         out["prob-htr"] = [
-            np.exp(
-                hypothesis[0].score / ((self.language_model_weight + 1) * length.item())
-            )
-            for hypothesis, length in zip(hypotheses, batch_sizes)
+            CTCLanguageDecoder.compute_scores_from_nbest(hypothesis)
+            for hypothesis in hypotheses
         ]
         return out
+
+    @staticmethod
+    def compute_scores_from_initial_matrix(tokens, timesteps, probs):
+        """
+        Compute confidence scores using probabilities from PyLaia
+
+        :param tokens: tokens from CTCHypothesis
+        :param timesteps: timesteps from CTCHypothesis
+        :param probs: initial probability matrix
+        :return: mean confidence score
+        """
+        sequence_prob = []
+        for token, timestep in zip(tokens[1:-1], timesteps[1:-1]):
+            sequence_prob.append(probs[timestep - 1, token].exp())
+        return np.mean(sequence_prob)
+
+    @staticmethod
+    def compute_scores_from_nbest(nbest_hypothesis):
+        """
+        Compute confidence scores using n best hypotheses
+
+        :param nbest_hypothesis: a CTCHypothesis object with nbest>=10
+        :return: confidence score
+        """
+        nbest_scores = [np.exp(hyp.score) for hyp in nbest_hypothesis]
+        return nbest_scores[0] / sum(nbest_scores)
