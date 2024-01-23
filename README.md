@@ -57,7 +57,7 @@ Work in this toolkit was financially supported by the [Pattern Recognition and H
 
 ## Citation
 
-Article describing the latest contributions to PyLaia
+* Article describing the latest contributions to PyLaia
 ```
 @inproceedings{pylaia2024,
     author = "Tarride, Solène and Schneider, Yoann and Generali, Marie and Boillet, Melodie and Abadie, Bastien and Kermorvant, Christopher",
@@ -67,7 +67,7 @@ Article describing the latest contributions to PyLaia
 }
 ```
 
-Original article
+* Original article
 ```
 @inproceedings{laia2017,
   author={Puigcerver, Joan},
@@ -80,7 +80,7 @@ Original article
   doi={10.1109/ICDAR.2017.20}}
 ```
 
-GitLab repository
+* GitLab repository
 ```
 @misc{puigcerver2018pylaia,
   author = {Joan Puigcerver and Carlos Mocholí},
