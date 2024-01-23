@@ -19,7 +19,7 @@ class __TestCallback(pl.Callback):
         assert self.pbar.main_progress_bar.desc.startswith("TR - E")
 
     def on_validation_epoch_start(self, trainer, *_, **__):
-        if trainer.running_sanity_check:
+        if trainer.sanity_checking:
             assert self.pbar.val_progress_bar.desc.startswith("VA sanity check")
         else:
             assert self.pbar.tr_timer.end is not None
@@ -35,7 +35,7 @@ class __TestCallback(pl.Callback):
         assert "cer=33.0" in str(self.pbar.val_progress_bar)
 
     def on_validation_epoch_end(self, trainer, *_, **__):
-        if not trainer.running_sanity_check:
+        if not trainer.sanity_checking:
             assert self.pbar.va_timer.end is not None
 
 

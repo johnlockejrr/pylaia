@@ -95,7 +95,7 @@ class ProgressBar(pl.callbacks.ProgressBar):
 
     def on_validation_epoch_start(self, trainer, *args, **kwargs):
         super().on_validation_start(trainer, *args, **kwargs)
-        if trainer.running_sanity_check:
+        if trainer.sanity_checking:
             self.val_progress_bar.set_description_str("VA sanity check")
         else:
             self.tr_timer.stop()
@@ -172,7 +172,7 @@ class ProgressBar(pl.callbacks.ProgressBar):
             # log validation bar
             log.log(self.level, tqdm.format_meter(**format_dict))
 
-            if trainer.running_sanity_check:
+            if trainer.sanity_checking:
                 self.val_progress_bar.refresh()
                 log.log(
                     self.level,
