@@ -24,7 +24,7 @@ test:
     - schedules
 
   script:
-    - tox --durations=10
+    - tox
 
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
 
