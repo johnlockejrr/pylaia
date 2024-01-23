@@ -24,7 +24,7 @@ test:
     - schedules
 
   script:
-    - pytest --cov=laia --cov-report term --durations=10 tests
+    - tox --durations=10
 
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
 
