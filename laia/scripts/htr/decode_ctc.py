@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 from typing import Any, Dict, List, Optional
 
 import jsonargparse
@@ -15,8 +16,8 @@ from laia.utils import ImageStats, SymbolsTable
 
 
 def run(
-    syms: str,
     img_list: str,
+    syms: Optional[str] = None,
     img_dirs: Optional[List[str]] = None,
     common: CommonArgs = CommonArgs(),
     data: DataArgs = DataArgs(),
@@ -45,6 +46,10 @@ def run(
     )
 
     # prepare the symbols
+    if not syms:
+        # HuggingFace models already have a symbols table
+        syms = os.path.join(checkpoint, "syms.txt")
+
     syms = SymbolsTable(syms)
 
     # prepare the data
@@ -125,14 +130,6 @@ def get_args(argv: Optional[List[str]] = None) -> Dict[str, Any]:
         "--config", action=jsonargparse.ActionConfigFile, help="Configuration file"
     )
     parser.add_argument(
-        "syms",
-        type=str,
-        help=(
-            "Mapping from strings to integers. "
-            "The CTC symbol must be mapped to integer 0"
-        ),
-    )
-    parser.add_argument(
         "img_list",
         type=str,
         help=(
@@ -140,6 +137,14 @@ def get_args(argv: Optional[List[str]] = None) -> Dict[str, Any]:
             'line. Lines starting with "#" will be ignored. Lines can be filepaths '
             '(e.g. "/tmp/img.jpg") or filenames of images present in --img_dirs (e.g. '
             "img.jpg). The filename extension is optional and case insensitive"
+        ),
+    )
+    parser.add_argument(
+        "--syms",
+        type=str,
+        help=(
+            "Mapping from strings to integers. "
+            "The CTC symbol must be mapped to integer 0"
         ),
     )
     parser.add_argument(
