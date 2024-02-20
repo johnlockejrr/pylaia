@@ -139,7 +139,6 @@ crnn:
   - false
   - false
   - false
-  use_masks: false
   rnn_layers: 3
   rnn_units: 256
   rnn_dropout: 0.5
