@@ -7,7 +7,7 @@ class AdaptivePool2d(torch.nn.Module):
     def __init__(self, output_sizes, func):
         super().__init__()
         self._output_sizes = output_sizes
-        self._func = func
+        self._func = func(output_sizes)
         self._fixed_size = isinstance(output_sizes, int) or (
             output_sizes[0] is not None and output_sizes[1] is not None
         )
@@ -18,7 +18,7 @@ class AdaptivePool2d(torch.nn.Module):
 
     def forward(self, x):
         x, xs = (x.data, x.sizes) if isinstance(x, PaddedTensor) else (x, None)
-        y = self._func(output_size=self.output_sizes)(x)
+        y = self._func(x)
         if xs is None or self._fixed_size:
             return y
         ys = xs.clone()
