@@ -34,7 +34,6 @@ class LaiaCRNN(nn.Module):
         rnn_type: Union[nn.LSTM, nn.GRU, nn.RNN] = nn.LSTM,
         inplace: bool = False,
         vertical_text: bool = False,
-        use_masks: bool = False,
     ) -> None:
         super().__init__()
         self._rnn_dropout = rnn_dropout
@@ -66,7 +65,6 @@ class LaiaCRNN(nn.Module):
                     dropout=dr,
                     batchnorm=bn,
                     inplace=inplace,
-                    use_masks=use_masks,
                 )
             )
             ni = nh

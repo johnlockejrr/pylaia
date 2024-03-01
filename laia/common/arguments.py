@@ -78,8 +78,6 @@ class CreateCRNNArgs:
         cnn_dropout: Dropout probability at the input of each convolutional layer
         cnn_batchnorm: Whether to do batch normalization before the activation in
             each convolutional layer
-        use_masks: Whether to apply a zero mask after each convolution and
-            non-linear activation
         rnn_layers: Number of recurrent layers
         rnn_units: Number of units in each recurrent layer
         rnn_dropout: Dropout probability at the input of each recurrent layer
@@ -107,7 +105,6 @@ class CreateCRNNArgs:
     )
     cnn_dropout: List[ClosedUnitInterval] = field(default_factory=lambda: [0.0] * 4)
     cnn_batchnorm: List[bool] = field(default_factory=lambda: [False] * 4)
-    use_masks: bool = False
     rnn_layers: PositiveInt = 3
     rnn_units: PositiveInt = 256
     rnn_dropout: ClosedUnitInterval = 0.5

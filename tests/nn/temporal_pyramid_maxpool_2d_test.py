@@ -1,14 +1,12 @@
-import pytest
 import torch
 
 from laia.data import PaddedTensor
 from laia.nn import TemporalPyramidMaxPool2d
 
 
-@pytest.mark.parametrize("use_nnutils", [True, False])
-def test_tensor(use_nnutils):
+def test_tensor():
     x = torch.randn(3, 5, 7, 8, requires_grad=True)
-    layer = TemporalPyramidMaxPool2d(levels=[1, 2], use_nnutils=use_nnutils)
+    layer = TemporalPyramidMaxPool2d(levels=[1, 2])
     y = layer(x)
     assert (3, 5 * (1 + 2)) == y.size()
     (dx,) = torch.autograd.grad([torch.sum(y)], [x])
@@ -33,8 +31,7 @@ def test_tensor(use_nnutils):
     torch.testing.assert_close(dx, expected_dx)
 
 
-@pytest.mark.parametrize("use_nnutils", [True, False])
-def test_padded_tensor(use_nnutils):
+def test_padded_tensor():
     x = torch.tensor(
         [
             [
@@ -49,7 +46,7 @@ def test_padded_tensor(use_nnutils):
         requires_grad=True,
         dtype=torch.float,
     )
-    layer = TemporalPyramidMaxPool2d(levels=[1, 2], use_nnutils=use_nnutils)
+    layer = TemporalPyramidMaxPool2d(levels=[1, 2])
     y = layer(PaddedTensor(x, torch.tensor([[3, 4]])))
     (dx,) = torch.autograd.grad([torch.sum(y)], [x])
 

@@ -26,8 +26,7 @@ class ImagePoolingSequencer(torch.nn.Module):
                 (self._fix_size, None) if columnwise else (None, self._fix_size)
             )
         else:
-            # Assume that the images have a fixed height
-            # (or width if columnwise=False)
+            # Do not use any pooling
             self.sequencer = None
 
     @property

@@ -51,29 +51,6 @@ class ConvBlockTest(unittest.TestCase):
         self.assertEqual([[11 // 2 + 1, 13 // 2 + 1]], y.sizes.tolist())
         self.assertEqual([11 // 2 + 1, 13 // 2 + 1], list(y.data.size())[2:])
 
-    def test_masking(self):
-        m = ConvBlock(1, 1, activation=None, use_masks=True)
-        # Reset parameters so that the operation does nothing
-        for name, param in m.named_parameters():
-            param.requires_grad = False
-            param.data.zero_()
-            if name == "conv.weight":
-                param[:, :, 1, 1] = 1
-
-        x = torch.randn(3, 1, 11, 13)
-        y = m(PaddedTensor(x, torch.tensor([[11, 13], [10, 12], [3, 2]]))).data
-
-        # Check sample 1
-        torch.testing.assert_close(x[0, :, :, :], y[0, :, :, :])
-        # Check sample 2
-        torch.testing.assert_close(x[1, :, :10, :12], y[1, :, :10, :12])
-        torch.testing.assert_close(torch.zeros(1, 1, 13), y[1, :, 10:, :])
-        torch.testing.assert_close(torch.zeros(1, 11, 1), y[1, :, :, 12:])
-        # Check sample 3
-        torch.testing.assert_close(x[2, :, :3, :2], y[2, :, :3, :2])
-        torch.testing.assert_close(torch.zeros(1, 8, 13), y[2, :, 3:, :])
-        torch.testing.assert_close(torch.zeros(1, 11, 11), y[2, :, :, 2:])
-
 
 def padded_cost_function(padded_y):
     y, ys = padded_y.data, padded_y.sizes
@@ -94,7 +71,6 @@ def padded_cost_function(padded_y):
         {"in_channels": 3, "out_channels": 5, "batchnorm": True},
         {"in_channels": 3, "out_channels": 5, "dropout": 0.3},
         {"in_channels": 3, "out_channels": 5, "poolsize": 2},
-        {"in_channels": 3, "out_channels": 5, "use_masks": True},
         {"in_channels": 3, "out_channels": 5, "inplace": True},
     ],
 )

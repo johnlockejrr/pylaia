@@ -92,7 +92,6 @@ def test_train_1_epoch(tmpdir, accelerator):
 @pytest.mark.skip(reason="Issue with half_precision")
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="AMP needs CUDA")
 def test_train_half_precision(tmpdir):
-    # TODO: add test using nnutils: https://github.com/jpuigcerver/nnutils/issues/4
     syms, img_dirs, data_module = prepare_data(tmpdir, image_sequencer="none-14")
     args = [
         syms,
