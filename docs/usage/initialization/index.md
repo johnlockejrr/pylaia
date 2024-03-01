@@ -62,7 +62,6 @@ The full list of parameters is detailed in this section.
 | `crnn.cnn_poolsize`       | MaxPooling size after each convolutional layer. (e.g. [n,n,...] or [[h1,w1],[h2,w2],...]).          | `List`  | `[2, 2, 2, 0]`                                         |
 | `crnn.cnn_dropout`        | Dropout probability at the input of each convolutional layer.                                       | `List`  | `[0.0, 0.0, 0.0, 0.0]`                                 |
 | `crnn.cnn_batchnorm`      | Whether to do batch normalization before the activation in each convolutional layer.                | `List`  | `[False, False, False, False]`                         |
-| `crnn.use_masks`          | Whether to apply a zero mask after each convolution and non-linear activation.                      | `bool`  | `False`                                                |
 | `crnn.rnn_layers`         | Number of recurrent layers.                                                                         | `int`   | `3`                                                    |
 | `crnn.rnn_units`          | Number of units in each recurrent layer.                                                            | `int`   | `256`                                                  |
 | `crnn.rnn_dropout`        | Dropout probability at the input of each recurrent layer.                                           | `float` | `0.5`                                                  |

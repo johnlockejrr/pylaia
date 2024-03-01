@@ -1,16 +1,11 @@
 from typing import Sequence, Union
 
 import torch
-from nnutils_pytorch import adaptive_maxpool_2d
 
 from laia.data import PaddedTensor
 
 
-def _adaptive_maxpool_2d(batch_input, output_sizes, batch_sizes, use_nnutils):
-    if use_nnutils:
-        return adaptive_maxpool_2d(
-            batch_input=batch_input, output_sizes=output_sizes, batch_sizes=batch_sizes
-        )
+def _adaptive_maxpool_2d(batch_input, output_sizes, batch_sizes):
     if batch_sizes is None:
         return torch.nn.functional.adaptive_max_pool2d(
             input=batch_input, output_size=output_sizes
@@ -28,13 +23,10 @@ def _adaptive_maxpool_2d(batch_input, output_sizes, batch_sizes, use_nnutils):
 
 
 class TemporalPyramidMaxPool2d(torch.nn.Module):
-    def __init__(
-        self, levels: Sequence[int], vertical: bool = False, use_nnutils: bool = True
-    ) -> None:
+    def __init__(self, levels: Sequence[int], vertical: bool = False) -> None:
         super().__init__()
         self._levels = levels
         self._vertical = vertical
-        self._use_nnutils = use_nnutils
 
     def forward(self, x: Union[torch.Tensor, PaddedTensor]) -> torch.Tensor:
         if isinstance(x, PaddedTensor):
@@ -51,7 +43,6 @@ class TemporalPyramidMaxPool2d(torch.nn.Module):
                 batch_input=x,
                 output_sizes=output_sizes,
                 batch_sizes=xs,
-                use_nnutils=self._use_nnutils,
             )
             out_levels.append(y.view(n, c * level))
 

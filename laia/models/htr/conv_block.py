@@ -8,7 +8,6 @@ from torch import Tensor
 
 from laia.common.types import Param2d
 from laia.data import PaddedTensor
-from laia.nn.mask_image_from_size import mask_image_from_size
 
 
 class ConvBlock(nn.Module):
@@ -24,7 +23,6 @@ class ConvBlock(nn.Module):
         dropout: Optional[float] = None,
         batchnorm: bool = False,
         inplace: bool = False,
-        use_masks: bool = False,
     ) -> None:
         super().__init__()
         ks, st, di, ps = ConvBlock.prepare_dimensional_args(
@@ -36,7 +34,6 @@ class ConvBlock(nn.Module):
 
         self.dropout = dropout
         self.in_channels = in_channels
-        self.use_masks = use_masks
         self.poolsize = ps
 
         # Add Conv2d layer (compute padding to perform a full convolution).
@@ -79,17 +76,12 @@ class ConvBlock(nn.Module):
             x = F.dropout(x, p=self.dropout, training=self.training)
 
         x = self.conv(x)
-        if self.use_masks:
-            x = mask_image_from_size(x, batch_sizes=xs, mask_value=0)
 
         if self.batchnorm:
             x = self.batchnorm(x)
 
         if self.activation:
             x = self.activation(x)
-
-        if self.use_masks:
-            x = mask_image_from_size(x, batch_sizes=xs, mask_value=0)
 
         if self.pool:
             x = self.pool(x)

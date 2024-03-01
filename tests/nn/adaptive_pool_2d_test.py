@@ -104,16 +104,16 @@ class AdaptiveAvgPool2dTest(unittest.TestCase):
                 # n = 0
                 [
                     # c = 0
-                    [[3 / 2, 1 / 2]],
+                    [[1 / 6, -9 / 6]],
                     # c = 1
-                    [[9 / 2, 6 / 2]],
+                    [[18 / 6, 39 / 6]],
                 ],
                 # n = 1
                 [
                     # c = 0
-                    [[12 / 2, 7 / 2]],
+                    [[24 / 6, 16 / 6]],
                     # c = 1
-                    [[2 / 2, 6 / 2]],
+                    [[20 / 6, 12 / 6]],
                 ],
             ],
             dtype=self.x.dtype,
@@ -229,14 +229,14 @@ class AdaptiveMaxPool2dTest(unittest.TestCase):
                     # c = 0
                     [[2, 1]],
                     # c = 1
-                    [[6, 5]],
+                    [[6, 21]],
                 ],
                 # n = 1
                 [
                     # c = 0
-                    [[8, 8]],
+                    [[8, 6]],
                     # c = 1
-                    [[4, 4]],
+                    [[9, 6]],
                 ],
             ],
             dtype=self.x.dtype,
