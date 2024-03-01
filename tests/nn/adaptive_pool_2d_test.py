@@ -99,7 +99,6 @@ class AdaptiveAvgPool2dTest(unittest.TestCase):
         m = AdaptiveAvgPool2d(output_size=(1, 2))
         x = PaddedTensor(self.x, torch.tensor([[2, 2], [1, 3]]))
         y = m(x)
-        print(y)
         expected_y = torch.tensor(
             [
                 # n = 0
@@ -223,7 +222,6 @@ class AdaptiveMaxPool2dTest(unittest.TestCase):
         m = AdaptiveMaxPool2d(output_size=(1, 2))
         x = PaddedTensor(self.x, torch.tensor([[2, 2], [1, 3]]))
         y = m(x)
-        print(y)
         expected_y = torch.tensor(
             [
                 # n = 0
