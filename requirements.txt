@@ -10,3 +10,4 @@ torchaudio>=0.13,<0.14
 torchmetrics<0.8.0
 jsonargparse[signatures]==4.7
 imagesize==1.4.1
+huggingface-hub==0.19.4
