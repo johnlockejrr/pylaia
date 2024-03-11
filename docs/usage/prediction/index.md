@@ -97,10 +97,21 @@ First, clone a trained model from Hugging Face:
 git clone https://huggingface.co/Teklia/pylaia-huginmunin
 ```
 
+Some files are stored through [Git-LFS](https://git-lfs.com/). Make sure all files are correctly pulled using the following command, from the cloned folder.
+```bash
+git lfs ls-files
+```
+
+You should see three files:
+
+- the language model (`language_model.arpa.gz`),
+- the model architecture (`model`),
+- the weights (`weights.ckpt`).
+
 List image names in `img_list.txt`:
 ```text
-docs/assets/219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f
-docs/assets/219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4
+219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f
+219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4
 ```
 
 Predict with:
