@@ -33,7 +33,6 @@ def run(
     scheduler: SchedulerArgs = SchedulerArgs(),
     data: DataArgs = DataArgs(),
     trainer: TrainerArgs = TrainerArgs(),
-    num_workers: Optional[int] = None,
 ):
     pl.seed_everything(common.seed)
 
@@ -92,7 +91,7 @@ def run(
         shuffle_tr=not bool(trainer.limit_train_batches),
         augment_tr=train.augment_training,
         stage="fit",
-        num_workers=num_workers,
+        num_workers=data.num_workers,
     )
 
     # prepare the training callbacks

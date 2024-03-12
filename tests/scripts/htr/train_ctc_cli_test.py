@@ -89,6 +89,7 @@ common:
 data:
   batch_size: 8
   color_mode: L
+  num_workers: null
 train:
   delimiters:
   - <space>
