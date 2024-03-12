@@ -79,14 +79,19 @@ Work in this toolkit was financially supported by the [Pattern Recognition and H
   doi={10.1109/ICDAR.2017.20}}
 ```
 
-* GitLab repository
+* GitHub repository
 ```
 @misc{puigcerver2018pylaia,
   author = {Joan Puigcerver and Carlos Mocholí},
   title = {PyLaia},
   year = {2018},
-  publisher = {GitLab},
-  journal = {GitLab repository},
-  howpublished = {\url{https://gitlab.teklia.com/atr/pylaia/}},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished = {\url{https://github.com/jpuigcerver/PyLaia/}},
   commit = {commit SHA}
 }
+```
+
+## Contact
+
+Have a question about PyLaia? Please contact us at [this link](mailto:team@teklia.com?subject=Feedback%20on%20PyLaia%3A%20).
