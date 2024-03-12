@@ -2,7 +2,6 @@ from re import escape
 
 import pytest
 import pytorch_lightning as pl
-import torch
 
 from laia.common.arguments import CreateCRNNArgs, TrainerArgs
 
@@ -12,12 +11,6 @@ def test_trainer_args():
     assert not hasattr(args, "callbacks")
     # instantiate to check if its valid
     pl.Trainer(**vars(args))
-
-
-def test_trainer_args_postinit(monkeypatch):
-    monkeypatch.setattr(torch, "__version__", "1.5.0")
-    with pytest.raises(ValueError, match=r"AMP requires torch>=1\.7\.0"):
-        TrainerArgs(precision=15)
 
 
 def test_createcrnn_args_postinit():

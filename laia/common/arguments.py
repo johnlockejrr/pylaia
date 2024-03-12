@@ -276,12 +276,6 @@ class TrainerArgs(make_dataclass("", __get_trainer_fields())):
         if self.progress_bar_refresh_rate is None:
             self.progress_bar_refresh_rate = 1
 
-        if self.precision != 32:
-            raise ValueError(
-                "AMP requires torch>=1.7.0. Additionally, only "
-                "fixed height models are currently supported"
-            )
-
 
 @dataclass
 class DecodeArgs:
