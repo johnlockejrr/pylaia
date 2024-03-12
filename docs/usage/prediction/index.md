@@ -90,6 +90,14 @@ This flag is mostly useful to define whether to predict on CPU or GPU.
 
 The prediction can be done using command-line arguments or a YAML configuration file. Note that CLI arguments override the values from the configuration file.
 
+We provide some images to try out our models. They can be found in `docs/assets`, on the [Gitlab repository](https://gitlab.teklia.com/atr/pylaia/-/tree/master/docs/assets?ref_type=heads). To test the prediction commands, make sure to download them on your end.
+
+```shell
+mkdir images
+wget https://user-images.githubusercontent.com/100838858/219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f.jpg -P images
+wget https://user-images.githubusercontent.com/100838858/219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4.jpg -P images
+```
+
 ### Predict using a model from Hugging Face
 
 First, clone a trained model from Hugging Face:
@@ -97,28 +105,29 @@ First, clone a trained model from Hugging Face:
 git clone https://huggingface.co/Teklia/pylaia-huginmunin
 ```
 
-Some files are stored through [Git-LFS](https://git-lfs.com/). Make sure all files are correctly pulled using the following command, from the cloned folder.
-```bash
-git lfs ls-files
-```
+!!! note
+    Some files are stored through [Git-LFS](https://git-lfs.com/). Make sure all files are correctly pulled using the following command, from the cloned folder.
+    ```bash
+    git lfs ls-files
+    ```
 
-You should see three files:
+    You should see three files:
 
-- the language model (`language_model.arpa.gz`),
-- the model architecture (`model`),
-- the weights (`weights.ckpt`).
+    - the language model (`language_model.arpa.gz`),
+    - the model architecture (`model`),
+    - the weights (`weights.ckpt`).
 
-List image names in `img_list.txt`:
-```text
-219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f
-219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4
-```
+    List image names in `img_list.txt`:
+    ```text
+    219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f
+    219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4
+    ```
 
 Predict with:
 ```bash
 pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ \
                       --common.model_filename pylaia-huginmunin/model \
-                      --img_dir [docs/assets] \
+                      --img_dir [images] \
                       pylaia-huginmunin/syms.txt \
                       img_list.txt
 ```
@@ -143,7 +152,7 @@ With the following configuration file:
 syms: pylaia-huginmunin/syms.txt
 img_list: img_list.txt
 img_dirs:
-  - docs/assets/
+  - images/
 common:
   experiment_dirname: pylaia-huginmunin
   model_filename: pylaia-huginmunin/model
@@ -225,7 +234,7 @@ With the following configuration file:
 syms: pylaia-huginmunin/syms.txt
 img_list: img_list.txt
 img_dirs:
-  - docs/assets/
+  - images/
 common:
   experiment_dirname: pylaia-huginmunin
   model_filename: pylaia-huginmunin/model
@@ -259,7 +268,7 @@ To output character localization, use the `--decode.segmentation char` option:
 pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ \
                       --common.model_filename pylaia-huginmunin/model \
                       --decode.segmentation char \
-                      --img_dir [docs/assets] \
+                      --img_dir [images] \
                       pylaia-huginmunin/syms.txt \
                       img_list.txt
 ```
@@ -277,7 +286,7 @@ To output word localization, use the `--decode.segmentation word` option:
 pylaia-htr-decode-ctc --common.experiment_dirname pylaia-huginmunin/ \
                       --common.model_filename pylaia-huginmunin/model \
                       --decode.segmentation word \
-                      --img_dir [docs/assets] \
+                      --img_dir [images] \
                       pylaia-huginmunin/syms.txt \
                       img_list.txt
 ```
