@@ -81,6 +81,7 @@ common:
 data:
   batch_size: 8
   color_mode: L
+  num_workers: null
 logging:
   fmt: '[%(asctime)s %(levelname)s %(name)s] %(message)s'
   level: INFO
