@@ -6,7 +6,7 @@ RUN apt-get update -q -y && apt-get install -q -y --no-install-recommends python
 
 # Setup pylaia library
 WORKDIR /src
-COPY requirements.txt doc-requirements.txt LICENSE setup.py MANIFEST.in README.md laia/VERSION /src/
+COPY LICENSE pyproject.toml MANIFEST.in README.md /src/
 
 COPY laia /src/laia
 
