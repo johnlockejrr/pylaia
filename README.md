@@ -57,7 +57,8 @@ Work in this toolkit was financially supported by the [Pattern Recognition and H
 ## Citation
 
 * Article describing the latest contributions to PyLaia
-```
+
+```bib
 @inproceedings{pylaia2024,
     author = "Tarride, Solène and Schneider, Yoann and Generali, Marie and Boillet, Melodie and Abadie, Bastien and Kermorvant, Christopher",
     title = "Improving Automatic Text Recognition with Language Models in the PyLaia Open-Source Library",
@@ -67,7 +68,8 @@ Work in this toolkit was financially supported by the [Pattern Recognition and H
 ```
 
 * Original article
-```
+
+```bib
 @inproceedings{laia2017,
   author={Puigcerver, Joan},
   booktitle={2017 14th IAPR International Conference on Document Analysis and Recognition (ICDAR)},
@@ -79,8 +81,22 @@ Work in this toolkit was financially supported by the [Pattern Recognition and H
   doi={10.1109/ICDAR.2017.20}}
 ```
 
-* GitHub repository
+* GitLab repository
+
+```bib
+@software{pylaia-teklia,
+  author = {Teklia},
+  title = {PyLaia},
+  year = {2022},
+  url = {https://gitlab.teklia.com/atr/pylaia/},
+  version = {1.1.0},
+  note = {commit SHA}
+}
 ```
+
+* GitHub repository
+
+```bib
 @misc{puigcerver2018pylaia,
   author = {Joan Puigcerver and Carlos Mocholí},
   title = {PyLaia},
