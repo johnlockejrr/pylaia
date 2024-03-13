@@ -117,11 +117,11 @@ git clone https://huggingface.co/Teklia/pylaia-huginmunin
     - the model architecture (`model`),
     - the weights (`weights.ckpt`).
 
-    List image names in `img_list.txt`:
-    ```text
-    219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f
-    219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4
-    ```
+List image names in `img_list.txt`:
+```text
+219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f
+219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4
+```
 
 Predict with:
 ```bash
