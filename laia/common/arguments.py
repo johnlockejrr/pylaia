@@ -167,7 +167,7 @@ class DataArgs:
     Args:
         batch_size: Batch size
         color_mode: L (grayscale): 1 channel, RGB: 3 channels, RGBA: 4 channels
-        num_workers: when Dataloader are instantiated, created as many worker processes
+        num_workers: When dataloaders are instantiated, created as many worker processes
     """
 
     class ColorMode(str, Enum):

@@ -36,10 +36,11 @@ The full list of parameters is detailed in this section.
 
 ### Data arguments
 
-| Name              | Description                                      | Type        | Default       |
-| ----------------- | ------------------------------------------------ | ----------- | ------------- |
-| `data.batch_size` | Batch size.                                      | `int`       | `8`           |
-| `data.color_mode` | Color mode. Must be either `L`, `RGB` or `RGBA`. | `ColorMode` | `ColorMode.L` |
+| Name               | Description                                                         | Type        | Default       |
+| ------------------ | ------------------------------------------------------------------- | ----------- | ------------- |
+| `data.batch_size`  | Batch size.                                                         | `int`       | `8`           |
+| `data.color_mode`  | Color mode. Must be either `L`, `RGB` or `RGBA`.                    | `ColorMode` | `ColorMode.L` |
+| `data.num_workers` | When dataloaders are instantiated, created as many worker processes | `int`       | `None`        |
 
 ### Decode arguments
 
