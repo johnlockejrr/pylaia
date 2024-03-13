@@ -167,6 +167,7 @@ class DataArgs:
     Args:
         batch_size: Batch size
         color_mode: L (grayscale): 1 channel, RGB: 3 channels, RGBA: 4 channels
+        num_workers: Number of worker processes created in dataloaders
     """
 
     class ColorMode(str, Enum):
@@ -176,6 +177,7 @@ class DataArgs:
 
     batch_size: PositiveInt = 8
     color_mode: ColorMode = ColorMode.L
+    num_workers: Optional[int] = None
 
 
 @dataclass
