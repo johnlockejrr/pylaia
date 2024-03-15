@@ -73,6 +73,8 @@ pylaia-htr-decode-ctc = "laia.scripts.htr.decode_ctc:main"
 pylaia-htr-netout = "laia.scripts.htr.netout:main"
 pylaia-htr-train-ctc = "laia.scripts.htr.train_ctc:main"
 
+[tool.setuptools.packages.find]
+exclude = ["tests"]
 
 [tool.coverage.paths]
 source = [
