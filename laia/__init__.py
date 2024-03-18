@@ -1,8 +1,11 @@
 import subprocess
 import sys
+from importlib.metadata import requires, version
 from pathlib import Path
 from shutil import which
 from typing import List
+
+from packaging.requirements import Requirement
 
 import laia.callbacks
 import laia.data
@@ -16,7 +19,7 @@ import laia.utils
 __all__ = ["__version__", "__root__", "get_installed_versions"]
 __lib__ = Path(__file__).parent
 __root__ = __lib__.parent
-__version__ = (__lib__ / "VERSION").read_text()
+__version__ = version("pylaia")
 
 try:
     branch = subprocess.check_output(
@@ -35,29 +38,23 @@ except subprocess.CalledProcessError:
 
 
 def get_installed_versions() -> List[str]:
-    requirements_path = __root__ / "requirements.txt"
-    if not requirements_path.exists():
-        return []
-    requirements = []
-    with open(requirements_path) as f:
-        for r in f.readlines():
-            r = r.strip()
-            r = r.split(" @ ")[0]  # support 'pkg @ git+https://...' notation
-            r = r.split("==")[0]
-            r = r.split(">=")[0]
-            r = r.split("<")[0]
-            r = r.split("[")[0]  # support 'pkg[extras]' notation
-            requirements.append(r)
+    # Get all dependencies
+    requirements: set[str] = {
+        req.name
+        for req in filter(
+            # Only keep direct dependencies
+            lambda x: x.marker is None,
+            # Parse lines
+            map(Requirement, requires("pylaia")),
+        )
+    }
     freeze = subprocess.check_output(
         [sys.executable, "-m", "pip", "freeze", "--exclude-editable"]
     )
     freeze = freeze.decode().strip().split("\n")
-    versions = [
-        r
-        for r in freeze
-        if r in requirements
-        or ("==" in r and r[: r.index("==")] in requirements)
-        or (" @ " in r and r[: r.index(" @ ")] in requirements)
-    ]
+    versions = list(
+        # Only keep PyLaia dependencies
+        filter(lambda package: Requirement(package).name in requirements, freeze)
+    )
     versions.append(f"laia=={__version__}")
     return versions
