@@ -52,7 +52,6 @@ def run(
         )
 
         # Check if images have variable height
-        print(fixed_input_height)
         if fixed_input_height > 0:
             assert dataset_stats.is_fixed_height, f"Found images with variable heights in {split} set: {dataset_stats.get_invalid_images_height(fixed_input_height)}."
 
