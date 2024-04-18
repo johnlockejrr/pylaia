@@ -64,7 +64,9 @@ nav:
     - Development: get_started/development.md
   - Usage:
     - usage/index.md
-    - Dataset: usage/datasets/index.md
+    - Dataset:
+      - usage/datasets/index.md
+      - Dataset formatting: usage/datasets/format.md
     - Model initialization: usage/initialization/index.md
     - Training: usage/training/index.md
     - Prediction: usage/prediction/index.md

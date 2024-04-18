@@ -21,6 +21,7 @@ def run(
     va_txt_table: str,
     te_txt_table: str,
     fixed_input_height: NonNegativeInt,
+    statistics_output: str,
     common: CommonArgs = CommonArgs(),
     train: TrainArgs = TrainArgs(),
 ):
@@ -38,8 +39,7 @@ def run(
     for d in train.delimiters:
         assert d in syms, f'The delimiter "{d}" is not available in the symbols file'
 
-    outname = "statistics.md"
-    mdfile = Statistics(outname)
+    mdfile = Statistics(statistics_output)
 
     for split in ["train", "val", "test"]:
         # Check for missing image
@@ -52,6 +52,7 @@ def run(
         )
 
         # Check if images have variable height
+        print(fixed_input_height)
         if fixed_input_height > 0:
             assert dataset_stats.is_fixed_height, f"Found images with variable heights in {split} set: {dataset_stats.get_invalid_images_height(fixed_input_height)}."
 
@@ -77,11 +78,11 @@ def run(
             train.delimiters,
         )
 
-    log.info("Dataset is correct")
+    log.info("Dataset is valid")
 
     # Write markdown statistics file
     mdfile.document.create_md_file()
-    log.info(f"Statistics written to {outname}")
+    log.info(f"Statistics written to {statistics_output}")
 
 
 def get_args(argv: Optional[List[str]] = None) -> Dict[str, Any]:
@@ -127,6 +128,12 @@ def get_args(argv: Optional[List[str]] = None) -> Dict[str, Any]:
             "will be used (see `adaptive_pooling`). This will be used to compute the "
             "model output height at the end of the convolutional layers"
         ),
+    )
+    parser.add_argument(
+        "--statistics_output",
+        type=str,
+        default="statistics.md",
+        help="Where the Markdown summary will be written",
     )
     parser.add_class_arguments(CommonArgs, "common")
     parser.add_class_arguments(TrainArgs, "train")
