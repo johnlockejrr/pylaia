@@ -37,6 +37,8 @@ dependencies = [
     "torchaudio>=0.13,<0.14",
     "torchmetrics<0.8.0",
     "torchvision>=0.14,<0.15",
+    "mdutils==1.6.0",
+    "prettytable==3.10.0"
 ]
 license = {text = "MIT"}
 
@@ -72,6 +74,7 @@ pylaia-htr-create-model = "laia.scripts.htr.create_model:main"
 pylaia-htr-decode-ctc = "laia.scripts.htr.decode_ctc:main"
 pylaia-htr-netout = "laia.scripts.htr.netout:main"
 pylaia-htr-train-ctc = "laia.scripts.htr.train_ctc:main"
+pylaia-htr-dataset = "laia.scripts.htr.dataset_check:main"
 
 [tool.setuptools.packages.find]
 exclude = ["tests"]

@@ -1,7 +1,7 @@
 import pytest
 from PIL import Image
 
-from laia.utils.image_stats import ImageStats
+from laia.utils.stats import ImageLabelsStats
 
 TR_TXT_TABLE = """
 tmp-0 a a b b c
@@ -56,7 +56,7 @@ def test_img_stats_fit_stage(
     tmpdir, sizes, expected_max_width, expected_is_fixed_height
 ):
     img_dirs, tr_txt_table, va_txt_table = prepare_training_data(tmpdir, sizes)
-    img_stats = ImageStats(
+    img_stats = ImageLabelsStats(
         stage="fit",
         tr_txt_table=tr_txt_table,
         va_txt_table=va_txt_table,
@@ -78,7 +78,7 @@ def test_img_stats_test_stage(
     tmpdir, sizes, expected_max_width, expected_is_fixed_height
 ):
     img_dirs, img_list = prepare_test_data(tmpdir, sizes)
-    img_stats = ImageStats(
+    img_stats = ImageLabelsStats(
         stage="test",
         img_list=img_list,
         img_dirs=img_dirs,
