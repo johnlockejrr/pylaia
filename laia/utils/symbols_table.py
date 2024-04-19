@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Iterator, Optional, Tuple, Union
+from typing import Iterator, Optional, Tuple, Union, List
 
 
 class SymbolsTable:
@@ -98,3 +98,13 @@ class SymbolsTable:
                 f'Value "{value}" was already present '
                 f'in the table (assigned to symbol "{old_sym}")'
             )
+
+    def check_list_symbols(self, char_list: List[str]):
+        """
+        Check if a list of characters appears in the symbols list.
+
+        Args:
+            tokens (List[str]): List of tokens
+        """
+        for char in char_list:
+            assert char in self._sym2val, f'The character "{char}" is not available in the symbols file'

@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
 from functools import cached_property
 from pathlib import Path
 from typing import List, Optional, TextIO, Union
+from enum import Enum
 
 import imagesize
 
@@ -9,6 +9,14 @@ from laia.data.image_from_list_dataset import _get_img_ids_and_filepaths
 from laia.data.text_image_from_text_table_dataset import (
     _get_images_and_texts_from_text_table,
 )
+
+class Split(Enum):
+    """
+    Split names
+    """
+    train = "train"
+    val = "val"
+    test = "test"
 
 
 class ImageLabelsStats:

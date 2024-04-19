@@ -6,23 +6,29 @@ import numpy as np
 from mdutils.mdutils import MdUtils
 from prettytable import MARKDOWN, PrettyTable
 
-import laia.common.logging as log
 from laia.callbacks.meters.sequence_error import char_to_word_seq
 
-_logger = log.get_logger(__name__)
-
+# Name of the first column
 METRIC_COLUMN = "Metric"
 
 
 def create_table(
-    data: Dict,
+    data: Dict[str, List[int|float]],
     count: bool = False,
     total: bool = True,
 ) -> PrettyTable:
     """
-    Each keys will be made into a column
-    We compute min, max, mean, median, total by default.
+    Generate a PrettyTable object from an input dictionary.
+    Compute min, max, mean, median, total by default.
     Total can be disabled. Count (length) computation can be enabled.
+
+    Args:
+        data: Data to display. Each key will be made into a column.
+        count: Whether to display an additional row for data count. 
+        total: Whether to display an additional row for data total sum.
+        
+    Returns:
+        PrettyTable: A Markdown table
     """
 
     statistics = PrettyTable(field_names=[METRIC_COLUMN, *data.keys()])
@@ -85,8 +91,6 @@ class Statistics:
         """
         self.document.new_header(level=level, title=title, add_table_of_contents="n")
         self.document.write("\n")
-
-        # logger.info(f"{title}\n\n{table}\n")
 
         self.document.write(table.get_string())
         self.document.write("\n")
