@@ -1,4 +1,4 @@
-# Model initialization
+# Dataset
 
 PyLaia datasets must be formatted following a specific format. Learn how to build a dataset by following this [page](./format.md).
 
@@ -18,7 +18,7 @@ This command will:
 If the dataset is valid, the script will:
 
 * display `Dataset is valid` and
-* save a summary of the dataset statistics in a Markdown file named after `statistics_output`.
+* save a summary of the dataset statistics in a Markdown file named after the argument provided in `--statistics_output`.
 
 ## Parameters
 
@@ -149,9 +149,9 @@ common:
 [2024-04-18 11:32:08,216 INFO laia.common.loader] Loaded model model
 [2024-04-18 11:32:08,319 CRITICAL laia] Uncaught exception:
 Traceback (most recent call last):
-  File "/home/solene/miniconda3/envs/python3.10/bin/pylaia-htr-dataset", line 8, in <module>
+  File "/usr/bin/pylaia-htr-dataset", line 8, in <module>
     sys.exit(main())
-  File "/home/solene/miniconda3/envs/python3.10/lib/python3.10/site-packages/laia/scripts/htr/dataset_check.py", line 149, in main
+  File "/usr/lib/python3.10/site-packages/laia/scripts/htr/dataset_check.py", line 149, in main
     run(**args)
   File "/home/solene/miniconda3/envs/python3.10/lib/python3.10/site-packages/laia/scripts/htr/dataset_check.py", line 56, in run
     assert dataset_stats.is_fixed_height, f"Found images with variable heights in {split} set: {dataset_stats.get_invalid_images_height(fixed_input_height)}."

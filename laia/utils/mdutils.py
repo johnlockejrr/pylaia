@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from collections import Counter, defaultdict
 from functools import partial
 from typing import Dict, List
