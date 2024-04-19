@@ -74,7 +74,7 @@ pylaia-htr-create-model = "laia.scripts.htr.create_model:main"
 pylaia-htr-decode-ctc = "laia.scripts.htr.decode_ctc:main"
 pylaia-htr-netout = "laia.scripts.htr.netout:main"
 pylaia-htr-train-ctc = "laia.scripts.htr.train_ctc:main"
-pylaia-htr-dataset = "laia.scripts.htr.dataset_check:main"
+pylaia-htr-dataset-validate = "laia.scripts.htr.dataset.validate:main"
 
 [tool.setuptools.packages.find]
 exclude = ["tests"]

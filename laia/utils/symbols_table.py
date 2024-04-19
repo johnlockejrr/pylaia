@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Iterator, Optional, Tuple, Union, List
+from typing import Iterator, List, Optional, Tuple, Union
 
 
 class SymbolsTable:
@@ -107,4 +107,6 @@ class SymbolsTable:
             tokens (List[str]): List of tokens
         """
         for char in char_list:
-            assert char in self._sym2val, f'The character "{char}" is not available in the symbols file'
+            assert (
+                char in self._sym2val
+            ), f'The character "{char}" is not available in the symbols file'

@@ -11,7 +11,7 @@ from laia.common.arguments import (
 )
 from laia.common.loader import ModelLoader
 from laia.scripts.htr import common_main
-from laia.utils import ImageLabelsStats, Statistics, SymbolsTable
+from laia.utils import ImageLabelsStats, Split, Statistics, SymbolsTable
 
 
 def run(
@@ -36,15 +36,14 @@ def run(
 
     # Prepare the symbols
     syms = SymbolsTable(syms)
-    for d in train.delimiters:
-        assert d in syms, f'The delimiter "{d}" is not available in the symbols file'
+    syms.check_list_symbols(train.delimiters)
 
     mdfile = Statistics(statistics_output)
 
-    for split in ["train", "val", "test"]:
+    for split in Split:
         # Check for missing image
         dataset_stats = ImageLabelsStats(
-            stage=split,
+            stage=split.value,
             tr_txt_table=tr_txt_table,
             va_txt_table=va_txt_table,
             te_txt_table=te_txt_table,
@@ -53,13 +52,10 @@ def run(
 
         # Check if images have variable height
         if fixed_input_height > 0:
-            assert dataset_stats.is_fixed_height, f"Found images with variable heights in {split} set: {dataset_stats.get_invalid_images_height(fixed_input_height)}."
+            assert dataset_stats.is_fixed_height, f"Found images with variable heights in {split.value} set: {dataset_stats.get_invalid_images_height(fixed_input_height)}."
 
         # Check if characters are in syms
-        for char in dataset_stats.character_set:
-            assert (
-                char in syms
-            ), f'The character "{char}" is not in the symbols file but appears in the {split} set'
+        syms.check_list_symbols(dataset_stats.character_set)
 
         # Check if images are too small
         min_valid_width = model.get_min_valid_image_size(dataset_stats.max_width)
@@ -70,7 +66,7 @@ def run(
 
         # Write markdown section
         mdfile.create_split_section(
-            split,
+            split.value,
             dataset_stats.widths,
             dataset_stats.heights,
             dataset_stats.labels,

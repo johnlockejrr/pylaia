@@ -4,7 +4,7 @@ Once the dataset is formatted and `pylaia` is installed and in your environment,
 
 * `pylaia-htr-create-model`
 : To create a new PyLaia model. More details in the [dedicated page](./initialization/index.md).
-* `pylaia-htr-dataset`
+* `pylaia-htr-dataset-validate`
 : To compute statistics and run validation checks on a dataset. More details in the [dedicated page](./datasets/index.md).
 * `pylaia-htr-train-ctc`
 : To train a PyLaia model. More details in the [dedicated page](./training/index.md).

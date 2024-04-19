@@ -13,7 +13,7 @@ METRIC_COLUMN = "Metric"
 
 
 def create_table(
-    data: Dict[str, List[int|float]],
+    data: Dict[str, List[int | float]],
     count: bool = False,
     total: bool = True,
 ) -> PrettyTable:
@@ -24,9 +24,9 @@ def create_table(
 
     Args:
         data: Data to display. Each key will be made into a column.
-        count: Whether to display an additional row for data count. 
+        count: Whether to display an additional row for data count.
         total: Whether to display an additional row for data total sum.
-        
+
     Returns:
         PrettyTable: A Markdown table
     """
