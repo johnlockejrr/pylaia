@@ -104,7 +104,7 @@ class SymbolsTable:
         Check if a list of characters appears in the symbols list.
 
         Args:
-            tokens (List[str]): List of tokens
+            char_list (List[str]): List of tokens
         """
         for char in char_list:
             assert (
