@@ -39,7 +39,7 @@ class ImageLabelsStats:
 
     def __init__(
         self,
-        stage: str | Split,
+        stage: Union[str, Split],
         tables: List[Union[TextIO, str, List[str]]],
         img_dirs: Optional[Union[List[str], str, List[Path], Path]] = None,
     ):
