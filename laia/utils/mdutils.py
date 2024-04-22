@@ -1,6 +1,6 @@
 from collections import Counter, defaultdict
 from functools import partial
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import numpy as np
 from mdutils.mdutils import MdUtils
@@ -13,7 +13,7 @@ METRIC_COLUMN = "Metric"
 
 
 def create_table(
-    data: Dict[str, List[int | float]],
+    data: Dict[str, List[Union[int, float]]],
     count: bool = False,
     total: bool = True,
 ) -> PrettyTable:
