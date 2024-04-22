@@ -13,7 +13,7 @@ METRIC_COLUMN = "Metric"
 
 
 def create_table(
-    data: Dict[str, List[int | float]],
+    data: Dict[str, List[int, float]],
     count: bool = False,
     total: bool = True,
 ) -> PrettyTable:
