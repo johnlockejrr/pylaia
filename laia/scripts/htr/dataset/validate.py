@@ -5,10 +5,7 @@ import jsonargparse
 from jsonargparse.typing import NonNegativeInt
 
 import laia.common.logging as log
-from laia.common.arguments import (
-    CommonArgs,
-    TrainArgs,
-)
+from laia.common.arguments import CommonArgs, TrainArgs
 from laia.common.loader import ModelLoader
 from laia.scripts.htr import common_main
 from laia.utils import ImageLabelsStats, Split, Statistics, SymbolsTable
@@ -68,8 +65,12 @@ def run(
     if any(errors for errors in dataset_issues.values()):
         log.error("Issues found in the dataset.")
         # Log all issues
-        for source, issue in dataset_issues.items():
-            log.error(f"{source} - {issue}")
+        for source, issues in dataset_issues.items():
+            if not issues:
+                continue
+
+            for issue in issues:
+                log.error(f"{source} - {issue}")
         return
 
     log.info("Dataset is valid")
