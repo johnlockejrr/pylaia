@@ -1,5 +1,6 @@
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterator, List, Optional, Tuple, Union
+from typing import Iterator, Optional, Tuple, Union
 
 
 class SymbolsTable:
@@ -99,14 +100,14 @@ class SymbolsTable:
                 f'in the table (assigned to symbol "{old_sym}")'
             )
 
-    def check_list_symbols(self, char_list: List[str]):
-        """
-        Check if a list of characters appears in the symbols list.
+    def check_symbols(self, tokens: Iterable[str]) -> set[str]:
+        """Check if a list of characters appears in the list of symbols
 
         Args:
-            char_list (List[str]): List of tokens
+            tokens (Iterable[str]): List of tokens
+
+        Returns:
+            set[str]: Unknown tokens.
         """
-        for char in char_list:
-            assert (
-                char in self._sym2val
-            ), f'The character "{char}" is not available in the symbols file'
+        known_symbols = set(self._sym2val)
+        return set(tokens) - known_symbols

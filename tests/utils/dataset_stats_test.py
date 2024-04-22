@@ -1,7 +1,7 @@
 import pytest
 from PIL import Image
 
-from laia.utils.stats import ImageLabelsStats
+from laia.utils.stats import ImageLabelsStats, Split
 
 TR_TXT_TABLE = """
 tmp-0 a a e b c
@@ -101,15 +101,14 @@ def test_img_stats_fit_stage(
     va_txt_table = prepare_training_data(tmpdir, "val", val_image_ids, val_sizes)[1]
     img_stats = ImageLabelsStats(
         stage="fit",
-        tr_txt_table=tr_txt_table,
-        va_txt_table=va_txt_table,
+        tables=[tr_txt_table, va_txt_table],
         img_dirs=img_dirs,
     )
     assert img_stats.max_width == expected_max_width
     assert img_stats.is_fixed_height == expected_is_fixed_height
     assert img_stats.character_set == expected_charset
     if img_stats.is_fixed_height:
-        img_stats.min_height == expected_height
+        assert img_stats.min_height == expected_height
 
 
 @pytest.mark.parametrize(
@@ -125,14 +124,14 @@ def test_img_stats_test_stage(
 ):
     img_dirs, img_list = prepare_test_data(tmpdir, sizes)
     img_stats = ImageLabelsStats(
-        stage="test",
-        img_list=img_list,
+        stage=Split.test,
+        tables=[img_list],
         img_dirs=img_dirs,
     )
     assert img_stats.max_width == expected_max_width
     assert img_stats.is_fixed_height == expected_is_fixed_height
     if img_stats.is_fixed_height:
-        img_stats.min_height == expected_height
+        assert img_stats.min_height == expected_height
     assert img_stats.labels == []
 
 
@@ -191,13 +190,12 @@ def test_img_stats_train_val_stage(
 ):
     img_dirs, txt_table = prepare_training_data(tmpdir, split, image_ids, sizes)
     img_stats = ImageLabelsStats(
-        stage=split,
-        tr_txt_table=txt_table if split == "train" else None,
-        va_txt_table=txt_table if split == "val" else None,
+        stage=Split(split),
+        tables=[txt_table],
         img_dirs=img_dirs,
     )
     assert img_stats.max_width == expected_max_width
     assert img_stats.is_fixed_height == expected_is_fixed_height
     assert img_stats.character_set == expected_charset
     if img_stats.is_fixed_height:
-        img_stats.min_height == expected_height
+        assert img_stats.min_height == expected_height

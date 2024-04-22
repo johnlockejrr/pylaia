@@ -34,44 +34,43 @@ def run(
         model is not None
     ), "Could not find the model. Have you run pylaia-htr-create-model?"
 
+    # Where all issues will be stored
+    dataset_issues = dict()
+
     # Prepare the symbols
-    syms = SymbolsTable(syms)
-    syms.check_list_symbols(train.delimiters)
+    syms: SymbolsTable = SymbolsTable(syms)
+    if missing := syms.check_symbols(train.delimiters):
+        dataset_issues["Delimiters"] = [f"Found some unknown symbols: {missing}"]
 
     mdfile = Statistics(statistics_output)
 
-    for split in Split:
+    for split, table in zip(Split, (tr_txt_table, va_txt_table, te_txt_table)):
         # Check for missing image
         dataset_stats = ImageLabelsStats(
             stage=split.value,
-            tr_txt_table=tr_txt_table,
-            va_txt_table=va_txt_table,
-            te_txt_table=te_txt_table,
+            tables=[table],
             img_dirs=img_dirs,
         )
+        dataset_issues[split.value] = dataset_stats.validate(
+            model, syms, fixed_input_height
+        )
 
-        # Check if images have variable height
-        if fixed_input_height > 0:
-            assert dataset_stats.is_fixed_height, f"Found images with variable heights in {split.value} set: {dataset_stats.get_invalid_images_height(fixed_input_height)}."
-
-        # Check if characters are in syms
-        syms.check_list_symbols(dataset_stats.character_set)
-
-        # Check if images are too small
-        min_valid_width = model.get_min_valid_image_size(dataset_stats.max_width)
-        if dataset_stats.min_width < min_valid_width:
-            log.warning(
-                f"Found some images too small for convolutions (width<{min_valid_width}). They will be padded during training."
+        if not dataset_issues[split.value]:
+            # Write markdown section
+            mdfile.create_split_section(
+                split.value,
+                dataset_stats.widths,
+                dataset_stats.heights,
+                dataset_stats.labels,
+                train.delimiters,
             )
 
-        # Write markdown section
-        mdfile.create_split_section(
-            split.value,
-            dataset_stats.widths,
-            dataset_stats.heights,
-            dataset_stats.labels,
-            train.delimiters,
-        )
+    if any(errors for errors in dataset_issues.values()):
+        log.error("Issues found in the dataset.")
+        # Log all issues
+        for source, issue in dataset_issues.items():
+            log.error(f"{source} - {issue}")
+        return
 
     log.info("Dataset is valid")
 

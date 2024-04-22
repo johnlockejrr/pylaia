@@ -9,6 +9,7 @@ from laia.data.image_from_list_dataset import _get_img_ids_and_filepaths
 from laia.data.text_image_from_text_table_dataset import (
     _get_images_and_texts_from_text_table,
 )
+from laia.utils.symbols_table import SymbolsTable
 
 
 class Split(Enum):
@@ -19,6 +20,9 @@ class Split(Enum):
     train = "train"
     val = "val"
     test = "test"
+
+    def __str__(self) -> str:
+        return self.value
 
 
 class ImageLabelsStats:
@@ -35,54 +39,61 @@ class ImageLabelsStats:
 
     def __init__(
         self,
-        stage: str,
-        tr_txt_table: Optional[Union[TextIO, str, List[str]]] = None,
-        va_txt_table: Optional[Union[TextIO, str, List[str]]] = None,
-        te_txt_table: Optional[Union[TextIO, str, List[str]]] = None,
-        img_list: Optional[Union[TextIO, str, List[str]]] = None,
+        stage: str | Split,
+        tables: List[Union[TextIO, str, List[str]]],
         img_dirs: Optional[Union[List[str], str, List[Path], Path]] = None,
     ):
-        assert stage in ["fit", "test", "train", "val"]
+        self.filenames = []
+        self.labels = []
+        for table in tables:
+            # Test split has no labels
+            if isinstance(stage, Split) and stage == Split.test:
+                self.filenames.extend(_get_img_ids_and_filepaths(table, img_dirs)[1])
+                continue
 
-        if stage == "fit":
-            assert tr_txt_table and va_txt_table
-            filenames = _get_images_and_texts_from_text_table(tr_txt_table, img_dirs)[1]
-            filenames += _get_images_and_texts_from_text_table(va_txt_table, img_dirs)[
-                1
-            ]
-
-            labels = _get_images_and_texts_from_text_table(tr_txt_table, img_dirs)[2]
-            labels += _get_images_and_texts_from_text_table(va_txt_table, img_dirs)[2]
-
-        elif stage == "test":
-            assert img_list or te_txt_table
-            if te_txt_table:
-                _, filenames, labels = _get_images_and_texts_from_text_table(
-                    te_txt_table, img_dirs
-                )
-            else:
-                filenames = _get_img_ids_and_filepaths(img_list, img_dirs)[1]
-                labels = []
-
-        elif stage == "train":
-            assert tr_txt_table
             _, filenames, labels = _get_images_and_texts_from_text_table(
-                tr_txt_table, img_dirs
+                table, img_dirs
             )
+            self.filenames.extend(filenames)
+            self.labels.extend(x.split() for x in labels)
 
-        elif stage == "val":
-            assert va_txt_table
-            _, filenames, labels = _get_images_and_texts_from_text_table(
-                va_txt_table, img_dirs
-            )
-
-        sizes = list(map(imagesize.get, filenames))
+        sizes = list(map(imagesize.get, self.filenames))
         self.widths, self.heights = zip(*sizes)
-        self.labels = [x.split() for x in labels]
-        self.filenames = filenames
+
+    def validate(self, model, syms: SymbolsTable, fixed_input_height: int) -> list[str]:
+        """Validate input dataset.
+
+        Args:
+            model : Laia model.
+            syms (SymbolsTable): Symbols known.
+            fixed_input_height (int): When set, all images must have this exact height.
+
+        Returns:
+            list[str]: List of errors found in the dataset.
+        """
+        errors: list[str] = []
+        # Check if images have variable height
+        if fixed_input_height > 0 and not self.is_fixed_height:
+            errors.append(
+                f"Found images with variable heights: {self.get_invalid_images_height(fixed_input_height)}."
+            )
+
+        # Check if characters are in syms
+        missing_symbols = syms.check_symbols(self.character_set)
+        if missing_symbols:
+            errors.append(f"Found some unknown symbols: {missing_symbols}")
+
+        # Check if images are too small
+        min_valid_width = model.get_min_valid_image_size(self.max_width)
+        if self.min_width < min_valid_width:
+            errors.append(
+                f"Found some images too small for convolutions (width<{min_valid_width}). They will be padded during training."
+            )
+
+        return errors
 
     @cached_property
-    def character_set(self) -> int:
+    def character_set(self) -> set[str]:
         """
         Get the set of characters
         """

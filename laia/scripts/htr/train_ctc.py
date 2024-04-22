@@ -74,8 +74,7 @@ def run(
     # prepare the data
     dataset_stats = ImageLabelsStats(
         stage="fit",
-        tr_txt_table=tr_txt_table,
-        va_txt_table=va_txt_table,
+        tables=[tr_txt_table, va_txt_table],
         img_dirs=img_dirs,
     )
     data_module = DataModule(

@@ -12,6 +12,7 @@ from laia.decoders import CTCGreedyDecoder, CTCLanguageDecoder
 from laia.engine import Compose, DataModule, EvaluatorModule, ImageFeeder, ItemFeeder
 from laia.scripts.htr import common_main
 from laia.utils import ImageLabelsStats, SymbolsTable
+from laia.utils.stats import Split
 
 
 def run(
@@ -45,10 +46,12 @@ def run(
     )
 
     # prepare the symbols
-    syms = SymbolsTable(syms)
+    syms: SymbolsTable = SymbolsTable(syms)
 
     # prepare the data
-    dataset_stats = ImageLabelsStats(stage="test", img_list=img_list, img_dirs=img_dirs)
+    dataset_stats = ImageLabelsStats(
+        stage=Split.test, tables=[img_list], img_dirs=img_dirs
+    )
     data_module = DataModule(
         syms=syms,
         img_dirs=img_dirs,
