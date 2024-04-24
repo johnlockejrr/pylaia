@@ -1,7 +1,10 @@
+import torch
 from conftest import call_script
 from PIL import Image
 
 import laia.scripts.htr.dataset.validate as script
+from laia.common.saver import ModelSaver
+from laia.models.htr.laia_crnn import LaiaCRNN
 
 TR_TXT_TABLE = """
 tmp-0 a a e b c
@@ -155,6 +158,28 @@ Statistics
 """
 
 
+def prepare_model(tmpdir):
+    args = [
+        1,  # num_input_channels
+        12,  # num_output_channels
+        [12, 24, 48, 48],  # cnn_num_features
+        [(3, 3)] * 4,  # cnn_kernel_size
+        [(1, 1)] * 4,  # cnn_stride
+        [(1, 1)] * 4,  # cnn_dilation
+        [torch.nn.LeakyReLU] * 4,  # cnn_activation
+        [(2, 2), (2, 2), (0, 0), (2, 2)],  # cnn_poolsize
+        [0] * 4,  # cnn_dropout
+        [False] * 4,  # cnn_batchnorm
+        "avgpool-8",
+        256,  # rnn_units
+        3,  # rnn_layers
+        0.5,  # rnn_dropout
+        0.5,  # lin_dropout
+    ]
+    LaiaCRNN(*args)  # check for failures
+    ModelSaver(tmpdir).save(LaiaCRNN, *args)
+
+
 def prepare_data(tmpdir, img_sizes) -> None:
     # Prepare images
     for image_id, size in img_sizes.items():
@@ -169,6 +194,7 @@ def prepare_data(tmpdir, img_sizes) -> None:
 
 def test_run_validate_valid_dataset(tmpdir) -> None:
     prepare_data(tmpdir, IMG_SIZES_VALID)
+    prepare_model(tmpdir)
     args = [
         f"{tmpdir/'syms.txt'}",
         f"[{tmpdir}]",
@@ -177,6 +203,7 @@ def test_run_validate_valid_dataset(tmpdir) -> None:
         f"{tmpdir/'test.txt'}",
         "--fixed_input_height=128",
         "--statistics_output=statistics.md",
+        f"--common.train_path={tmpdir}",
     ]
     _, stderr = call_script(script.__file__, args)
     assert "Dataset is valid" in stderr
@@ -185,6 +212,7 @@ def test_run_validate_valid_dataset(tmpdir) -> None:
 
 def test_run_validate_invalid_dataset(tmpdir) -> None:
     prepare_data(tmpdir, IMG_SIZES_INVALID)
+    prepare_model(tmpdir)
     args = [
         f"{tmpdir/'syms.txt'}",
         f"[{tmpdir}]",
@@ -193,6 +221,7 @@ def test_run_validate_invalid_dataset(tmpdir) -> None:
         f"{tmpdir/'test.txt'}",
         f"--fixed_input_height={128}",
         "--statistics_output=statistics.md",
+        f"--common.train_path={tmpdir}",
     ]
     _, stderr = call_script(script.__file__, args)
     assert not tmpdir.join("statistics.md").exists()
