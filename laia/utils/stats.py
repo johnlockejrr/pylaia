@@ -31,9 +31,7 @@ class ImageLabelsStats:
 
     Args:
         stage: String indicating the stage of the processing, either "test" or "fit"
-        tr_txt_table: Path to the train text table (train mode)
-        va_txt_table: Path to the validation text table (train mode)
-        img_list: Path to the list of test images (test mode)
+        tables: List of ids (test mode) with tokenized text (train and val mode)
         img_dirs: Path to images
     """
 
