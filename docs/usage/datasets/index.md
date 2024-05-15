@@ -1,195 +1,163 @@
-# Dataset formatting
+# Dataset
 
-To train PyLaia, you need line images and their corresponding transcriptions. The dataset should be divided into three sets: training, validation and test sets.
+PyLaia datasets must be formatted following a specific format. Learn how to build a dataset by following this [page](./format.md).
 
-The dataset should be formatted as follows:
+Once the dataset is created, you may use the `pylaia-htr-dataset-validate` command to compute statistics and make sure your dataset is valid. To know more about the options of this command, use `pylaia-htr-dataset-validate --help`.
+
+
+## Purpose
+
+This command will:
+
+* issue a warning if some images are missing (they will be ignored during training)
+* issue a warning if some images have an invalid width (they will be padded during training)
+* fail if images have variable height when  `fixed_input_height>0`
+* fail if a character is missing in the list of symbols `syms.txt`
+
+If the dataset is valid, the script will:
+
+* display `Dataset is valid` and
+* save a summary of the dataset statistics in a Markdown file named after the argument provided in `--statistics_output`.
+
+## Parameters
+
+The full list of parameters is detailed in this section.
+
+### General parameters
+
+| Parameter            | Description                                                                                                                                                                                          | Type   | Default |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ | ------- |
+| `syms`               | Positional argument. Path to a file mapping characters to integers. The CTC symbol must be mapped to integer 0.                                                                                      | `str`  |         |
+| `img_dirs`           | Positional argument. Directories containing line images.                                                                                                                                             | `str`  |         |
+| `tr_txt_table`       | Positional argument. Path to a file mapping training image ids and tokenized transcription.                                                                                                          | `str`  |         |
+| `va_txt_table`       | Positional argument. Path to a file mapping validation image ids and tokenized transcription.                                                                                                        | `str`  |         |
+| `te_txt_table`       | Positional argument. Path to a file mapping validation image ids and tokenized transcription.                                                                                                        | `str`  |         |
+| `fixed_input_height` | Height of the input images. If set to 0, a variable height model will be used (see `adaptive_pooling`). This will be used to compute the model output height at the end of the convolutional layers. | `int`  | 0       |
+| `statistics_output`  | Where the Markdown summary will be written.                                                                                                                                                          | `str`  | `"statistics.md"`       |
+| `config`             | Path to a JSON configuration file                                                                                                                                                                    | `json` |         |
+
+### Common parameters
+
+| Name                    | Description                             | Type  | Default |
+| ----------------------- | --------------------------------------- | ----- | ------- |
+| `common.train_path`     | Directory where the model will be saved | `str` | `.`     |
+| `common.model_filename` | Filename of the model.                  | `str` | `model` |
+
+### Logging arguments
+
+| Name                      | Description                                                                                                    | Type            | Default                                           |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------- | ------------------------------------------------- |
+| `logging.fmt`             | Logging format.                                                                                                | `str`           | `%(asctime)s %(levelname)s %(name)s] %(message)s` |
+| `logging.level`           | Logging level. Should be in `{NOTSET,DEBUG,INFO,WARNING,ERROR,CRITICAL}`                                       | `Level`         | `INFO`                                            |
+| `logging.filepath`        | Filepath for the logs file. Can be a filepath or a filename to be created in `train_path`/`experiment_dirname` | `Optional[str]` |                                                   |
+| `logging.overwrite`       | Whether to overwrite the logfile or to append.                                                                 | `bool`          | `False`                                           |
+| `logging.to_stderr_level` | If filename is set, use this to log also to stderr at the given level.                                         | `Level`         | `ERROR`                                           |
+
+### Train arguments
+
+| Name               | Description                                       | Type   | Default       |
+| ------------------ | ------------------------------------------------- | ------ | ------------- |
+| `train.delimiters` | List of symbols representing the word delimiters. | `List` | `["<space>"]` |
+
+## Examples
+
+This arguments can be passed using command-line arguments or a YAML configuration file. Note that CLI arguments override the values from the configuration file.
+
+### Example with Command Line Arguments (CLI)
+
+Run the following command to create a model:
+```sh
+pylaia-htr-dataset-validate /data/Esposalles/dataset/syms.txt \
+                            [/data/Esposalles/dataset/images/] \
+                            /data/Esposalles/dataset/train.txt \
+                            /data/Esposalles/dataset/val.txt \
+                            /data/Esposalles/dataset/test.txt \
+                            --common.experiment_dirname experiment-esposalles/ \
+                            --fixed_input_size 128 \
+                            --statistice_ouput statistics.md
+```
+
+Will output:
 ```bash
-# Images
-├── images
-    ├── train/
-    ├── val/
-    └── test/
-# Image ids (used for prediction)
-├── train_ids.txt
-├── val_ids.txt
-├── test_ids.txt
-# Tokenized transcriptions (used for training)
-├── train.txt
-├── val.txt
-# Transcriptions (used for evaluation)
-├── train_text.txt
-├── val_text.txt
-├── test_text.txt
-# Symbol list
-└── syms.txt
+[2024-04-23 12:58:31,399 INFO laia] Arguments: {'syms': '/data/Esposalles/dataset/syms.txt', 'img_dirs': ['/data/Esposalles/dataset/images/'], 'tr_txt_table': '/data/Esposalles/dataset/train.txt', 'va_txt_table': '/data/Esposalles/dataset/val.txt', 'te_txt_table': '/data/Esposalles/dataset/test.txt', 'fixed_input_height': 128, 'common': CommonArgs(seed=74565, train_path='', model_filename='model', experiment_dirname='experiment-esposalles', monitor=<Monitor.va_cer: 'va_cer'>, checkpoint=None), 'train': TrainArgs(delimiters=['<space>'], checkpoint_k=3, resume=False, early_stopping_patience=80, gpu_stats=False, augment_training=True)}
+[2024-04-23 12:58:32,010 INFO laia] Installed:
+[2024-04-23 12:58:32,050 INFO laia.common.loader] Loaded model model
+[2024-04-23 12:58:32,094 INFO laia] Dataset is valid
+[2024-04-23 12:58:32,094 INFO laia] Statistics written to statistics.md
 ```
 
-## Images
+### Example with a YAML configuration file
 
-By default, images should be resized to a fixed height (recommended value: 128 pixels). This can be done using [ImageMagick's `mogrify`](https://imagemagick.org/script/mogrify.php) function:
-```
-mogrify -resize x128 images/*.jpg
-```
-
-Note that PyLaia can also support variable size images by setting `--fixed_input_height 0` during [model initialization](../initialization/index.md).
-
-
-## Ground truth
-
-### Tokenized transcriptions
-
-Two files `{train|val}.txt` are required to train the model. They should map image names and tokenized transcriptions for the training and validation sets.
-
-Example:
-
-```text title="train.txt"
-train/im01 f o r <space> d e t <space> t i l f æ l d e <space> d e t <space> s k u l d e <space> l y k k e s <space> D i g
-train/im02 a t <space> o p d r i v e <space> d e t <space> o m s k r e v n e <space> e x p l : <space> a f
-train/im03 « F r u <space> I n g e r » , <space> a t <space> s e n d e <space> m i g <space> s a m m e
+Run the following command to validate a dataset:
+```sh
+pylaia-htr-dataset-validate --config config_dataset.yaml
 ```
 
-### Transcriptions
+Where `config_dataset.yaml` is:
 
-Three files `{train|val|test}_text.txt` are required to evaluate your models. They should map image names and non-tokenized transcriptions.
-
-Example:
-```text title="train_text.txt"
-train/im01 for det tilfælde det skulde lykkes Dig
-train/im02 at opdrive det omskrevne expl: af
-train/im03 «Fru Inger», at sende mig samme
+```yaml
+syms: /data/Esposalles/dataset/syms.txt
+img_dirs: [/data/Esposalles/dataset/images/]
+tr_txt_table: /data/Esposalles/dataset/train.txt
+va_txt_table: /data/Esposalles/dataset/val.txt
+te_txt_table: /data/Esposalles/dataset/test.txt
+fixed_input_height: 128
+statistics_output: statistics.md
+common:
+  experiment_dirname: experiment-esposalles
 ```
 
-### Image list
+### Example with perfect dataset
 
-Three files `{train|val|test}_ids.txt` are required to run predictions. They should list image names without transcriptions and can be obtained with:
 ```bash
-cut -d' ' -f1 train_text.txt > train_ids.txt
+[2024-04-23 12:58:31,399 INFO laia] Arguments: {'syms': '/data/Esposalles/dataset/syms.txt', 'img_dirs': ['/data/Esposalles/dataset/images/'], 'tr_txt_table': '/data/Esposalles/dataset/train.txt', 'va_txt_table': '/data/Esposalles/dataset/val.txt', 'te_txt_table': '/data/Esposalles/dataset/test.txt', 'fixed_input_height': 128, 'common': CommonArgs(seed=74565, train_path='', model_filename='model', experiment_dirname='experiment-esposalles', monitor=<Monitor.va_cer: 'va_cer'>, checkpoint=None), 'train': TrainArgs(delimiters=['<space>'], checkpoint_k=3, resume=False, early_stopping_patience=80, gpu_stats=False, augment_training=True)}
+[2024-04-23 12:58:32,010 INFO laia] Installed:
+[2024-04-23 12:58:32,050 INFO laia.common.loader] Loaded model model
+[2024-04-23 12:58:32,094 INFO laia] Dataset is valid
+[2024-04-23 12:58:32,094 INFO laia] Statistics written to statistics.md
 ```
 
-Example:
-```text title="train_ids.txt"
-train/im01
-train/im02
-train/im03
+### Example with missing images
+
+```bash
+[2024-04-23 13:01:34,646 INFO laia] Arguments: {'syms': '/data/Esposalles/dataset/syms.txt', 'img_dirs': ['/data/Esposalles/dataset/images/'], 'tr_txt_table': '/data/Esposalles/dataset/train.txt', 'va_txt_table': '/data/Esposalles/dataset/val.txt', 'te_txt_table': '/data/Esposalles/dataset/test.txt', 'fixed_input_height': 128, 'common': CommonArgs(seed=74565, train_path='', model_filename='model', experiment_dirname='experiment-esposalles', monitor=<Monitor.va_cer: 'va_cer'>, checkpoint=None), 'train': TrainArgs(delimiters=['<space>'], checkpoint_k=3, resume=False, early_stopping_patience=80, gpu_stats=False, augment_training=True)}
+[2024-04-23 13:01:35,200 INFO laia] Installed:
+[2024-04-23 13:01:35,232 INFO laia.common.loader] Loaded model model
+[2024-04-23 13:01:35,782 WARNING laia.data.text_image_from_text_table_dataset] No image file found for image ID '0d7cf548-742b-4067-9084-52478806091d_Line0_30af78fd-e15d-4873-91d1-69ad7c0623c3.jpg', ignoring example...
+[2024-04-23 13:01:35,783 WARNING laia.data.text_image_from_text_table_dataset] No image file found for image ID '0d7cf548-742b-4067-9084-52478806091d_Line0_b1fb9275-5d49-4266-9de0-e6a93fc6dfaf.jpg', ignoring example...
+[2024-04-23 13:01:35,894 INFO laia] Dataset is valid
+[2024-04-23 13:01:35,894 INFO laia] Statistics written to statistics.md
 ```
 
-### Symbol list
+### Example with small images
 
-Finally, a file named `syms.txt` is required, mapping tokens from the training set and their index, starting with the `<ctc>` token.
+```sh
+[2024-04-23 13:01:34,646 INFO laia] Arguments: {'syms': '/data/Esposalles/dataset/syms.txt', 'img_dirs': ['/data/Esposalles/dataset/images/'], 'tr_txt_table': '/data/Esposalles/dataset/train.txt', 'va_txt_table': '/data/Esposalles/dataset/val.txt', 'te_txt_table': '/data/Esposalles/dataset/test.txt', 'fixed_input_height': 128, 'common': CommonArgs(seed=74565, train_path='', model_filename='model', experiment_dirname='experiment-esposalles', monitor=<Monitor.va_cer: 'va_cer'>, checkpoint=None), 'train': TrainArgs(delimiters=['<space>'], checkpoint_k=3, resume=False, early_stopping_patience=80, gpu_stats=False, augment_training=True)}
+[2024-04-23 13:01:35,200 INFO laia] Installed:
+[2024-04-23 13:01:35,232 INFO laia.common.loader] Loaded model model
+[2024-04-23 13:01:36,052 ERROR laia] Issues found in the dataset.
+[2024-04-23 13:01:36,052 ERROR laia] train - Found some images too small for convolutions (width<8). They will be padded during training.
+```
 
-Example:
+### Example with variable image height
 
-```text title="syms.txt"
-<ctc> 0
-! 1
-" 2
-& 3
-' 4
-( 5
-) 6
-+ 7
-, 8
-- 9
-. 10
-/ 11
-0 12
-1 13
-2 14
-3 15
-4 16
-5 17
-6 18
-7 19
-8 20
-9 21
-: 22
-; 23
-< 24
-= 25
-> 26
-? 27
-A 28
-B 29
-C 30
-D 31
-E 32
-F 33
-G 34
-H 35
-I 36
-J 37
-K 38
-L 39
-M 40
-N 41
-O 42
-P 43
-Q 44
-R 45
-S 46
-T 47
-U 48
-V 49
-W 50
-X 51
-Y 52
-Z 53
-[ 54
-] 55
-a 56
-b 57
-c 58
-d 59
-e 60
-f 61
-g 62
-h 63
-i 64
-j 65
-k 66
-l 67
-m 68
-n 69
-o 70
-p 71
-q 72
-r 73
-s 74
-t 75
-u 76
-v 77
-w 78
-x 79
-y 80
-z 81
-« 82
-¬ 83
-» 84
-¼ 85
-½ 86
-Å 87
-Æ 88
-Ø 89
-à 90
-á 91
-â 92
-ä 93
-å 94
-æ 95
-ç 96
-è 97
-é 98
-ê 99
-ö 100
-ø 101
-ù 102
-û 103
-ü 104
-– 105
-— 106
-’ 107
-„ 108
-… 109
-<unk> 110
-<space> 111
+```sh
+[2024-04-23 13:01:34,646 INFO laia] Arguments: {'syms': '/data/Esposalles/dataset/syms.txt', 'img_dirs': ['/data/Esposalles/dataset/images/'], 'tr_txt_table': '/data/Esposalles/dataset/train.txt', 'va_txt_table': '/data/Esposalles/dataset/val.txt', 'te_txt_table': '/data/Esposalles/dataset/test.txt', 'fixed_input_height': 128, 'common': CommonArgs(seed=74565, train_path='', model_filename='model', experiment_dirname='experiment-esposalles', monitor=<Monitor.va_cer: 'va_cer'>, checkpoint=None), 'train': TrainArgs(delimiters=['<space>'], checkpoint_k=3, resume=False, early_stopping_patience=80, gpu_stats=False, augment_training=True)}
+[2024-04-23 13:01:35,200 INFO laia] Installed:
+[2024-04-23 13:01:35,232 INFO laia.common.loader] Loaded model model
+[2024-04-23 13:01:36,052 ERROR laia] Issues found in the dataset.
+[2024-04-23 13:01:36,052 ERROR laia] train - Found images with variable heights: ['/data/Esposalles/dataset/images/f6d2b699-e910-4191-bc7d-f56e60fe979a_Line2_91b43b71-ea60-4f42-a896-880676aed723.jpg'].
+[2024-04-23 13:01:36,052 ERROR laia] test - Found images with variable heights: ['/data/Esposalles/dataset/images/fd1e6b3b-48cb-41c0-b1e9-2924b9562876_Line3_27e23ff1-f730-44ac-844f-479e5cc9e9aa.jpg'].
+```
+
+### Example with missing symbol
+
+```sh
+[2024-04-23 13:01:34,646 INFO laia] Arguments: {'syms': '/data/Esposalles/dataset/syms.txt', 'img_dirs': ['/data/Esposalles/dataset/images/'], 'tr_txt_table': '/data/Esposalles/dataset/train.txt', 'va_txt_table': '/data/Esposalles/dataset/val.txt', 'te_txt_table': '/data/Esposalles/dataset/test.txt', 'fixed_input_height': 128, 'common': CommonArgs(seed=74565, train_path='', model_filename='model', experiment_dirname='experiment-esposalles', monitor=<Monitor.va_cer: 'va_cer'>, checkpoint=None), 'train': TrainArgs(delimiters=['<space>'], checkpoint_k=3, resume=False, early_stopping_patience=80, gpu_stats=False, augment_training=True)}
+[2024-04-23 13:01:35,200 INFO laia] Installed:
+[2024-04-23 13:01:35,232 INFO laia.common.loader] Loaded model model
+[2024-04-23 13:01:36,052 ERROR laia] Issues found in the dataset.
+[2024-04-23 13:01:36,052 ERROR laia] train - Found some unknown symbols: {'='}
+[2024-04-23 13:01:36,052 ERROR laia] val - Found some unknown symbols: {'='}
+[2024-04-23 13:01:36,052 ERROR laia] test - Found some unknown symbols: {'='}
 ```

@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from pathlib import Path
 from typing import Iterator, Optional, Tuple, Union
 
@@ -98,3 +99,15 @@ class SymbolsTable:
                 f'Value "{value}" was already present '
                 f'in the table (assigned to symbol "{old_sym}")'
             )
+
+    def check_symbols(self, tokens: Iterable[str]) -> set[str]:
+        """Check if a list of characters appears in the list of symbols
+
+        Args:
+            tokens (Iterable[str]): List of tokens
+
+        Returns:
+            set[str]: Unknown tokens.
+        """
+        known_symbols = set(self._sym2val)
+        return set(tokens) - known_symbols
