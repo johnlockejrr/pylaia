@@ -109,3 +109,10 @@ def test_save(tmpdir):
     st_file = tmpdir / "syms"
     st.save(str(st_file))
     assert st_file.read_text("utf-8") == "a 1\nb 2\n"
+
+
+def test_check_symbols():
+    st = SymbolsTable()
+    st.add("a", 1)
+    st.add("b", 2)
+    assert st.check_symbols(["a", "b", "c"]) == {"c"}

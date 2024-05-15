@@ -11,6 +11,10 @@ It requires:
 - a [formatted dataset](../datasets/index.md),
 - the pickled `model` file created during [model initialization](../initialization/index.md).
 
+!!! note
+
+    The [`pylaia-htr-dataset-validate`](../datasets/index.md) command can help you analyze your dataset and point out issues.
+
 ## Parameters
 
 The full list of parameters is detailed in this section.
