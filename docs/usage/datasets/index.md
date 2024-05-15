@@ -2,8 +2,7 @@
 
 PyLaia datasets must be formatted following a specific format. Learn how to build a dataset by following this [page](./format.md).
 
-Once the dataset is created, you may use the `pylaia-htr-dataset` command to compute statistics and make sure your dataset is valid. To know more about the options of this command, use `pylaia-htr-dataset --help`.
-
+Once the dataset is created, you may use the `pylaia-htr-dataset-validate` command to compute statistics and make sure your dataset is valid. To know more about the options of this command, use `pylaia-htr-dataset-validate --help`.
 
 
 ## Purpose
@@ -91,7 +90,7 @@ Will output:
 
 Run the following command to validate a dataset:
 ```sh
-pylaia-htr-dataset --config config_dataset.yaml
+pylaia-htr-dataset-validate --config config_dataset.yaml
 ```
 
 Where `config_dataset.yaml` is:
