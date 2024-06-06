@@ -56,7 +56,7 @@ dev = [
     "pre-commit",
 ]
 test = [
-    "tox",
+    "tox==4.15.1",
 ]
 docs = [
     "black==23.11.0",
