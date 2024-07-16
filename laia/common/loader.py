@@ -8,8 +8,11 @@ from typing import Any, Callable, Optional, Union
 import natsort as ns
 import pytorch_lightning as pl
 import torch
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
 
 from laia.common.logging import get_logger
+from laia.utils import SymbolsTable
 
 _logger = get_logger(__name__)
 
@@ -138,3 +141,57 @@ class ModelLoader(ObjectLoader):
             err_msg = f'Could not find a valid checkpoint in "{exp_dirpath}"'
         assert found, err_msg
         return found
+
+    @staticmethod
+    def reset_parameters(syms: SymbolsTable, model: Any, checkpoint_path: str):
+        """
+        Keep only the pretrained weights and reset other parameters, callbacks and the optimizer from the checkpoint.
+
+        Args:
+            syms (SymbolsTable): symbols table.
+            model (Any): current model.
+            checkpoint_path (str): pretrained checkpoint.
+        """
+        # Create new checkpoint
+        filename, file_extension = os.path.splitext(checkpoint_path)
+        new_checkpoint_path = f"{filename}_reset{file_extension}"
+
+        # Load checkpoint
+        checkpoint = torch.load(checkpoint_path, map_location=torch.device("cpu"))
+
+        # Reinitialize the linear layer
+        model.linear = torch.nn.Linear(model.linear.in_features, len(syms))
+        checkpoint["state_dict"]["model.linear.weight"] = torch.nn.init.xavier_uniform_(
+            torch.empty(len(syms), model.linear.in_features)
+        )
+        checkpoint["state_dict"]["model.linear.bias"] = torch.nn.init.uniform_(
+            torch.empty(len(syms)),
+        )
+
+        # Reinitialize the training settings
+        checkpoint["global_step"] = 0
+        checkpoint["epoch"] = 0
+
+        # Reinitialize the optimizer's state
+        checkpoint["optimizer_states"] = []
+
+        # Reinitialize the checkpoint callback
+        checkpoint["callbacks"][ModelCheckpoint]["best_model_score"] = torch.tensor(
+            float("inf")
+        )
+        checkpoint["callbacks"][ModelCheckpoint]["current_score"] = torch.tensor(
+            float("inf")
+        )
+        checkpoint["callbacks"][ModelCheckpoint][
+            "best_model_path"
+        ] = new_checkpoint_path
+
+        # Reinitialize the early stopping callback
+        checkpoint["callbacks"][EarlyStopping]["wait_count"] = 0
+        checkpoint["callbacks"][EarlyStopping]["stopped_epoch"] = 0
+        checkpoint["callbacks"][EarlyStopping]["best_score"] = torch.tensor(
+            float("inf")
+        )
+
+        torch.save(checkpoint, new_checkpoint_path)
+        return new_checkpoint_path

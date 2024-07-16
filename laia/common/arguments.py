@@ -192,6 +192,9 @@ class TrainArgs:
             k: the best k models will be saved
         resume: Whether to resume training with a checkpoint. See `checkpoint`.
             If a number, resumes training for this number of epochs.
+        pretrain: Whether to only load the weights from a checkpoint, and resume
+            the other parameters (callbacks, optimizer). See `checkpoint`.
+            If a number, resumes training for this number of epochs.
         early_stopping_patience: Number of validation epochs with no improvement
             after which training will be stopped
         gpu_stats: Whether to include GPU stats in the training progress bar
@@ -202,6 +205,7 @@ class TrainArgs:
     delimiters: Optional[List[str]] = field(default_factory=lambda: ["<space>"])
     checkpoint_k: GeNeg1Int = 3
     resume: Union[bool, NonNegativeInt] = False
+    pretrain: Union[bool, NonNegativeInt] = False
     early_stopping_patience: NonNegativeInt = 20
     gpu_stats: bool = False
     augment_training: bool = False
