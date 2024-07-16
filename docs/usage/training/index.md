@@ -146,7 +146,7 @@ trainer:
 
 Run the following command to continue training from a checkpoint for 200 epochs.
 ```sh
-pylaia-htr-train-ctc --config config_train_model.yaml --train.resume True --trainer.max_epochs 200
+pylaia-htr-train-ctc --config config_train_model.yaml --train.resume true --trainer.max_epochs 200
 ```
 
 !!! note
@@ -156,7 +156,7 @@ pylaia-htr-train-ctc --config config_train_model.yaml --train.resume True --trai
 
 Run the following command to load pretrained weights and fine-tune on a new dataset for 200 epochs.
 ```sh
-pylaia-htr-train-ctc --config config_train_model.yaml --common.checkpoint "initial_checkpoint.ckpt" --train.pretrain True --trainer.max_epochs 200
+pylaia-htr-train-ctc --config config_train_model.yaml --common.checkpoint initial_checkpoint.ckpt --train.pretrain true --trainer.max_epochs 200
 ```
 
 !!! warning
