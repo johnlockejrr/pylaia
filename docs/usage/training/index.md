@@ -144,7 +144,7 @@ trainer:
 
 ### Resume training from a checkpoint
 
-Run the following command to continue training on the same dataset from a checkpoint, for 200 epochs.
+Run the following command to continue training from a checkpoint for 200 epochs.
 ```sh
 pylaia-htr-train-ctc --config config_train_model.yaml --train.resume True --trainer.max_epochs 200
 ```
@@ -154,7 +154,11 @@ pylaia-htr-train-ctc --config config_train_model.yaml --train.resume True --trai
 
 ### Fine-tune from a checkpoint
 
-Run the following command to load pretrained weights and fine-tune on another dataset, for 200 epochs.
+Run the following command to load pretrained weights and fine-tune on a new dataset for 200 epochs.
 ```sh
-pylaia-htr-train-ctc --config config_train_model.yaml --train.pretrain True --trainer.max_epochs 200
+pylaia-htr-train-ctc --config config_train_model.yaml --common.checkpoint "initial_checkpoint.ckpt" --train.pretrain True --trainer.max_epochs 200
 ```
+
+!!! warning
+    This option requires that your model architecture `model` matches the one used to train `initial_checkpoint.ckpt`.
+    The last linear layer will be reinitialized using the Xavier initialization to match the new vocabulary size.
