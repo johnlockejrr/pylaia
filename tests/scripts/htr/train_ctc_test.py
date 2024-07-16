@@ -134,9 +134,38 @@ def test_train_can_resume_training(tmpdir, caplog):
     caplog.clear()
 
     # train for one more epoch
-    kwargs["train"] = TrainArgs(resume=1)
+    kwargs["train"] = TrainArgs(resume=True)
     script.run(*args, **kwargs)
     assert "Model has been trained for 2 epochs (21 steps)" in caplog.messages
+
+
+def test_pretraining(tmpdir, caplog):
+    syms, img_dirs, data_module = prepare_data(tmpdir)
+    caplog.set_level("INFO")
+    args = [
+        syms,
+        img_dirs,
+        data_module.root / "tr.gt",
+        data_module.root / "va.gt",
+    ]
+    kwargs = {
+        "common": CommonArgs(train_path=tmpdir),
+        "data": DataArgs(batch_size=3),
+        "optimizer": OptimizerArgs(name="SGD"),
+        "train": TrainArgs(augment_training=True),
+        "trainer": TrainerArgs(
+            progress_bar_refresh_rate=0, weights_summary=None, max_epochs=1
+        ),
+    }
+    # run to have a checkpoint
+    script.run(*args, **kwargs)
+    assert "Model has been trained for 1 epochs (11 steps)" in caplog.messages
+    caplog.clear()
+
+    # train for one more epoch
+    kwargs["train"] = TrainArgs(pretrain=True)
+    script.run(*args, **kwargs)
+    assert "Model has been trained for 1 epochs (11 steps)" in caplog.messages
 
 
 def test_train_early_stops(tmpdir, caplog):
