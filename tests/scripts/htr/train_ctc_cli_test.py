@@ -68,8 +68,8 @@ def test_entry_point():
     assert "--common.experiment_dirname EXPERIMENT_DIRNAME" in help
     assert "Any of: 1" in help
     assert "(type: int_ge-1, default: 3)" in help
-    assert "--train.resume RESUME" in help
-    assert "Union[bool, NonNegativeInt]" in help
+    assert "--train.resume {true,false}" in help
+    assert "bool" in help
     assert "[%(asctime)s %(levelname)s %(name)s] %(message)s" in help
     assert "--optimizer.name {SGD,RMSProp,Adam}" in help
     assert "(type: Monitor, default: va_loss)" in help
