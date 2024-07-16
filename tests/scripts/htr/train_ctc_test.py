@@ -138,6 +138,7 @@ def test_train_can_resume_training(tmpdir, caplog):
     script.run(*args, **kwargs)
     assert "Model has been trained for 2 epochs (21 steps)" in caplog.messages
 
+
 def test_pretraining(tmpdir, caplog):
     syms, img_dirs, data_module = prepare_data(tmpdir)
     caplog.set_level("INFO")
@@ -165,6 +166,7 @@ def test_pretraining(tmpdir, caplog):
     kwargs["train"] = TrainArgs(pretrain=True)
     script.run(*args, **kwargs)
     assert "Model has been trained for 1 epochs (11 steps)" in caplog.messages
+
 
 def test_train_early_stops(tmpdir, caplog):
     syms, img_dirs, data_module = prepare_data(tmpdir)
