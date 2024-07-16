@@ -39,15 +39,20 @@ def run(
     loader = ModelLoader(
         common.train_path, filename=common.model_filename, device="cpu"
     )
+
+    # prepare the symbols
+    syms = SymbolsTable(syms)
+    for d in train.delimiters:
+        assert d in syms, f'The delimiter "{d}" is not available in the symbols file'
+
     # maybe load a checkpoint
-    checkpoint = None
-    if train.resume:
-        checkpoint = loader.prepare_checkpoint(
+    checkpoint_path = (
+        loader.prepare_checkpoint(
             common.checkpoint, common.experiment_dirpath, common.monitor
         )
-        trainer.max_epochs = torch.load(checkpoint)["epoch"] + train.resume
-        log.info(f'Using checkpoint "{checkpoint}"')
-        log.info(f"Max epochs set to {trainer.max_epochs}")
+        if train.resume or train.pretrain
+        else None
+    )
 
     # load the non-pytorch_lightning model
     model = loader.load()
@@ -55,10 +60,15 @@ def run(
         model is not None
     ), "Could not find the model. Have you run pylaia-htr-create-model?"
 
-    # prepare the symbols
-    syms = SymbolsTable(syms)
-    for d in train.delimiters:
-        assert d in syms, f'The delimiter "{d}" is not available in the symbols file'
+    if train.resume or train.pretrain:
+        if train.pretrain:
+            checkpoint_path = loader.reset_parameters(syms, model, checkpoint_path)
+
+        trainer.max_epochs += torch.load(checkpoint_path)["epoch"]
+        log.info(
+            f'Using checkpoint "{checkpoint_path}" in {"pretrain" if train.pretrain else "resume"} mode'
+        )
+        log.info(f"Max epochs set to {trainer.max_epochs}")
 
     # prepare the engine
     engine_module = HTREngineModule(
@@ -126,7 +136,7 @@ def run(
     # prepare the trainer
     trainer = pl.Trainer(
         default_root_dir=common.train_path,
-        resume_from_checkpoint=checkpoint,
+        resume_from_checkpoint=checkpoint_path,
         callbacks=callbacks,
         logger=EpochCSVLogger(common.experiment_dirpath),
         checkpoint_callback=True,
