@@ -95,6 +95,7 @@ train:
   - <space>
   checkpoint_k: 3
   resume: false
+  pretrain: false
   early_stopping_patience: 20
   gpu_stats: false
   augment_training: false
