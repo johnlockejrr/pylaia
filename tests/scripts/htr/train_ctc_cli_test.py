@@ -90,6 +90,7 @@ data:
   batch_size: 8
   color_mode: L
   num_workers: null
+  reading_order: LTR
 train:
   delimiters:
   - <space>

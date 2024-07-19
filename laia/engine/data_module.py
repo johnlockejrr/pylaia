@@ -37,7 +37,7 @@ class DataModule(pl.LightningDataModule):
         augment_tr: bool = False,
         stage: str = "fit",
         num_workers: Optional[int] = None,
-        reading_order: str = "LTR"
+        reading_order: str = "LTR",
     ) -> None:
         assert stage in ("fit", "test")
         base_img_transform = transforms.vision.ToImageTensor(

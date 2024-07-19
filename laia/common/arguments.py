@@ -184,6 +184,7 @@ class DataArgs:
     num_workers: Optional[int] = None
     reading_order: ReadingOrder = ReadingOrder.LTR
 
+
 @dataclass
 class TrainArgs:
     """Train arguments
