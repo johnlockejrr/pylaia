@@ -175,10 +175,14 @@ class DataArgs:
         RGB = "RGB"
         RGBA = "RGBA"
 
+    class ReadingOrder(str, Enum):
+        LTR = "Left-to-right"
+        RTL = "Right-to-left"
+
     batch_size: PositiveInt = 8
     color_mode: ColorMode = ColorMode.L
     num_workers: Optional[int] = None
-
+    reading_order: ReadingOrder = ReadingOrder.LTR
 
 @dataclass
 class TrainArgs:

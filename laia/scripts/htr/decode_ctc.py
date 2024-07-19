@@ -63,6 +63,7 @@ def run(
         color_mode=data.color_mode,
         stage="test",
         num_workers=num_workers,
+        reading_order=data.reading_order,
     )
 
     if decode.use_language_model:

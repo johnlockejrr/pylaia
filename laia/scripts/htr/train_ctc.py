@@ -101,6 +101,7 @@ def run(
         augment_tr=train.augment_training,
         stage="fit",
         num_workers=data.num_workers,
+        reading_order=data.reading_order,
     )
 
     # prepare the training callbacks
