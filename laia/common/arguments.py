@@ -176,8 +176,10 @@ class DataArgs:
         RGBA = "RGBA"
 
     class ReadingOrder(str, Enum):
-        LTR = "Left-to-right"
-        RTL = "Right-to-left"
+        # Left-to-right reading order
+        LTR = "LTR"
+        # Right-to-left reading order
+        RTL = "RTL"
 
     batch_size: PositiveInt = 8
     color_mode: ColorMode = ColorMode.L
