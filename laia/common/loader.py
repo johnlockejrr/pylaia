@@ -53,7 +53,7 @@ class ObjectLoader(Loader):
         kwargs = obj.get("kwargs", {})
         # The key use_masks is deprecated
         if "use_masks" in kwargs:
-            _logger.warn(
+            _logger.warning(
                 "The key 'use_masks' is not supported anymore and will be removed."
             )
             kwargs.pop("use_masks")
