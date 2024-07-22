@@ -51,6 +51,12 @@ class ObjectLoader(Loader):
         fn = getattr(module, obj["name"])
         args = obj.get("args", [])
         kwargs = obj.get("kwargs", {})
+        # The key use_masks is deprecated
+        if "use_masks" in kwargs:
+            _logger.warn(
+                "The key 'use_masks' is not supported anymore and will be removed."
+            )
+            kwargs.pop("use_masks")
         return fn(*args, **kwargs)
 
 
