@@ -150,7 +150,12 @@ class ModelLoader(ObjectLoader):
         return found
 
     @staticmethod
-    def reset_parameters(syms: SymbolsTable, model: Any, checkpoint_path: str):
+    def reset_parameters(
+        syms: SymbolsTable,
+        model: Any,
+        checkpoint_path: str,
+        early_stopping_patience: int,
+    ):
         """
         Keep only the pretrained weights and reset other parameters, callbacks and the optimizer from the checkpoint.
 
@@ -158,6 +163,7 @@ class ModelLoader(ObjectLoader):
             syms (SymbolsTable): symbols table.
             model (Any): current model.
             checkpoint_path (str): pretrained checkpoint.
+            early_stopping_patience (int): Number of validation epochs with no improvement after which training will be stopped
         """
         # Create new checkpoint
         filename, file_extension = os.path.splitext(checkpoint_path)
@@ -199,6 +205,7 @@ class ModelLoader(ObjectLoader):
         checkpoint["callbacks"][EarlyStopping]["best_score"] = torch.tensor(
             float("inf")
         )
+        checkpoint["callbacks"][EarlyStopping]["patience"] = early_stopping_patience
 
         torch.save(checkpoint, new_checkpoint_path)
         return new_checkpoint_path
