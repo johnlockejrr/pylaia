@@ -23,10 +23,12 @@ class Monitor(str, Enum):
     va_cer = "va_cer"
     va_wer = "va_wer"
 
+
 class Layer(str, Enum):
     conv = "conv"
     rnn = "rnn"
     linear = "linear"
+
 
 @dataclass
 class CommonArgs:
@@ -49,6 +51,7 @@ class CommonArgs:
                 `experiment_dirname` directory
         monitor: Metric to monitor for early stopping and checkpointing.
     """
+
     seed: int = 74565  # 0x12345
     train_path: str = ""
     model_filename: str = "model"

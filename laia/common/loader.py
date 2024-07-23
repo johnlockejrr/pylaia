@@ -3,7 +3,7 @@ from collections import OrderedDict
 from glob import glob
 from importlib import import_module
 from io import BytesIO
-from typing import Any, Callable, Optional, Union, List
+from typing import Any, Callable, List, Optional, Union
 
 import natsort as ns
 import pytorch_lightning as pl
@@ -11,8 +11,8 @@ import torch
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
 
-from laia.common.logging import get_logger
 from laia.common.arguments import Layer
+from laia.common.logging import get_logger
 from laia.utils import SymbolsTable
 
 _logger = get_logger(__name__)
