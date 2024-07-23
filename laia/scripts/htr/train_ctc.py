@@ -62,7 +62,12 @@ def run(
 
     if train.resume or train.pretrain:
         if train.pretrain:
-            checkpoint_path = loader.reset_parameters(syms, model, checkpoint_path)
+            checkpoint_path = loader.reset_parameters(
+                syms=syms,
+                model=model,
+                checkpoint_path=checkpoint_path,
+                early_stopping_patience=train.early_stopping_patience,
+            )
 
         trainer.max_epochs += torch.load(checkpoint_path)["epoch"]
         log.info(
