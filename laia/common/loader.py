@@ -3,7 +3,7 @@ from collections import OrderedDict
 from glob import glob
 from importlib import import_module
 from io import BytesIO
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, List, Optional, Union
 
 import natsort as ns
 import pytorch_lightning as pl
@@ -11,6 +11,7 @@ import torch
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
 
+from laia.common.arguments import Layer
 from laia.common.logging import get_logger
 from laia.utils import SymbolsTable
 
@@ -201,3 +202,16 @@ class ModelLoader(ObjectLoader):
 
         torch.save(checkpoint, new_checkpoint_path)
         return new_checkpoint_path
+
+    @staticmethod
+    def freeze_layers(model: Any, layers: List[Layer]):
+        """
+        Freeze some layers during training. By default, all layers are trainable.
+
+        Args:
+            model (Any): current model.
+            layers (List[Layer]): list of layers to freeze.
+        """
+        for layer in layers:
+            for param in getattr(model, layer).parameters():
+                param.requires_grad = False

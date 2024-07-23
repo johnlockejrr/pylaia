@@ -70,6 +70,9 @@ def run(
         )
         log.info(f"Max epochs set to {trainer.max_epochs}")
 
+    if train.freeze_layers:
+        loader.freeze_layers(model, train.freeze_layers)
+
     # prepare the engine
     engine_module = HTREngineModule(
         model,
