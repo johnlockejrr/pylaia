@@ -23,6 +23,10 @@ class Monitor(str, Enum):
     va_cer = "va_cer"
     va_wer = "va_wer"
 
+class Layer(str, Enum):
+    conv = "conv"
+    rnn = "rnn"
+    linear = "linear"
 
 @dataclass
 class CommonArgs:
@@ -45,7 +49,6 @@ class CommonArgs:
                 `experiment_dirname` directory
         monitor: Metric to monitor for early stopping and checkpointing.
     """
-
     seed: int = 74565  # 0x12345
     train_path: str = ""
     model_filename: str = "model"
@@ -195,6 +198,10 @@ class TrainArgs:
         pretrain: Whether to load the weights from a checkpoint, and resume
             the other parameters (callbacks, optimizer). See `checkpoint`.
             If a number, resumes training for this number of epochs.
+        freeze_layers: List of layers to freeze during training.
+            "conv": to freeze convolutional layers
+            "rnn": to freeze recurrent layers
+            "linear": to freeze the linear layer
         early_stopping_patience: Number of validation epochs with no improvement
             after which training will be stopped
         gpu_stats: Whether to include GPU stats in the training progress bar
@@ -206,6 +213,7 @@ class TrainArgs:
     checkpoint_k: GeNeg1Int = 3
     resume: bool = False
     pretrain: bool = False
+    freeze_layers: Optional[List[Layer]] = None
     early_stopping_patience: NonNegativeInt = 20
     gpu_stats: bool = False
     augment_training: bool = False
