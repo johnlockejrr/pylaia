@@ -212,12 +212,6 @@ class ModelLoader(ObjectLoader):
             model (Any): current model.
             layers (List[Layer]): list of layers to freeze.
         """
-        if "conv" in layers:
-            for param in model.conv.parameters():
-                param.requires_grad = False
-        if "rnn" in layers:
-            for param in model.rnn.parameters():
-                param.requires_grad = False
-        if "linear" in layers:
-            for param in model.linear.parameters():
+        for layer in layers:
+            for param in getattr(model, layer).parameters():
                 param.requires_grad = False

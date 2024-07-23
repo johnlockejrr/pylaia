@@ -216,7 +216,7 @@ class TrainArgs:
     checkpoint_k: GeNeg1Int = 3
     resume: bool = False
     pretrain: bool = False
-    freeze_layers: Optional[List[Layer]] = None
+    freeze_layers: Optional[List[Layer]] = field(default_factory=list)
     early_stopping_patience: NonNegativeInt = 20
     gpu_stats: bool = False
     augment_training: bool = False

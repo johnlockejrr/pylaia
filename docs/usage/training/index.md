@@ -56,7 +56,7 @@ The full list of parameters is detailed in this section.
 | `train.checkpoint_k`            | Model saving mode: `-1` all models will be saved, `0`: no models are saved, `k` the `k` best models are saved.                | `int`              | `3`           |
 | `train.resume`                  | Whether to resume training with a checkpoint. This option can be used to continue training on the same dataset. | `bool` | `False`       |
 | `train.pretrain`                | Whether to load pretrained weights from a checkpoint. This option can be used to load pretrained weights when fine-tuning a model on a new dataset. | `bool` | `False`       |
-| `train.freeze_layers`           | List of layers to freeze during training: `"conv"` to freeze convolutional layers, `"rnn"` to freeze recurrent layers, `"linear"` to freeze the linear layer | `List[Layer]` | `None`       |
+| `train.freeze_layers`           | List of layers to freeze during training: `"conv"` to freeze convolutional layers, `"rnn"` to freeze recurrent layers, `"linear"` to freeze the linear layer | `List[str]` | `None`       |
 | `train.early_stopping_patience` | Number of validation epochs with no improvement after which training will be stopped.                                         | `int`              | `20`          |
 | `train.gpu_stats`               | Whether to include GPU stats in the training progress bar.                                                                    | `bool`             | `False`       |
 | `train.augment_training`        | Whether to use data augmentation.                                                                                             | `bool`             | `False`       |
