@@ -163,7 +163,7 @@ class ModelLoader(ObjectLoader):
         Args:
             syms (SymbolsTable): symbols table.
             model (Any): current model.
-            model_path (str) path to the model object.
+            model_path (str): path to the model object.
             checkpoint_path (str): pretrained checkpoint.
             early_stopping_patience (int): Number of validation epochs with no improvement after which training will be stopped
         """
