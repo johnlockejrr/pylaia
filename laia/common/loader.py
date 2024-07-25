@@ -153,6 +153,7 @@ class ModelLoader(ObjectLoader):
     def reset_parameters(
         syms: SymbolsTable,
         model: Any,
+        model_path: str,
         checkpoint_path: str,
         early_stopping_patience: int,
     ):
@@ -162,6 +163,7 @@ class ModelLoader(ObjectLoader):
         Args:
             syms (SymbolsTable): symbols table.
             model (Any): current model.
+            model_path (str): path to the model object.
             checkpoint_path (str): pretrained checkpoint.
             early_stopping_patience (int): Number of validation epochs with no improvement after which training will be stopped
         """
@@ -207,7 +209,14 @@ class ModelLoader(ObjectLoader):
         )
         checkpoint["callbacks"][EarlyStopping]["patience"] = early_stopping_patience
 
+        # Save new checkpoint
         torch.save(checkpoint, new_checkpoint_path)
+
+        # Save the new model object
+        model_object = torch.load(model_path)
+        model_object["kwargs"]["num_output_labels"] = len(syms)
+        torch.save(model_object, model_path)
+
         return new_checkpoint_path
 
     @staticmethod

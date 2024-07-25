@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 from typing import Any, Dict, List, Optional
 
 import jsonargparse
@@ -65,6 +66,7 @@ def run(
             checkpoint_path = loader.reset_parameters(
                 syms=syms,
                 model=model,
+                model_path=os.path.join(common.train_path, common.model_filename),
                 checkpoint_path=checkpoint_path,
                 early_stopping_patience=train.early_stopping_patience,
             )
