@@ -76,6 +76,7 @@ class ModelLoader(ObjectLoader):
         model = super().load()
         if model is not None:
             _logger.info("Loaded model {}", self._path)
+
         return model
 
     def get_model_state_dict(self, checkpoint: str) -> OrderedDict:
@@ -242,11 +243,18 @@ class ModelLoader(ObjectLoader):
             source (str): initial file path.
             target (str): target file path.
         """
-        if os.path.exists(source):
-            _logger.error(f"The file {source} does not exist.")
+        # Target file already exists
+        if os.path.exists(target):
+            _logger.info(f"The target file {target} already exists.")
+            return
+
+        if not os.path.exists(source):
+            _logger.error(f"The source file {source} does not exist.")
+            raise FileNotFoundError
 
         target_dir = os.path.dirname(target)
         if not os.path.exists(target_dir):
             os.makedirs(target_dir, exist_ok=True)
 
         shutil.move(source, target)
+        _logger.warning(f"The file {source} has been moved to {target}.")
