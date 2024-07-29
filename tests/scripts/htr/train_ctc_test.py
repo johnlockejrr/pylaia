@@ -1,3 +1,5 @@
+import os
+
 import pytest
 import torch
 from conftest import call_script
@@ -157,18 +159,24 @@ def test_pretraining(tmpdir, caplog):
             progress_bar_refresh_rate=0, weights_summary=None, max_epochs=1
         ),
     }
-    # run to have a checkpoint
     script.run(*args, **kwargs)
     assert "Model has been trained for 1 epochs (11 steps)" in caplog.messages
-    print(caplog.messages)
     caplog.clear()
 
-    # train for one more epoch
+    # restart from checkpoint
     kwargs["train"] = TrainArgs(pretrain=True)
     kwargs["common"] = CommonArgs(
         train_path=tmpdir, checkpoint="epoch=0-lowest_va_cer.ckpt"
     )
     script.run(*args, **kwargs)
+    ckpt_path = os.path.abspath(
+        os.path.join(
+            kwargs["common"].experiment_dirname,
+            "pretrained",
+            kwargs["common"].checkpoint.replace(".ckpt", "_reset.ckpt"),
+        )
+    )
+    assert f"""Using checkpoint "{ckpt_path}" in pretrain mode"""
     assert "Model has been trained for 1 epochs (11 steps)" in caplog.messages
 
 
