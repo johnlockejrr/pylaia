@@ -160,10 +160,14 @@ def test_pretraining(tmpdir, caplog):
     # run to have a checkpoint
     script.run(*args, **kwargs)
     assert "Model has been trained for 1 epochs (11 steps)" in caplog.messages
+    print(caplog.messages)
     caplog.clear()
 
     # train for one more epoch
     kwargs["train"] = TrainArgs(pretrain=True)
+    kwargs["common"] = CommonArgs(
+        train_path=tmpdir, checkpoint="epoch=0-lowest_va_cer.ckpt"
+    )
     script.run(*args, **kwargs)
     assert "Model has been trained for 1 epochs (11 steps)" in caplog.messages
 

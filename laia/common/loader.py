@@ -1,4 +1,5 @@
 import os
+import shutil
 from collections import OrderedDict
 from glob import glob
 from importlib import import_module
@@ -231,3 +232,21 @@ class ModelLoader(ObjectLoader):
         for layer in layers:
             for param in getattr(model, layer).parameters():
                 param.requires_grad = False
+
+    @staticmethod
+    def move_file(source: str, target: str):
+        """
+        Move a file from source_dir to target_dir.
+
+        Args:
+            source (str): initial file path.
+            target (str): target file path.
+        """
+        if os.path.exists(source):
+            _logger.error(f"The file {source} does not exist.")
+
+        target_dir = os.path.dirname(target)
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir, exist_ok=True)
+
+        shutil.move(source, target)
