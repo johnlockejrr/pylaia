@@ -52,7 +52,7 @@ Tracker = "https://gitlab.teklia.com/atr/pylaia/issues/"
 dev = [
     "black",
     "isort",
-    "pre-commit",
+    "pre-commit==3.8.0",
 ]
 test = [
     "tox",
