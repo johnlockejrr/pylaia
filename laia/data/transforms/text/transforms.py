@@ -1,5 +1,3 @@
-import re
-from functools import partial
 from typing import Dict, List, Union
 
 from bidi.algorithm import get_display
@@ -10,40 +8,43 @@ from laia.utils.symbols_table import SymbolsTable
 _logger = log.get_logger(__name__)
 
 
-def rtl_word(word: str, pattern: re.Pattern) -> str:
-    return "".join(reversed(list(filter(None, pattern.split(word)))))
+def untokenize(
+    sentence: str, space_token: str = "<space>", space_display: str = " "
+) -> str:
+    return "".join(sentence.split()).replace(space_token, space_display)
 
 
-def rtl(sentence: str, tokens: set) -> str:
-    pattern = re.compile(rf"{'|'.join(f'({re.escape(word)})' for word in tokens)}")
-    return " <space> ".join(
-        reversed(
-            list(map(partial(rtl_word, pattern=pattern), sentence.split(" <space> ")))
-        )
+def tokenize(
+    sentence: str, space_token: str = "<space>", space_display: str = " "
+) -> str:
+    return space_display.join(
+        [space_token if token == space_display else token for token in list(sentence)]
     )
-
-
-def untokenize(sentence: str) -> str:
-    return "".join(sentence.split()).replace("<space>", " ")
-
-
-def tokenize(sentence: str) -> str:
-    return " ".join([token if token != " " else "<space>" for token in list(sentence)])
 
 
 class ToTensor:
     def __init__(
-        self, syms: Union[Dict, SymbolsTable], reading_order: str = "LTR"
+        self,
+        syms: Union[Dict, SymbolsTable],
+        reading_order: str = "LTR",
+        space_token: str = "<space>",
+        space_display: str = " ",
     ) -> None:
         assert isinstance(syms, (Dict, SymbolsTable))
         self._syms = syms
         self.reading_order = reading_order
+        self.space_token = space_token
+        self.space_display = space_display
 
     def __call__(self, x: str) -> List[int]:
         if self.reading_order == "RTL":
-            x = untokenize(x)
+            x = untokenize(
+                x, space_token=self.space_token, space_display=self.space_display
+            )
             x = get_display(x)
-            x = tokenize(x)
+            x = tokenize(
+                x, space_token=self.space_token, space_display=self.space_display
+            )
         values = []
         for c in x.split():
             v = (

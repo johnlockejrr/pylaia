@@ -38,6 +38,8 @@ class DataModule(pl.LightningDataModule):
         stage: str = "fit",
         num_workers: Optional[int] = None,
         reading_order: str = "LTR",
+        space_token: str = "<space>",
+        space_display: str = " ",
     ) -> None:
         assert stage in ("fit", "test")
         base_img_transform = transforms.vision.ToImageTensor(
@@ -62,7 +64,12 @@ class DataModule(pl.LightningDataModule):
                 if augment_tr
                 else None,
             )
-            txt_transform = transforms.text.ToTensor(syms, reading_order=reading_order)
+            txt_transform = transforms.text.ToTensor(
+                syms,
+                reading_order=reading_order,
+                space_token=space_token,
+                space_display=space_display,
+            )
             _logger.info(f"Training data transforms:\n{tr_img_transform}")
             super().__init__(
                 train_transforms=(tr_img_transform, txt_transform),
