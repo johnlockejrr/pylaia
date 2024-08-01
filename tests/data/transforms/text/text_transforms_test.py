@@ -1,5 +1,47 @@
-from laia.data.transforms.text import ToTensor
+import pytest
+
+from laia.data.transforms.text import ToTensor, tokenize, untokenize
 from laia.utils import SymbolsTable
+
+
+@pytest.mark.parametrize(
+    "sentence,tokenization,space_token,space_display",
+    [
+        (
+            "salut à toi l'endimanché",
+            "s a l u t <space> à <space> t o i <space> l ' e n d i m a n c h é",
+            "<space>",
+            " ",
+        ),
+        (
+            "salut à tous les paysans",
+            "s a l u t <ESPACE> à <ESPACE> t o u s <ESPACE> l e s <ESPACE> p a y s a n s",
+            "<ESPACE>",
+            " ",
+        ),
+        (
+            "salut-aussi-à-Rantanplan",
+            "s a l u t <dash> a u s s i <dash> à <dash> R a n t a n p l a n",
+            "<dash>",
+            "-",
+        ),
+        (
+            "أكلت اثنتي عشرة (12) قطعة بسكويت في 1/08/2024",
+            "أ ك ل ت <space> ا ث ن ت ي <space> ع ش ر ة <space> ( 1 2 ) <space> ق ط ع ة <space> ب س ك و ي ت <space> ف ي <space> 1 / 0 8 / 2 0 2 4",
+            "<space>",
+            " ",
+        ),
+    ],
+)
+def test_tokenize_untokenize(sentence, tokenization, space_token, space_display):
+    assert (
+        tokenize(sentence, space_token=space_token, space_display=space_display)
+        == tokenization
+    )
+    assert (
+        untokenize(tokenization, space_token=space_token, space_display=space_display)
+        == sentence
+    )
 
 
 def test_call_with_dict(caplog):

@@ -17,7 +17,7 @@ def untokenize(
 def tokenize(
     sentence: str, space_token: str = "<space>", space_display: str = " "
 ) -> str:
-    return space_display.join(
+    return " ".join(
         [space_token if token == space_display else token for token in list(sentence)]
     )
 
