@@ -47,13 +47,23 @@ def run(
         assert d in syms, f'The delimiter "{d}" is not available in the symbols file'
 
     # maybe load a checkpoint
-    checkpoint_path = (
-        loader.prepare_checkpoint(
+    if train.pretrain:
+        # Move the checkpoint in a pretrained directory to avoid it being selected by find_best
+        initial_ckpt = os.path.join(common.experiment_dirpath, common.checkpoint)
+        target_ckpt = os.path.join(
+            common.experiment_dirpath, "pretrained", common.checkpoint
+        )
+        loader.move_file(source=initial_ckpt, target=target_ckpt)
+        checkpoint_path = loader.prepare_checkpoint(
+            common.checkpoint, os.path.dirname(target_ckpt), common.monitor
+        )
+
+    elif train.resume:
+        checkpoint_path = loader.prepare_checkpoint(
             common.checkpoint, common.experiment_dirpath, common.monitor
         )
-        if train.resume or train.pretrain
-        else None
-    )
+    else:
+        checkpoint_path = None
 
     # load the non-pytorch_lightning model
     model = loader.load()

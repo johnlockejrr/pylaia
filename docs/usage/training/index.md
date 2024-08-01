@@ -157,9 +157,13 @@ pylaia-htr-train-ctc --config config_train_model.yaml --train.resume true --trai
 
 Run the following command to load pretrained weights and fine-tune on a new dataset for 200 epochs.
 ```sh
-pylaia-htr-train-ctc --config config_train_model.yaml --common.checkpoint initial_checkpoint.ckpt --train.pretrain true --trainer.max_epochs 200
+pylaia-htr-train-ctc --config config_train_model.yaml --common.experiment_dirname experiment/ --common.checkpoint initial_checkpoint.ckpt --train.pretrain true --trainer.max_epochs 200
 ```
 
 !!! warning
     This option requires that your model architecture `model` matches the one used to train `initial_checkpoint.ckpt`.
     The last linear layer will be reinitialized using the Xavier initialization to match the new vocabulary size.
+
+!!! note
+    The initial checkpoint is expected to be in the following directory: `{common.experiment_dirname}/pretrained/`.
+    If it is located in `common.experiment_dirname`, the subdirectory `pretrained` will be created and the checkpoint will be moved there automatically.
