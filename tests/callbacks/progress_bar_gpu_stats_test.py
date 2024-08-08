@@ -24,9 +24,13 @@ def test_progress_bar_gpu_stats(monkeypatch, tmpdir):
     def _fake_on_train_start(self, *_):
         self._gpu_ids = "0,1"
 
+    def _fake_setup(self, trainer, pl_module, stage=None):
+        ...
+
     fake_stats = [[1.2, 2.3], [3.4, 4.5]]
     monkeypatch.setattr(shutil, "which", lambda _: True)
     monkeypatch.setattr(ProgressBarGPUStats, "on_train_start", _fake_on_train_start)
+    monkeypatch.setattr(ProgressBarGPUStats, "setup", _fake_setup)
     monkeypatch.setattr(ProgressBarGPUStats, "_get_gpu_stats", lambda *_: fake_stats)
 
     trainer = DummyTrainer(

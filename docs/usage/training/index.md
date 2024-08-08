@@ -57,6 +57,7 @@ The full list of parameters is detailed in this section.
 | `train.checkpoint_k`            | Model saving mode: `-1` all models will be saved, `0`: no models are saved, `k` the `k` best models are saved.                | `int`              | `3`           |
 | `train.resume`                  | Whether to resume training with a checkpoint. This option can be used to continue training on the same dataset. | `bool` | `False`       |
 | `train.pretrain`                | Whether to load pretrained weights from a checkpoint. This option can be used to load pretrained weights when fine-tuning a model on a new dataset. | `bool` | `False`       |
+| `train.freeze_layers`           | List of layers to freeze during training: `"conv"` to freeze convolutional layers, `"rnn"` to freeze recurrent layers, `"linear"` to freeze the linear layer | `List[str]` | `None`       |
 | `train.early_stopping_patience` | Number of validation epochs with no improvement after which training will be stopped.                                         | `int`              | `20`          |
 | `train.gpu_stats`               | Whether to include GPU stats in the training progress bar.                                                                    | `bool`             | `False`       |
 | `train.augment_training`        | Whether to use data augmentation.                                                                                             | `bool`             | `False`       |
@@ -157,12 +158,16 @@ pylaia-htr-train-ctc --config config_train_model.yaml --train.resume true --trai
 
 Run the following command to load pretrained weights and fine-tune on a new dataset for 200 epochs.
 ```sh
-pylaia-htr-train-ctc --config config_train_model.yaml --common.checkpoint initial_checkpoint.ckpt --train.pretrain true --trainer.max_epochs 200
+pylaia-htr-train-ctc --config config_train_model.yaml --common.experiment_dirname experiment/ --common.checkpoint initial_checkpoint.ckpt --train.pretrain true --trainer.max_epochs 200
 ```
 
 !!! warning
     This option requires that your model architecture `model` matches the one used to train `initial_checkpoint.ckpt`.
     The last linear layer will be reinitialized using the Xavier initialization to match the new vocabulary size.
+
+!!! note
+    The initial checkpoint is expected to be in the following directory: `{common.experiment_dirname}/pretrained/`.
+    If it is located in `common.experiment_dirname`, the subdirectory `pretrained` will be created and the checkpoint will be moved there automatically.
 
 ### Train on Right-To-Left reading order
 

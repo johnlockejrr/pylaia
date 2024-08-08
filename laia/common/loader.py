@@ -1,9 +1,10 @@
 import os
+import shutil
 from collections import OrderedDict
 from glob import glob
 from importlib import import_module
 from io import BytesIO
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, List, Optional, Union
 
 import natsort as ns
 import pytorch_lightning as pl
@@ -11,6 +12,7 @@ import torch
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
 
+from laia.common.arguments import Layer
 from laia.common.logging import get_logger
 from laia.utils import SymbolsTable
 
@@ -51,6 +53,12 @@ class ObjectLoader(Loader):
         fn = getattr(module, obj["name"])
         args = obj.get("args", [])
         kwargs = obj.get("kwargs", {})
+        # The key use_masks is deprecated
+        if "use_masks" in kwargs:
+            _logger.warning(
+                "The key 'use_masks' is not supported anymore and will be removed."
+            )
+            kwargs.pop("use_masks")
         return fn(*args, **kwargs)
 
 
@@ -68,6 +76,7 @@ class ModelLoader(ObjectLoader):
         model = super().load()
         if model is not None:
             _logger.info("Loaded model {}", self._path)
+
         return model
 
     def get_model_state_dict(self, checkpoint: str) -> OrderedDict:
@@ -143,14 +152,22 @@ class ModelLoader(ObjectLoader):
         return found
 
     @staticmethod
-    def reset_parameters(syms: SymbolsTable, model: Any, checkpoint_path: str):
+    def reset_parameters(
+        syms: SymbolsTable,
+        model: Any,
+        model_path: str,
+        checkpoint_path: str,
+        early_stopping_patience: int,
+    ):
         """
         Keep only the pretrained weights and reset other parameters, callbacks and the optimizer from the checkpoint.
 
         Args:
             syms (SymbolsTable): symbols table.
             model (Any): current model.
+            model_path (str): path to the model object.
             checkpoint_path (str): pretrained checkpoint.
+            early_stopping_patience (int): Number of validation epochs with no improvement after which training will be stopped
         """
         # Create new checkpoint
         filename, file_extension = os.path.splitext(checkpoint_path)
@@ -192,6 +209,52 @@ class ModelLoader(ObjectLoader):
         checkpoint["callbacks"][EarlyStopping]["best_score"] = torch.tensor(
             float("inf")
         )
+        checkpoint["callbacks"][EarlyStopping]["patience"] = early_stopping_patience
 
+        # Save new checkpoint
         torch.save(checkpoint, new_checkpoint_path)
+
+        # Save the new model object
+        model_object = torch.load(model_path)
+        model_object["kwargs"]["num_output_labels"] = len(syms)
+        torch.save(model_object, model_path)
+
         return new_checkpoint_path
+
+    @staticmethod
+    def freeze_layers(model: Any, layers: List[Layer]):
+        """
+        Freeze some layers during training. By default, all layers are trainable.
+
+        Args:
+            model (Any): current model.
+            layers (List[Layer]): list of layers to freeze.
+        """
+        for layer in layers:
+            for param in getattr(model, layer).parameters():
+                param.requires_grad = False
+
+    @staticmethod
+    def move_file(source: str, target: str):
+        """
+        Move a file from source_dir to target_dir.
+
+        Args:
+            source (str): initial file path.
+            target (str): target file path.
+        """
+        # Target file already exists
+        if os.path.exists(target):
+            _logger.info(f"The target file {target} already exists.")
+            return
+
+        if not os.path.exists(source):
+            _logger.error(f"The source file {source} does not exist.")
+            raise FileNotFoundError
+
+        target_dir = os.path.dirname(target)
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir, exist_ok=True)
+
+        shutil.move(source, target)
+        _logger.warning(f"The file {source} has been moved to {target}.")

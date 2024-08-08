@@ -24,6 +24,12 @@ class Monitor(str, Enum):
     va_wer = "va_wer"
 
 
+class Layer(str, Enum):
+    conv = "conv"
+    rnn = "rnn"
+    linear = "linear"
+
+
 @dataclass
 class CommonArgs:
     """Common arguments
@@ -202,6 +208,10 @@ class TrainArgs:
         pretrain: Whether to load the weights from a checkpoint, and resume
             the other parameters (callbacks, optimizer). See `checkpoint`.
             If a number, resumes training for this number of epochs.
+        freeze_layers: List of layers to freeze during training.
+            "conv": to freeze convolutional layers
+            "rnn": to freeze recurrent layers
+            "linear": to freeze the linear layer
         early_stopping_patience: Number of validation epochs with no improvement
             after which training will be stopped
         gpu_stats: Whether to include GPU stats in the training progress bar
@@ -213,6 +223,7 @@ class TrainArgs:
     checkpoint_k: GeNeg1Int = 3
     resume: bool = False
     pretrain: bool = False
+    freeze_layers: Optional[List[Layer]] = field(default_factory=list)
     early_stopping_patience: NonNegativeInt = 20
     gpu_stats: bool = False
     augment_training: bool = False

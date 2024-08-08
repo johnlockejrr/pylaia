@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 from typing import Any, Dict, List, Optional
 
 import jsonargparse
@@ -48,13 +49,23 @@ def run(
         assert d in syms, f'The delimiter "{d}" is not available in the symbols file'
 
     # maybe load a checkpoint
-    checkpoint_path = (
-        loader.prepare_checkpoint(
+    if train.pretrain:
+        # Move the checkpoint in a pretrained directory to avoid it being selected by find_best
+        initial_ckpt = os.path.join(common.experiment_dirpath, common.checkpoint)
+        target_ckpt = os.path.join(
+            common.experiment_dirpath, "pretrained", common.checkpoint
+        )
+        loader.move_file(source=initial_ckpt, target=target_ckpt)
+        checkpoint_path = loader.prepare_checkpoint(
+            common.checkpoint, os.path.dirname(target_ckpt), common.monitor
+        )
+
+    elif train.resume:
+        checkpoint_path = loader.prepare_checkpoint(
             common.checkpoint, common.experiment_dirpath, common.monitor
         )
-        if train.resume or train.pretrain
-        else None
-    )
+    else:
+        checkpoint_path = None
 
     # load the non-pytorch_lightning model
     model = loader.load()
@@ -64,13 +75,22 @@ def run(
 
     if train.resume or train.pretrain:
         if train.pretrain:
-            checkpoint_path = loader.reset_parameters(syms, model, checkpoint_path)
+            checkpoint_path = loader.reset_parameters(
+                syms=syms,
+                model=model,
+                model_path=os.path.join(common.train_path, common.model_filename),
+                checkpoint_path=checkpoint_path,
+                early_stopping_patience=train.early_stopping_patience,
+            )
 
         trainer.max_epochs += torch.load(checkpoint_path)["epoch"]
         log.info(
             f'Using checkpoint "{checkpoint_path}" in {"pretrain" if train.pretrain else "resume"} mode'
         )
         log.info(f"Max epochs set to {trainer.max_epochs}")
+
+    if train.freeze_layers:
+        loader.freeze_layers(model, train.freeze_layers)
 
     # prepare the engine
     engine_module = HTREngineModule(
