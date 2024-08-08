@@ -1,10 +1,15 @@
 from typing import Callable, Optional, Union
 
 import pytorch_lightning as pl
+from bidi.algorithm import get_display
 from tqdm.auto import tqdm
 
+import laia.common.logging as log
+from laia.data.transforms.text import tokenize, untokenize
 from laia.decoders import CTCGreedyDecoder
 from laia.utils import SymbolsTable
+
+_logger = log.get_logger(__name__)
 
 
 def compute_word_prob(symbols, hyp, prob, input_separator):
@@ -42,6 +47,7 @@ class Decode(pl.Callback):
         include_img_ids: bool = True,
         print_line_confidence_scores: bool = False,
         print_word_confidence_scores: bool = False,
+        reading_order: str = "LTR",
     ):
         super().__init__()
         self.decoder = decoder
@@ -59,6 +65,15 @@ class Decode(pl.Callback):
         self.include_img_ids = include_img_ids
         self.print_line_confidence_scores = print_line_confidence_scores
         self.print_word_confidence_scores = print_word_confidence_scores
+        self.reading_order = reading_order
+
+        if self.reading_order == "RTL" and not convert_spaces:
+            # cannot use get_display() if convert_spaces is False
+            _logger.warn(
+                "The reading order is set to RTL (Right-to-Left), but '--decode.convert_spaces' is set to False. "
+                "This will cause LTR (Left-to-Right) text predictions because PyLaia uses the bidi algorithm to handle RTL text. "
+                "For predictions in RTL order, consider setting '--decode.convert_spaces true'."
+            )
 
     @property
     def print_confidence_scores(self):
@@ -89,6 +104,10 @@ class Decode(pl.Callback):
         for i, (img_id, hyp) in enumerate(zip(img_ids, hyps)):
             if self.use_symbols:
                 hyp = [self.syms[v] for v in hyp]
+                if self.reading_order == "RTL":
+                    hyp = get_display(untokenize(" ".join(hyp)))
+                    hyp = tokenize(hyp).split(" ")
+
                 if self.convert_spaces:
                     hyp = [
                         self.output_space if sym == self.input_space else sym
@@ -100,6 +119,8 @@ class Decode(pl.Callback):
             if self.print_confidence_scores:
                 if self.print_word_confidence_scores:
                     word_prob = [f"{prob:.2f}" for prob in word_probs[i]]
+                    if self.reading_order == "RTL":
+                        word_prob.reverse()
                     self.write(
                         f"{img_id}{self.separator}{word_prob}{self.separator}{hyp}"
                         if self.include_img_ids

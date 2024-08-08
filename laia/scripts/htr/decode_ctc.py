@@ -108,6 +108,7 @@ def run(
             include_img_ids=decode.include_img_ids,
             print_line_confidence_scores=decode.print_line_confidence_scores,
             print_word_confidence_scores=decode.print_word_confidence_scores,
+            reading_order=data.reading_order,
         ),
     ]
 

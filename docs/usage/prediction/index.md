@@ -41,6 +41,7 @@ The full list of parameters is detailed in this section.
 | `data.batch_size`  | Batch size.                                       | `int`       | `8`           |
 | `data.color_mode`  | Color mode. Must be either `L`, `RGB` or `RGBA`.  | `ColorMode` | `ColorMode.L` |
 | `data.num_workers` | Number of worker processes created in dataloaders | `int`       | `None`        |
+| `data.reading_order` | Reading order on the input lines: LFT (Left-to-Right) or RTL (Right-to-Left). | `ReadingOrder`       | `LFT`        |
 
 ### Decode arguments
 
@@ -296,4 +297,21 @@ Expected output:
 ```text
 219007024-f45433e7-99fd-43b0-bce6-93f63fa72a8f [('og', 1, 1, 79, 128), ('<space>', 80, 1, 143, 128), ('Valstad', 144, 1, 407, 128), ('<space>', 408, 1, 496, 128), ('kan', 497, 1, 624, 128), ('<space>', 625, 1, 712, 128), ('vi', 713, 1, 776, 128), ('<space>', 777, 1, 808, 128), ('vist', 809, 1, 944, 128)]
 219008758-c0097bb4-c55a-4652-ad2e-bba350bee0e4 [('ikke', 1, 1, 191, 128), ('<space>', 192, 1, 248, 128), ('gjøre', 249, 1, 408, 128), ('<space>', 409, 1, 481, 128), ('Regning', 482, 1, 762, 128), ('<space>', 763, 1, 794, 128), ('paa,', 795, 1, 914, 128)]
+```
+
+### Predict on Right-To-Left data
+
+To output word localization, use the `--data.reading_order` option:
+```bash
+pylaia-htr-decode-ctc --common.experiment_dirname pylaia-khatt/ \
+                      --common.model_filename pylaia-khatt/model \
+                      --data.reading_order RTL \
+                      --img_dir [images] \
+                      pylaia-khatt/syms.txt \
+                      img_list.txt
+```
+
+Expected output:
+```text
+text_line_1302 العلماء على فهم هذه الكتابات بالدراسات اللغوية السامية مثل العبرانية، وباللغة العربية التي
 ```
