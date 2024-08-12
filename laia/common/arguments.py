@@ -24,6 +24,13 @@ class Monitor(str, Enum):
     va_wer = "va_wer"
 
 
+class ReadingOrder(str, Enum):
+    # Left-to-right reading order
+    LTR = "LTR"
+    # Right-to-left reading order
+    RTL = "RTL"
+
+
 class Layer(str, Enum):
     conv = "conv"
     rnn = "rnn"
@@ -180,12 +187,6 @@ class DataArgs:
         L = "L"
         RGB = "RGB"
         RGBA = "RGBA"
-
-    class ReadingOrder(str, Enum):
-        # Left-to-right reading order
-        LTR = "LTR"
-        # Right-to-left reading order
-        RTL = "RTL"
 
     batch_size: PositiveInt = 8
     color_mode: ColorMode = ColorMode.L

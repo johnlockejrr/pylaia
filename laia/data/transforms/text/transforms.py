@@ -4,6 +4,7 @@ from typing import Dict, List, Union
 from bidi.algorithm import get_display
 
 import laia.common.logging as log
+from laia.common.arguments import ReadingOrder
 from laia.utils.symbols_table import SymbolsTable
 
 _logger = log.get_logger(__name__)
@@ -81,7 +82,7 @@ class ToTensor:
         self.space_display = space_display
 
     def __call__(self, x: str) -> List[int]:
-        if self.reading_order == "RTL":
+        if self.reading_order == ReadingOrder.RTL:
             x = untokenize(
                 x, space_token=self.space_token, space_display=self.space_display
             )

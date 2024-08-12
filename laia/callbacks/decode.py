@@ -5,6 +5,7 @@ from bidi.algorithm import get_display
 from tqdm.auto import tqdm
 
 import laia.common.logging as log
+from laia.common.arguments import ReadingOrder
 from laia.data.transforms.text import tokenize, untokenize
 from laia.decoders import CTCGreedyDecoder
 from laia.utils import SymbolsTable
@@ -67,7 +68,7 @@ class Decode(pl.Callback):
         self.print_word_confidence_scores = print_word_confidence_scores
         self.reading_order = reading_order
 
-        if self.reading_order == "RTL" and not convert_spaces:
+        if self.reading_order == ReadingOrder.RTL and not convert_spaces:
             # cannot use get_display() if convert_spaces is False
             _logger.warn(
                 "The reading order is set to RTL (Right-to-Left), but '--decode.convert_spaces' is set to False. "
@@ -104,7 +105,7 @@ class Decode(pl.Callback):
         for i, (img_id, hyp) in enumerate(zip(img_ids, hyps)):
             if self.use_symbols:
                 hyp = [self.syms[v] for v in hyp]
-                if self.reading_order == "RTL":
+                if self.reading_order == ReadingOrder.RTL:
                     hyp = get_display(untokenize(" ".join(hyp)))
                     hyp = tokenize(hyp).split(" ")
 
@@ -119,7 +120,7 @@ class Decode(pl.Callback):
             if self.print_confidence_scores:
                 if self.print_word_confidence_scores:
                     word_prob = [f"{prob:.2f}" for prob in word_probs[i]]
-                    if self.reading_order == "RTL":
+                    if self.reading_order == ReadingOrder.RTL:
                         word_prob.reverse()
                     self.write(
                         f"{img_id}{self.separator}{word_prob}{self.separator}{hyp}"
