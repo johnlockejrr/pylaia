@@ -46,7 +46,8 @@ The full list of parameters is detailed in this section.
 | ------------------ | ------------------------------------------------- | ----------- | ------------- |
 | `data.batch_size`  | Batch size.                                       | `int`       | `8`           |
 | `data.color_mode`  | Color mode. Must be either `L`, `RGB` or `RGBA`.  | `ColorMode` | `ColorMode.L` |
-| `data.num_workers` | Number of worker processes created in dataloaders | `int`       | `None`        |
+| `data.num_workers`  | Number of worker processes created in dataloaders | `int`       | `None`        |
+| `data.reading_order` | Reading order on the input lines: LFT (Left-to-Right) or RTL (Right-to-Left). | `ReadingOrder`       | `LFT`        |
 
 ### Train arguments
 
@@ -101,7 +102,7 @@ Pytorch Lighning `Trainer` flags can also be set using the `--trainer` argument.
 The model can be trained using command-line arguments or a YAML configuration file. Note that CLI arguments override the values from the configuration file.
 
 
-### Training from scratch with Command Line Arguments (CLI)
+### Train from scratch with Command Line Arguments (CLI)
 
 Run the following command to train a model:
 ```sh
@@ -113,7 +114,7 @@ pylaia-htr-train-ctc /path/to/syms.txt \
    --data.batch_size 32
 ```
 
-### Training from scratch with a YAML configuration file
+### Train from scratch with a YAML configuration file
 
 Run the following command to train a model:
 ```sh
@@ -167,3 +168,36 @@ pylaia-htr-train-ctc --config config_train_model.yaml --common.experiment_dirnam
 !!! note
     The initial checkpoint is expected to be in the following directory: `{common.experiment_dirname}/pretrained/`.
     If it is located in `common.experiment_dirname`, the subdirectory `pretrained` will be created and the checkpoint will be moved there automatically.
+
+### Train on Right-To-Left reading order
+
+By default, PyLaia expects images with Left-to-Right reading order.
+To train a model on Right-To-Left data, use the following command:
+```sh
+pylaia-htr-train-ctc --config config_train_model_rtl.yaml
+```
+
+Where `config_train_model_rtl.yaml` is:
+
+```yaml title="config_train_model_rtl.yaml"
+syms: /path/to/syms.txt
+img_dirs:
+  - /path/to/images/
+tr_txt_table: /path/to/train.txt
+va_txt_table: /path/to/val.txt
+common:
+  experiment_dirname: experiment-dataset
+logging:
+  filepath: pylaia_training.log
+scheduler:
+  active: true
+train:
+  augment_training: true
+  early_stopping_patience: 80
+trainer:
+  auto_select_gpus: true
+  gpus: 1
+  max_epochs: 600
+data:
+  reading_order: RTL
+```

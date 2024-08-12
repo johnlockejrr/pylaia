@@ -82,6 +82,7 @@ data:
   batch_size: 8
   color_mode: L
   num_workers: null
+  reading_order: LTR
 logging:
   fmt: '[%(asctime)s %(levelname)s %(name)s] %(message)s'
   level: INFO
