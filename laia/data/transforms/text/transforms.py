@@ -26,10 +26,8 @@ def untokenize(
         str: The untokenized text.
 
     Example:
-        untokenize("T h i s <space> i s <space> a n <space> e x a m p l e")
-        >>> "This is an example"
-        untokenize("T h e <space> O l y m p i c s <space> G a m e s <space> a r e <space> o r g a n i z e d <space> i n <space> <location>P a r i s")
-        >>> "The Olympics Games are organized in <location>Paris"
+        >>> untokenize("I <space> l o v e <space> <location> P a r i s")
+        'I love <location>Paris'
     """
     return "".join(tokenized_sentence.split()).replace(space_token, space_display)
 
@@ -53,10 +51,12 @@ def tokenize(
         str: The tokenized text with spaces replaced by `space_display`.
 
     Example:
-        untokenize("This is an example")
-        >>> "T h i s <space> i s <space> a n <space> e x a m p l e"
-        tokenize("The Olympics Games are organized in <location>Paris")
-        >>> "T h e <space> O l y m p i c s <space> G a m e s <space> a r e <space> o r g a n i z e d <space> i n <space> <location>P a r i s"
+        >>> symbols = {"I", "l", "o", "v", "e", "P", "a", "r", "i", "s", "<space>"}
+        >>> tokenize("I love <location>Paris", symbols=symbols)
+        'I <space> l o v e  < l o c a t i o n> P a r i s'
+        >>> symbols.update(["<location>"])
+        >>> tokenize("I love <location>Paris", symbols=symbols)
+        'I <space> l o v e <space> <location> P a r i s'
     """
     pattern = re.compile(rf"{'|'.join(f'({re.escape(word)})' for word in symbols)}")
     return " ".join(
