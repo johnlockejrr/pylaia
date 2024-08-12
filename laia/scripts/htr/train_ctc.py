@@ -11,6 +11,7 @@ from laia.callbacks import LearningRate, ProgressBar, ProgressBarGPUStats
 from laia.common.arguments import (
     CommonArgs,
     DataArgs,
+    DecodeArgs,
     OptimizerArgs,
     SchedulerArgs,
     TrainArgs,
@@ -34,6 +35,7 @@ def run(
     scheduler: SchedulerArgs = SchedulerArgs(),
     data: DataArgs = DataArgs(),
     trainer: TrainerArgs = TrainerArgs(),
+    decode: DecodeArgs = DecodeArgs(),
 ):
     pl.seed_everything(common.seed)
 
@@ -121,6 +123,9 @@ def run(
         augment_tr=train.augment_training,
         stage="fit",
         num_workers=data.num_workers,
+        reading_order=data.reading_order,
+        space_token=decode.input_space,
+        space_display=decode.output_space,
     )
 
     # prepare the training callbacks
@@ -220,6 +225,7 @@ def get_args(argv: Optional[List[str]] = None) -> Dict[str, Any]:
     parser.add_class_arguments(OptimizerArgs, "optimizer")
     parser.add_class_arguments(SchedulerArgs, "scheduler")
     parser.add_class_arguments(TrainerArgs, "trainer")
+    parser.add_class_arguments(DecodeArgs, "decode")
 
     args = parser.parse_args(argv, with_meta=False).as_dict()
 
@@ -229,6 +235,7 @@ def get_args(argv: Optional[List[str]] = None) -> Dict[str, Any]:
     args["optimizer"] = OptimizerArgs(**args["optimizer"])
     args["scheduler"] = SchedulerArgs(**args["scheduler"])
     args["trainer"] = TrainerArgs(**args["trainer"])
+    args["decode"] = DecodeArgs(**args["decode"])
 
     return args
 
