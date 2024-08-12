@@ -56,6 +56,7 @@ class ToTensor:
                 space_display=self.space_display,
                 symbols=set(self._syms._sym2val.keys()),
             )
+
         values = []
         for c in x.split():
             v = (

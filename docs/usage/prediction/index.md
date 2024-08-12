@@ -41,7 +41,7 @@ The full list of parameters is detailed in this section.
 | `data.batch_size`  | Batch size.                                       | `int`       | `8`           |
 | `data.color_mode`  | Color mode. Must be either `L`, `RGB` or `RGBA`.  | `ColorMode` | `ColorMode.L` |
 | `data.num_workers` | Number of worker processes created in dataloaders | `int`       | `None`        |
-| `data.reading_order` | Reading order on the input lines: LFT (Left-to-Right) or RTL (Right-to-Left). | `ReadingOrder`       | `LFT`        |
+| `data.reading_order` | Reading order on the input lines: LTR (Left-to-Right) or RTL (Right-to-Left). | `ReadingOrder`       | `LTR`        |
 
 ### Decode arguments
 

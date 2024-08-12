@@ -179,7 +179,7 @@ pylaia-htr-train-ctc --config config_train_model_rtl.yaml
 
 Where `config_train_model_rtl.yaml` is:
 
-```yaml
+```yaml title="config_train_model_rtl.yaml"
 syms: /path/to/syms.txt
 img_dirs:
   - /path/to/images/
