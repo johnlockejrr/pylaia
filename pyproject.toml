@@ -51,22 +51,19 @@ Tracker = "https://gitlab.teklia.com/atr/pylaia/issues/"
 
 [project.optional-dependencies]
 dev = [
-    "black",
-    "isort",
     "pre-commit==3.8.0",
 ]
 test = [
-    "tox",
+    "tox==4.17.1",
 ]
 docs = [
-    "black==23.11.0",
+    "black==24.8.0",
     "mkdocs-autorefs==0.5.0",
     "mkdocs-gen-files==0.5.0",
     "mkdocs-literate-nav==0.6.1",
     "mkdocs-material==9.4.5",
     "mkdocs-section-index==0.3.8",
-    "mkdocstrings-python==1.7.4",
-    "mkdocstrings==0.24.0",
+    "mkdocstrings-python==1.10.7",
 ]
 
 [project.scripts]
