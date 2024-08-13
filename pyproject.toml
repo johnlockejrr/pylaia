@@ -52,7 +52,7 @@ Tracker = "https://gitlab.teklia.com/atr/pylaia/issues/"
 [project.optional-dependencies]
 dev = [
     "black",
-    "isort",
+    "isort==5.13.2",
     "pre-commit",
 ]
 test = [
