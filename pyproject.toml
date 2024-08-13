@@ -38,7 +38,7 @@ dependencies = [
     "torchvision>=0.14,<0.15",
     "mdutils==1.6.0",
     "prettytable==3.10.0",
-    "python-bidi==0.4.2"
+    "python-bidi==0.6.0"
 ]
 license = {text = "MIT"}
 
