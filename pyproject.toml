@@ -51,14 +51,13 @@ Tracker = "https://gitlab.teklia.com/atr/pylaia/issues/"
 
 [project.optional-dependencies]
 dev = [
-    "black",
     "pre-commit",
 ]
 test = [
-    "tox",
+    "tox==4.17.1",
 ]
 docs = [
-    "black==23.11.0",
+    "black==24.8.0",
     "mkdocs-autorefs==0.5.0",
     "mkdocs-gen-files==0.5.0",
     "mkdocs-literate-nav==0.6.1",
