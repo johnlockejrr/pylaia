@@ -1,7 +1,7 @@
 from typing import Callable, Optional, Union
 
 import pytorch_lightning as pl
-from bidi.algorithm import get_display
+from bidi import get_display
 from tqdm.auto import tqdm
 
 import laia.common.logging as log
