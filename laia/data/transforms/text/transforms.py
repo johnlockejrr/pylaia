@@ -1,7 +1,7 @@
 import re
 from typing import Dict, List, Union
 
-from bidi.algorithm import get_display
+from bidi import get_display
 
 import laia.common.logging as log
 from laia.common.arguments import ReadingOrder
