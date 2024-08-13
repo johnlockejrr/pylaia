@@ -1,5 +1,37 @@
 # Releases
 
+## 1.1.1
+
+Released on **12 August 2024** &bull; View on [Gitlab](https://gitlab.teklia.com/atr/pylaia/-/releases/1.1.1)
+
+### Breaking changes
+
+- The [nnutils](https://gitlab.teklia.com/atr/nnutils/) library is no longer maintained and is only compatible with Python 3.6, 3.7, 3.8. As such its dependency has been removed. The `crnn.use_masks` parameter has been removed. It is still supported to keep the compatibility with older training configuration but will be ignored.
+
+### Feature
+
+- The number of worker processes created in dataloaders is now exposed through the `data.num_workers`  parameter.
+- There is a new command to run basic checks and compute statistics on your training dataset. Learn more about it in [the documentation](https://atr.pages.teklia.com/pylaia/usage/datasets/).
+- Pretraining is now available. Load the weights of a previous checkpoint using the `train.pretrain` parameter when fine-tuning a model on a new dataset. Learn more about it in [the documentation](https://atr.pages.teklia.com/pylaia/usage/training/#resume-training-from-a-checkpoint).
+- When training on a small dataset, freezing some of the layers can help with model convergence. The `train.freeze_layers` parameter supports freezing:
+
+    - convolutional layers,
+    - recurrent layers,
+    - linear layers.
+
+- Proper support for right-to-left (RTL) languages is now available. Enable it using the `data.reading_order` argument both during [training](https://atr.pages.teklia.com/pylaia/usage/training/#train-on-right-to-left-reading-order) and [decoding](https://atr.pages.teklia.com/pylaia/usage/prediction/#predict-on-right-to-left-data).
+
+### Dependencies
+
+- Bumped [pytorch-lightning](https://pypi.org/project/pytorch-lightning/) to version `1.4.2`.
+- Bumped [textdistance](https://pypi.org/project/textdistance/) to version `4.6.1`.
+
+### Misc
+
+- A deprecation warning from jsonargparse was fixed.
+- The package's metadata are now stored in `pyproject.toml` as per [PEP-0621](https://peps.python.org/pep-0621/).
+- PyLaia now uses [ruff](https://docs.astral.sh/ruff/) for linting and formatting.
+
 ## 1.1.0
 
 Released on **22 December 2023** &bull; View on [Gitlab](https://gitlab.teklia.com/atr/pylaia/-/releases/1.1.0)
