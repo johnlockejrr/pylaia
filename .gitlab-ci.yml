@@ -31,11 +31,11 @@ test:
   parallel:
     matrix:
       - IMAGE:
-        - python:3.9
         - python:3.10
+        - python:3.11
 
 lint:
-  image: python:3.10
+  image: python:3.11
   stage: test
 
   cache:
@@ -59,7 +59,7 @@ lint:
 
 deploy-pypi:
   stage: release
-  image: python:3.10
+  image: python:3.11
 
   only:
     - tags
@@ -112,7 +112,7 @@ bump-python-deps:
 
 # Make sure docs still build correctly
 .docs:
-  image: python:3.10
+  image: python:3.11
   artifacts:
     paths:
       - public
@@ -145,7 +145,7 @@ pages:
     - schedules
 
 docs-deploy:
-  image: node:18
+  image: node:22
   stage: deploy
 
   dependencies:
@@ -168,7 +168,7 @@ docs-deploy:
     - surge public ${CI_ENVIRONMENT_URL}
 
 docs-stop-surge:
-  image: node:18
+  image: node:22
   stage: deploy
   when: manual
 
