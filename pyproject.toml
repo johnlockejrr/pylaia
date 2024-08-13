@@ -63,8 +63,7 @@ docs = [
     "mkdocs-literate-nav==0.6.1",
     "mkdocs-material==9.4.5",
     "mkdocs-section-index==0.3.8",
-    "mkdocstrings-python==1.7.4",
-    "mkdocstrings==0.24.0",
+    "mkdocstrings-python==1.10.7",
 ]
 
 [project.scripts]
