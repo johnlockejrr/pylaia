@@ -32,7 +32,7 @@ def test_cpu(tmpdir, num_processes):
         callbacks=[TrainingTimer(), __TestCallback()],
         accelerator="ddp_cpu" if num_processes > 1 else None,
         num_processes=num_processes,
-        plugins=[DummyLoggingPlugin(log_filepath)],
+        strategy=DummyLoggingPlugin(log_filepath),
     )
     trainer.fit(DummyEngine(), datamodule=DummyMNIST(batch_size=1))
 
