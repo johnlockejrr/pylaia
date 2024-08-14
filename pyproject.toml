@@ -87,10 +87,6 @@ source = [
 [tool.coverage.run]
 branch = true
 parallel = true
-include = [
-   "laia/*",
-   "tests/*"
-]
 
 [tool.coverage.report]
 show_missing = false
