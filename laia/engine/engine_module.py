@@ -159,9 +159,3 @@ class EngineModule(pl.LightningModule):
             sync_dist=True,
         )
         return {"loss": batch_loss, "batch_y_hat": batch_y_hat}
-
-    def get_progress_bar_dict(self):
-        items = super().get_progress_bar_dict()
-        # remove version number
-        items.pop("v_num", None)
-        return items

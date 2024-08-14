@@ -127,7 +127,9 @@ def test_train_can_resume_training(tmpdir, caplog):
         "optimizer": OptimizerArgs(name="SGD"),
         "train": TrainArgs(augment_training=True),
         "trainer": TrainerArgs(
-            progress_bar_refresh_rate=0, weights_summary=None, max_epochs=1
+            enable_model_summary=False,
+            max_epochs=1,
+            enable_progress_bar=False,
         ),
     }
     # run to have a checkpoint
@@ -156,7 +158,9 @@ def test_pretraining(tmpdir, caplog):
         "optimizer": OptimizerArgs(name="SGD"),
         "train": TrainArgs(augment_training=True),
         "trainer": TrainerArgs(
-            progress_bar_refresh_rate=0, weights_summary=None, max_epochs=1
+            enable_model_summary=False,
+            max_epochs=1,
+            enable_progress_bar=False,
         ),
     }
     script.run(*args, **kwargs)
@@ -192,7 +196,9 @@ def test_train_early_stops(tmpdir, caplog):
         data=DataArgs(batch_size=3),
         train=TrainArgs(early_stopping_patience=2),
         trainer=TrainerArgs(
-            progress_bar_refresh_rate=0, weights_summary=None, max_epochs=5
+            enable_model_summary=False,
+            max_epochs=5,
+            enable_progress_bar=False,
         ),
     )
     assert (
@@ -217,7 +223,9 @@ def test_train_with_scheduler(tmpdir, caplog):
         optimizer=OptimizerArgs(learning_rate=1),
         scheduler=SchedulerArgs(active=True, patience=0, monitor="va_wer", factor=0.5),
         trainer=TrainerArgs(
-            progress_bar_refresh_rate=0, weights_summary=None, max_epochs=5
+            enable_model_summary=False,
+            max_epochs=5,
+            enable_progress_bar=False,
         ),
     )
     assert "E1: lr-RMSprop 1.000e+00 ⟶ 5.000e-01" in caplog.messages
@@ -251,7 +259,7 @@ def test_train_can_overfit_one_image(tmpdir, caplog):
             early_stopping_patience=100,  # disable early stopping
         ),
         trainer=TrainerArgs(
-            weights_summary=None,
+            enable_model_summary=False,
             overfit_batches=1,
             max_epochs=70,
             check_val_every_n_epoch=100,  # disable validation

@@ -7,7 +7,6 @@ from io import BytesIO
 from typing import Any, Callable, List, Optional, Union
 
 import natsort as ns
-import pytorch_lightning as pl
 import torch
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
 from pytorch_lightning.callbacks.model_checkpoint import ModelCheckpoint
@@ -17,6 +16,16 @@ from laia.common.logging import get_logger
 from laia.utils import SymbolsTable
 
 _logger = get_logger(__name__)
+
+
+def _lookup_key(obj_class, dict_keys: list[str]) -> str | None:
+    return next(
+        filter(
+            lambda key: key.startswith(obj_class.__name__),
+            dict_keys,
+        ),
+        None,
+    )
 
 
 class Loader:
@@ -121,18 +130,20 @@ class ModelLoader(ObjectLoader):
 
     @staticmethod
     def find_best(directory: str, monitor: str, mode: str = "min") -> Optional[str]:
-        ckpts = [
-            os.path.join(directory, f)
-            for f in os.listdir(directory)
-            if f.endswith(".ckpt")
-        ]
-        ckpts = [(f, torch.load(f, map_location="cpu")) for f in ckpts]
-        ckpts = [
-            (f, ckpt["callbacks"][type(pl.callbacks.ModelCheckpoint())])
-            for f, ckpt in ckpts
-        ]
-        # note: requires checkpoints generated using pl>1.0.4
-        ckpts = [(f, ckpt) for f, ckpt in ckpts if ckpt.get("monitor") == monitor]
+        ckpts = []
+        for f in os.listdir(directory):
+            if not f.endswith(".ckpt"):
+                continue
+
+            filepath = os.path.join(directory, f)
+            callbacks = torch.load(filepath, map_location="cpu")["callbacks"]
+            callback_key = _lookup_key(
+                ModelCheckpoint, dict_keys=list(callbacks.keys())
+            )
+            # note: requires checkpoints generated using pl>1.0.4
+            if callbacks[callback_key].get("monitor") == monitor:
+                ckpts.append((filepath, callbacks[callback_key]))
+
         if not ckpts:
             return
         mode = min if mode == "min" else max
@@ -193,23 +204,31 @@ class ModelLoader(ObjectLoader):
         checkpoint["optimizer_states"] = []
 
         # Reinitialize the checkpoint callback
-        checkpoint["callbacks"][ModelCheckpoint]["best_model_score"] = torch.tensor(
+        callback_key = _lookup_key(
+            ModelCheckpoint, dict_keys=list(checkpoint["callbacks"].keys())
+        )
+
+        checkpoint["callbacks"][callback_key]["best_model_score"] = torch.tensor(
             float("inf")
         )
-        checkpoint["callbacks"][ModelCheckpoint]["current_score"] = torch.tensor(
+        checkpoint["callbacks"][callback_key]["current_score"] = torch.tensor(
             float("inf")
         )
-        checkpoint["callbacks"][ModelCheckpoint][
-            "best_model_path"
-        ] = new_checkpoint_path
+        checkpoint["callbacks"][callback_key]["best_model_path"] = new_checkpoint_path
+
+        early_stopping_key = _lookup_key(
+            EarlyStopping, dict_keys=list(checkpoint["callbacks"].keys())
+        )
 
         # Reinitialize the early stopping callback
-        checkpoint["callbacks"][EarlyStopping]["wait_count"] = 0
-        checkpoint["callbacks"][EarlyStopping]["stopped_epoch"] = 0
-        checkpoint["callbacks"][EarlyStopping]["best_score"] = torch.tensor(
+        checkpoint["callbacks"][early_stopping_key]["wait_count"] = 0
+        checkpoint["callbacks"][early_stopping_key]["stopped_epoch"] = 0
+        checkpoint["callbacks"][early_stopping_key]["best_score"] = torch.tensor(
             float("inf")
         )
-        checkpoint["callbacks"][EarlyStopping]["patience"] = early_stopping_patience
+        checkpoint["callbacks"][early_stopping_key][
+            "patience"
+        ] = early_stopping_patience
 
         # Save new checkpoint
         torch.save(checkpoint, new_checkpoint_path)

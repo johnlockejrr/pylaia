@@ -57,6 +57,7 @@ class CommonArgs:
                 the highest epoch number, globbing will be done inside the
                 `experiment_dirname` directory
         monitor: Metric to monitor for early stopping and checkpointing.
+        refresh_rate: Determines at which rate (in number of batches) the progress bars get updated.
     """
 
     seed: int = 74565  # 0x12345
@@ -65,6 +66,7 @@ class CommonArgs:
     experiment_dirname: str = "experiment"
     monitor: Monitor = Monitor.va_cer
     checkpoint: Optional[str] = None
+    refresh_rate: int = 1
 
     def __post_init__(self):
         self.experiment_dirpath = join(self.train_path, self.experiment_dirname)
@@ -296,10 +298,6 @@ def __get_trainer_fields() -> List[Tuple[str, Type, Any]]:
 @dataclass
 class TrainerArgs(make_dataclass("", __get_trainer_fields())):
     __doc__ = pl.Trainer.__init__.__doc__
-
-    def __post_init__(self):
-        if self.progress_bar_refresh_rate is None:
-            self.progress_bar_refresh_rate = 1
 
 
 @dataclass

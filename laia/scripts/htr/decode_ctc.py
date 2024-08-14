@@ -87,7 +87,7 @@ def run(
 
     # prepare the testing callbacks
     callbacks = [
-        ProgressBar(refresh_rate=trainer.progress_bar_refresh_rate),
+        ProgressBar(refresh_rate=common.refresh_rate),
         Segmentation(
             syms,
             segmentation=decode.segmentation,

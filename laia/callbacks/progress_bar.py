@@ -4,14 +4,17 @@ from logging import INFO
 from typing import Dict, Optional
 
 import pytorch_lightning as pl
-from pytorch_lightning.callbacks.progress import convert_inf
+from pytorch_lightning.callbacks.progress.tqdm_progress import (
+    TQDMProgressBar,
+    convert_inf,
+)
 from tqdm.auto import tqdm
 
 import laia.common.logging as log
 from laia.callbacks.meters import Timer
 
 
-class ProgressBar(pl.callbacks.ProgressBar):
+class ProgressBar(TQDMProgressBar):
     def __init__(
         self,
         refresh_rate: int = 1,
@@ -95,7 +98,7 @@ class ProgressBar(pl.callbacks.ProgressBar):
 
     def on_validation_epoch_start(self, trainer, *args, **kwargs):
         super().on_validation_start(trainer, *args, **kwargs)
-        if trainer.running_sanity_check:
+        if trainer._run_sanity_check:
             self.val_progress_bar.set_description_str("VA sanity check")
         else:
             self.tr_timer.stop()
@@ -104,21 +107,25 @@ class ProgressBar(pl.callbacks.ProgressBar):
 
     def on_train_batch_end(self, trainer, *args, **kwargs):
         # skip parent to avoid two postfix calls
-        super(pl.callbacks.ProgressBar, self).on_train_batch_end(
-            trainer, *args, **kwargs
-        )
+        super(
+            pl.callbacks.progress.tqdm_progress.TQDMProgressBar, self
+        ).on_train_batch_end(trainer, *args, **kwargs)
         if self._should_update(self.train_batch_idx, self.total_train_batches):
             self._update_bar(self.main_progress_bar)
             self.main_progress_bar.set_postfix(
                 refresh=True,
-                running_loss=trainer.progress_bar_dict["loss"],
+                running_loss=self.get_metrics(trainer, trainer.lightning_module)[
+                    "loss"
+                ],
                 **trainer.progress_bar_metrics.get("gpu_stats", {}),
             )
 
     def set_postfix(self, pbar, prefix):
         l = len(prefix)
         postfix = {}
-        for k, v in self.trainer.progress_bar_dict.items():
+        for k, v in self.get_metrics(
+            self.trainer, self.trainer.lightning_module
+        ).items():
             if k.startswith(prefix):
                 postfix[k[l:]] = self.format[k[l:]].format(v)
             elif not k.startswith("tr_") and not k.startswith("va_"):
@@ -156,7 +163,9 @@ class ProgressBar(pl.callbacks.ProgressBar):
 
     def on_validation_batch_end(self, *args, **kwargs):
         # skip parent
-        super(pl.callbacks.ProgressBar, self).on_validation_batch_end(*args, **kwargs)
+        super(
+            pl.callbacks.progress.tqdm_progress.TQDMProgressBar, self
+        ).on_validation_batch_end(*args, **kwargs)
         if self._should_update(self.val_batch_idx, self.total_val_batches):
             self._update_bar(self.val_progress_bar)
 
@@ -172,7 +181,7 @@ class ProgressBar(pl.callbacks.ProgressBar):
             # log validation bar
             log.log(self.level, tqdm.format_meter(**format_dict))
 
-            if trainer.running_sanity_check:
+            if trainer._run_sanity_check:
                 self.val_progress_bar.refresh()
                 log.log(
                     self.level,
@@ -183,7 +192,9 @@ class ProgressBar(pl.callbacks.ProgressBar):
 
     def on_validation_end(self, *args, **kwargs):
         # skip parent to avoid postfix call
-        super(pl.callbacks.ProgressBar, self).on_validation_end(*args, **kwargs)
+        super(
+            pl.callbacks.progress.tqdm_progress.TQDMProgressBar, self
+        ).on_validation_end(*args, **kwargs)
         self.val_progress_bar.close()
 
     def on_test_end(self, *args, **kwargs):

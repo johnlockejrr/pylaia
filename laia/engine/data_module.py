@@ -50,6 +50,11 @@ class DataModule(pl.LightningDataModule):
         self.batch_size = batch_size
         # TODO: https://github.com/PyTorchLightning/pytorch-lightning/issues/2196
         self.num_workers = num_workers or multiprocessing.cpu_count()
+
+        self._train_transforms = None
+        self._val_transforms = None
+        self._test_transforms = None
+
         if stage == "fit":
             self.tr_ds = None
             self.va_ds = None
@@ -71,14 +76,39 @@ class DataModule(pl.LightningDataModule):
                 space_display=space_display,
             )
             _logger.info(f"Training data transforms:\n{tr_img_transform}")
-            super().__init__(
-                train_transforms=(tr_img_transform, txt_transform),
-                val_transforms=base_img_transform,
-            )
+            self.train_transforms = (tr_img_transform, txt_transform)
+            self.val_transforms = base_img_transform
         elif stage == "test":
             self.te_ds = None
             self.te_img_list = te_img_list
-            super().__init__(test_transforms=base_img_transform)
+            self.test_transforms = base_img_transform
+
+    @property
+    def train_transforms(self):
+        """Optional transforms (or collection of transforms) you can apply to train dataset."""
+        return self._train_transforms
+
+    @train_transforms.setter
+    def train_transforms(self, t):
+        self._train_transforms = t
+
+    @property
+    def val_transforms(self):
+        """Optional transforms (or collection of transforms) you can apply to validation dataset."""
+        return self._val_transforms
+
+    @val_transforms.setter
+    def val_transforms(self, t):
+        self._val_transforms = t
+
+    @property
+    def test_transforms(self):
+        """Optional transforms (or collection of transforms) you can apply to test dataset."""
+        return self._test_transforms
+
+    @test_transforms.setter
+    def test_transforms(self, t):
+        self._test_transforms = t
 
     def setup(self, stage: Optional[str] = None):
         if stage == "fit":
