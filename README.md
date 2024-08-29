@@ -110,4 +110,4 @@ Work in this toolkit was financially supported by the [Pattern Recognition and H
 
 ## Contact
 
-Have a question about PyLaia? Please contact us at [this link](mailto:team@teklia.com?subject=Feedback%20on%20PyLaia%3A%20).
+🆘 Have a question about PyLaia? Please contact us on [support.teklia.com](https://support.teklia.com/c/machine-learning/pylaia/13).
