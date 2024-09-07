@@ -33,7 +33,7 @@ dependencies = [
     "scipy==1.11.3",
     "textdistance==4.6.3",
     "torch>=1.13,<1.14",
-    "torchaudio>=0.13,<0.14",
+    "torchaudio==2.4.1",
     "torchmetrics<0.8.0",
     "torchvision>=0.14,<0.15",
     "mdutils==1.6.0",
