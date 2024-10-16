@@ -29,8 +29,13 @@ class SymbolsTable:
         f = open(f)
         self.clear()
         try:
-            lines = [line.split() for line in f if len(line.split())]
-            for s, v in lines:
+            lines = f.read().splitlines()
+            mapping = [
+                list(filter(bool, line.split(" ")))
+                for line in lines
+                if len(list(filter(bool, line.split(" "))))
+            ]
+            for s, v in mapping:
                 self.add(s, int(v))
         except Exception:
             raise

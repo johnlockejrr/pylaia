@@ -86,19 +86,32 @@ def test_contains():
 @pytest.mark.parametrize("as_type", [str, Path])
 def test_load(tmpdir, as_type):
     file = tmpdir / "f"
-    file.write_text("\n\na   1\nb     2\n", "utf-8")
+    file.write_text("\n\na 1\nb     2\n\t           3\n\n", "utf-8")
     st = SymbolsTable(as_type(file))
-    assert len(st) == 2
+    assert len(st) == 3
     assert st["a"] == 1
     assert st["b"] == 2
+    assert st["\t"] == 3
     assert st[1] == "a"
     assert st[2] == "b"
+    assert st[3] == "\t"
+
+
+def test_load_type_error(tmpdir):
+    file = tmpdir / "f"
+    file.write_text("\n 1", "utf-8")
+    with pytest.raises(
+        ValueError, match=re.escape("not enough values to unpack (expected 2, got 1)")
+    ):
+        SymbolsTable(file)
 
 
 def test_load_value_error(tmpdir):
     file = tmpdir / "f"
-    file.write_text("\n\na   1\nb     c\n", "utf-8")
-    with pytest.raises(ValueError):
+    file.write_text("a X", "utf-8")
+    with pytest.raises(
+        ValueError, match=re.escape("invalid literal for int() with base 10: 'X'")
+    ):
         SymbolsTable(file)
 
 
