@@ -35,7 +35,7 @@ dependencies = [
     "torch>=1.13,<1.14",
     "torchaudio>=0.13,<0.14",
     "torchmetrics<0.8.0",
-    "torchvision==0.19.1",
+    "torchvision==0.20.0",
     "mdutils==1.6.0",
     "prettytable==3.11.0",
     "python-bidi==0.6.0"
