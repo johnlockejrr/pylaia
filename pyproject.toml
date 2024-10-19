@@ -54,7 +54,7 @@ dev = [
     "pre-commit==3.8.0",
 ]
 test = [
-    "tox==4.21.2",
+    "tox==4.23.0",
 ]
 docs = [
     "black==24.8.0",
