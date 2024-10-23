@@ -4,8 +4,8 @@ from collections import OrderedDict
 from pathlib import Path
 
 import pytest
-import pytorch_lightning as pl
 import torch
+from pytorch_lightning.callbacks import ModelCheckpoint
 
 from laia.common.loader import ModelLoader, ObjectLoader
 from laia.dummies import DummyEngine, DummyMNIST, DummyTrainer
@@ -173,12 +173,8 @@ def test_model_loader_find_best(tmpdir):
     # with no-monitor ckpts
     trainer = DummyTrainer(
         default_root_dir=tmpdir,
-        callbacks=[
-            pl.callbacks.ModelCheckpoint(
-                dirpath=tmpdir, save_top_k=-1, filename="{epoch}"
-            )
-        ],
-        checkpoint_callback=True,
+        callbacks=[ModelCheckpoint(dirpath=tmpdir, save_top_k=-1, filename="{epoch}")],
+        enable_checkpointing=True,
         max_epochs=3,
     )
     trainer.fit(DummyEngine(), datamodule=DummyMNIST())
@@ -186,11 +182,11 @@ def test_model_loader_find_best(tmpdir):
 
     # with monitor ckpts
     monitor = "bar"
-    mc = pl.callbacks.ModelCheckpoint(
+    mc = ModelCheckpoint(
         dirpath=tmpdir, save_top_k=-1, monitor=monitor, mode="max", filename="{epoch}"
     )
     trainer = DummyTrainer(
-        default_root_dir=tmpdir, callbacks=[mc], checkpoint_callback=True, max_epochs=3
+        default_root_dir=tmpdir, callbacks=[mc], enable_checkpointing=True, max_epochs=3
     )
     trainer.fit(DummyEngine(), datamodule=DummyMNIST())
     assert (
@@ -210,7 +206,7 @@ def test_model_loader_prepare_checkpoint(tmpdir):
     trainer = DummyTrainer(
         default_root_dir=tmpdir,
         callbacks=[
-            pl.callbacks.ModelCheckpoint(
+            ModelCheckpoint(
                 dirpath=exp_dirpath,
                 save_top_k=-1,
                 monitor=monitor,
@@ -218,7 +214,7 @@ def test_model_loader_prepare_checkpoint(tmpdir):
                 filename="{epoch}",
             )
         ],
-        checkpoint_callback=True,
+        enable_checkpointing=True,
         max_epochs=2,
     )
     trainer.fit(DummyEngine(), datamodule=DummyMNIST())

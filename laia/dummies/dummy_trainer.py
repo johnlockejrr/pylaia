@@ -4,14 +4,14 @@ import pytorch_lightning as pl
 class DummyTrainer(pl.Trainer):
     def __init__(self, **kwargs):
         defaults = {
-            "checkpoint_callback": False,
+            "enable_checkpointing": False,
             "logger": True,
-            "weights_summary": None,
+            "enable_model_summary": False,
             "max_epochs": 1,
             "limit_train_batches": 10,
             "limit_val_batches": 10,
             "limit_test_batches": 10,
-            "progress_bar_refresh_rate": 0,
+            "enable_progress_bar": False,
             "deterministic": True,
         }
         defaults.update(kwargs)

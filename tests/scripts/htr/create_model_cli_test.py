@@ -90,6 +90,7 @@ common:
   experiment_dirname: experiment
   monitor: va_cer
   checkpoint: null
+  refresh_rate: 1
 logging:
   fmt: '[%(asctime)s %(levelname)s %(name)s] %(message)s'
   level: INFO

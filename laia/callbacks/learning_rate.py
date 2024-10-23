@@ -1,3 +1,5 @@
+from itertools import chain
+
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks.lr_monitor import LearningRateMonitor
 from pytorch_lightning.utilities import rank_zero_only
@@ -19,8 +21,8 @@ class LearningRate(LearningRateMonitor):
                 "that have no learning rate schedulers",
                 RuntimeWarning,
             )
-        names = self._find_names(trainer.lr_schedulers)
-        self.lrs = {name: [] for name in names}
+        names, _, _ = self._find_names_from_schedulers(trainer.lr_schedulers)
+        self.lrs = {name: [] for name in chain.from_iterable(names)}
         self.last_values = {}
 
     @rank_zero_only

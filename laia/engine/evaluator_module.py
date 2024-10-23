@@ -26,9 +26,3 @@ class EvaluatorModule(pl.LightningModule):
             self.global_step,
         ):
             return self.model(batch_x)
-
-    def get_progress_bar_dict(self):
-        items = super().get_progress_bar_dict()
-        # remove version number
-        items.pop("v_num", None)
-        return items

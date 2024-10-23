@@ -39,6 +39,7 @@ The full list of parameters is detailed in this section.
 | `common.experiment_dirname` | Directory name of the experiment.                                                                                                                                                                                                                   | `str`           | `experiment`     |
 | `common.monitor`            | Metric to monitor for early stopping and checkpointing.                                                                                                                                                                                             | `Monitor`       | `Monitor.va_cer` |
 | `common.checkpoint`         | Checkpoint to load. Must be a filepath, a filename, a glob pattern or `None` (in this case, the best checkpoint will be loaded). Note that the checkpoint will be searched in `common.experiment_dirname`, unless you provide an absolute filepath. | `Optional[str]` | `None`           |
+| `common.refresh_rate`         | Determines at which rate (in number of batches) the progress bars get updated. | `int`        | `1`  |
 
 ### Data arguments
 

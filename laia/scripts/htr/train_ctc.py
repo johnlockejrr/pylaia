@@ -148,7 +148,7 @@ def run(
         strict=False,  # training_step may return None
     )
     callbacks = [
-        ProgressBar(refresh_rate=trainer.progress_bar_refresh_rate),
+        ProgressBar(refresh_rate=common.refresh_rate),
         checkpoint_callback,
         early_stopping_callback,
         checkpoint_callback,
@@ -161,15 +161,13 @@ def run(
     # prepare the trainer
     trainer = pl.Trainer(
         default_root_dir=common.train_path,
-        resume_from_checkpoint=checkpoint_path,
         callbacks=callbacks,
         logger=EpochCSVLogger(common.experiment_dirpath),
-        checkpoint_callback=True,
         **vars(trainer),
     )
 
     # train!
-    trainer.fit(engine_module, datamodule=data_module)
+    trainer.fit(engine_module, datamodule=data_module, ckpt_path=checkpoint_path)
 
     # training is over
     if early_stopping_callback.stopped_epoch:

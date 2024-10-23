@@ -42,7 +42,7 @@ train(
     ),
     trainer=TrainerArgs(
         max_epochs=epochs,
-        weights_summary=None,
+        enable_model_summary=False,
         gpus=1,
         precision=16,
         # training is still not deterministic on GPU

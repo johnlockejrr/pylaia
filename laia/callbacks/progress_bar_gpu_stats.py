@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple
 
 import pytorch_lightning as pl
-from pytorch_lightning.utilities import DeviceType, rank_zero_only
+from pytorch_lightning.utilities.enums import DeviceType
 from pytorch_lightning.utilities.exceptions import MisconfigurationException
 
 import laia.common.logging as log
@@ -9,37 +9,37 @@ import laia.common.logging as log
 _logger = log.get_logger(__name__)
 
 
-class ProgressBarGPUStats(pl.callbacks.GPUStatsMonitor):
-    def __init__(self):
-        super().__init__(
-            memory_utilization=True,
-            gpu_utilization=False,
-            intra_step_time=False,
-            inter_step_time=False,
-            fan_speed=False,
-            temperature=False,
-        )
+class ProgressBarGPUStats(pl.callbacks.device_stats_monitor.DeviceStatsMonitor):
+    # def __init__(self) -> None:
+    #     super().__init__(
+    #         memory_utilization=True,
+    #         gpu_utilization=False,
+    #         intra_step_time=False,
+    #         inter_step_time=False,
+    #         fan_speed=False,
+    #         temperature=False,
+    #     )
 
     def on_train_start(self, trainer, *args, **kwargs):
         if not trainer._device_type == DeviceType.GPU:
             raise MisconfigurationException(
-                "You are using GPUStatsMonitor but are not running on GPU"
+                "You are using DeviceStatsMonitor but are not running on GPU"
                 f" since gpus attribute in Trainer is set to {trainer.gpus}."
             )
         self._gpu_ids = ",".join(map(str, trainer.data_parallel_device_ids))
 
-    def on_train_batch_start(self, *_, **__):
-        pass
+    # def on_train_batch_start(self, *_, **__):
+    #     pass
 
-    @rank_zero_only
-    def on_train_batch_end(self, trainer, *_, **__):
-        gpu_stat_keys = self._get_gpu_stat_keys() + self._get_gpu_device_stat_keys()
-        gpu_stats = self._get_gpu_stats([k for k, _ in gpu_stat_keys])
-        log.debug("GPU stats: {}", gpu_stats)
-        progress_bar_metrics = ProgressBarGPUStats.parse_gpu_stats(
-            self._gpu_ids, gpu_stats, gpu_stat_keys
-        )
-        trainer.progress_bar_metrics["gpu_stats"] = progress_bar_metrics
+    # @rank_zero_only
+    # def on_train_batch_end(self, trainer, *_, **__):
+    #     gpu_stat_keys = self._get_gpu_stat_keys() + self._get_gpu_device_stat_keys()
+    #     gpu_stats = self._get_gpu_stats([k for k, _ in gpu_stat_keys])
+    #     log.debug("GPU stats: {}", gpu_stats)
+    #     progress_bar_metrics = ProgressBarGPUStats.parse_gpu_stats(
+    #         self._gpu_ids, gpu_stats, gpu_stat_keys
+    #     )
+    #     trainer.progress_bar_metrics["gpu_stats"] = progress_bar_metrics
 
     @staticmethod
     def parse_gpu_stats(

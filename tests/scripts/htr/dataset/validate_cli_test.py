@@ -38,6 +38,7 @@ common:
   experiment_dirname: experiment
   monitor: va_cer
   checkpoint: null
+  refresh_rate: 1
 train:
   delimiters:
   - <space>

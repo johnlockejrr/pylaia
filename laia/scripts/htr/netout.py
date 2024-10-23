@@ -72,7 +72,7 @@ def run(
     # prepare the testing callbacks
     callbacks = [
         Netout(writers, output_transform=netout.output_transform),
-        ProgressBar(refresh_rate=trainer.progress_bar_refresh_rate),
+        ProgressBar(refresh_rate=common.refresh_rate),
     ]
 
     # prepare the trainer
