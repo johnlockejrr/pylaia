@@ -161,7 +161,7 @@ def run(
 
     # prepare the logger
     if train.log_to == Logger.wandb:
-        logger = pl.logger.WandbLogger(project="PyLaia")
+        logger = pl.loggers.WandbLogger(project="PyLaia")
         logger.watch(model)
     else:
         logger = EpochCSVLogger(common.experiment_dirpath)
