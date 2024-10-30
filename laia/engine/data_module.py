@@ -70,6 +70,8 @@ class DataModule(pl.LightningDataModule):
                 space_token=space_token,
                 space_display=space_display,
             )
+            self.save_hyperparameters()
+
             _logger.info(f"Training data transforms:\n{tr_img_transform}")
             super().__init__(
                 train_transforms=(tr_img_transform, txt_transform),

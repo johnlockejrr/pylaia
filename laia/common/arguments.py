@@ -18,6 +18,11 @@ from jsonargparse.typing import (
 GeNeg1Int = restricted_number_type(None, int, (">=", -1))
 
 
+class Logger(str, Enum):
+    csv = "csv"
+    wandb = "wandb"
+
+
 class Monitor(str, Enum):
     va_loss = "va_loss"
     va_cer = "va_cer"
@@ -228,6 +233,7 @@ class TrainArgs:
     early_stopping_patience: NonNegativeInt = 20
     gpu_stats: bool = False
     augment_training: bool = False
+    log_to: Logger = Logger.csv
 
 
 @dataclass

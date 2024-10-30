@@ -12,6 +12,7 @@ from laia.common.arguments import (
     CommonArgs,
     DataArgs,
     DecodeArgs,
+    Logger,
     OptimizerArgs,
     SchedulerArgs,
     TrainArgs,
@@ -158,12 +159,19 @@ def run(
     if scheduler.active:
         callbacks.append(LearningRate(logging_interval="epoch"))
 
+    # prepare the logger
+    if train.log_to == Logger.wandb:
+        logger = pl.logger.WandbLogger(project="PyLaia")
+        logger.watch(model)
+    else:
+        logger = EpochCSVLogger(common.experiment_dirpath)
+
     # prepare the trainer
     trainer = pl.Trainer(
         default_root_dir=common.train_path,
         resume_from_checkpoint=checkpoint_path,
         callbacks=callbacks,
-        logger=EpochCSVLogger(common.experiment_dirpath),
+        logger=logger,
         checkpoint_callback=True,
         **vars(trainer),
     )
