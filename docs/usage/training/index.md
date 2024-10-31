@@ -208,7 +208,7 @@ data:
 By default, PyLaia logs metrics and losses to a local CSV file. You can chose to log into [Weights & Biases](https://wandb.ai/home) instead.
 
 To set up Weights & Biases:
-* Run `pip install pylaia[wandb]` to install the required library
+* Run `pip install pylaia[wandb]` to install the required dependencies
 * Sign in to Weights & Biases using `wandb login`
 
 Then, start training with `pylaia-htr-train-ctc --config config_train_model.yaml --train.log_to wandb`.
