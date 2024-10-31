@@ -101,7 +101,7 @@ train:
   early_stopping_patience: 20
   gpu_stats: false
   augment_training: false
-  log_to: csv
+  log_to_wandb: false
 logging:
   fmt: '[%(asctime)s %(levelname)s %(name)s] %(message)s'
   level: INFO

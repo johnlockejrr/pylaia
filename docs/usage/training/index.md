@@ -61,7 +61,7 @@ The full list of parameters is detailed in this section.
 | `train.early_stopping_patience` | Number of validation epochs with no improvement after which training will be stopped.                                                                        | `int`       | `20`          |
 | `train.gpu_stats`               | Whether to include GPU stats in the training progress bar.                                                                                                   | `bool`      | `False`       |
 | `train.augment_training`        | Whether to use data augmentation.                                                                                                                            | `bool`      | `False`       |
-| `train.log_to`                  | Logger to use during training. Should be either `"csv"` to log metrics locally, or `"wandb"` to report to Weights & Biases                                   | `Logger`    | `"csv"`       |
+| `train.log_to_wandb`            | Whether to log training metrics and parameters to Weights & Biases.                                                                                          | `bool`      | `False`       |
 
 
 ### Logging arguments
@@ -211,7 +211,7 @@ To set up Weights & Biases:
 * Run `pip install pylaia[wandb]` to install the required dependencies
 * Sign in to Weights & Biases using `wandb login`
 
-Then, start training with `pylaia-htr-train-ctc --config config_train_model.yaml --train.log_to wandb`.
+Then, start training with `pylaia-htr-train-ctc --config config_train_model.yaml --train.log_to_wandb true`.
 
 This will create a project called `PyLaia` in W&B with one run for each training. The following are monitored for each run:
 * Training and validation metrics (losses, CER, WER)
