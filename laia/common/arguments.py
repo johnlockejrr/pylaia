@@ -228,6 +228,7 @@ class TrainArgs:
     early_stopping_patience: NonNegativeInt = 20
     gpu_stats: bool = False
     augment_training: bool = False
+    log_to_wandb: bool = False
 
 
 @dataclass

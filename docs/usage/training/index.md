@@ -42,25 +42,26 @@ The full list of parameters is detailed in this section.
 
 ### Data arguments
 
-| Name               | Description                                       | Type        | Default       |
-| ------------------ | ------------------------------------------------- | ----------- | ------------- |
-| `data.batch_size`  | Batch size.                                       | `int`       | `8`           |
-| `data.color_mode`  | Color mode. Must be either `L`, `RGB` or `RGBA`.  | `ColorMode` | `ColorMode.L` |
-| `data.num_workers`  | Number of worker processes created in dataloaders | `int`       | `None`        |
-| `data.reading_order` | Reading order on the input lines: LFT (Left-to-Right) or RTL (Right-to-Left). | `ReadingOrder`       | `LFT`        |
+| Name                 | Description                                                                   | Type           | Default       |
+| -------------------- | ----------------------------------------------------------------------------- | -------------- | ------------- |
+| `data.batch_size`    | Batch size.                                                                   | `int`          | `8`           |
+| `data.color_mode`    | Color mode. Must be either `L`, `RGB` or `RGBA`.                              | `ColorMode`    | `ColorMode.L` |
+| `data.num_workers`   | Number of worker processes created in dataloaders                             | `int`          | `None`        |
+| `data.reading_order` | Reading order on the input lines: LFT (Left-to-Right) or RTL (Right-to-Left). | `ReadingOrder` | `LFT`         |
 
 ### Train arguments
 
-| Name                            | Description                                                                                                                   | Type               | Default       |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------- |
-| `train.delimiters`              | List of symbols representing the word delimiters.                                                                             | `List`             | `["<space>"]` |
-| `train.checkpoint_k`            | Model saving mode: `-1` all models will be saved, `0`: no models are saved, `k` the `k` best models are saved.                | `int`              | `3`           |
-| `train.resume`                  | Whether to resume training with a checkpoint. This option can be used to continue training on the same dataset. | `bool` | `False`       |
-| `train.pretrain`                | Whether to load pretrained weights from a checkpoint. This option can be used to load pretrained weights when fine-tuning a model on a new dataset. | `bool` | `False`       |
-| `train.freeze_layers`           | List of layers to freeze during training: `"conv"` to freeze convolutional layers, `"rnn"` to freeze recurrent layers, `"linear"` to freeze the linear layer | `List[str]` | `None`       |
-| `train.early_stopping_patience` | Number of validation epochs with no improvement after which training will be stopped.                                         | `int`              | `20`          |
-| `train.gpu_stats`               | Whether to include GPU stats in the training progress bar.                                                                    | `bool`             | `False`       |
-| `train.augment_training`        | Whether to use data augmentation.                                                                                             | `bool`             | `False`       |
+| Name                            | Description                                                                                                                                                  | Type        | Default       |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- | ------------- |
+| `train.delimiters`              | List of symbols representing the word delimiters.                                                                                                            | `List`      | `["<space>"]` |
+| `train.checkpoint_k`            | Model saving mode: `-1` all models will be saved, `0`: no models are saved, `k` the `k` best models are saved.                                               | `int`       | `3`           |
+| `train.resume`                  | Whether to resume training with a checkpoint. This option can be used to continue training on the same dataset.                                              | `bool`      | `False`       |
+| `train.pretrain`                | Whether to load pretrained weights from a checkpoint. This option can be used to load pretrained weights when fine-tuning a model on a new dataset.          | `bool`      | `False`       |
+| `train.freeze_layers`           | List of layers to freeze during training: `"conv"` to freeze convolutional layers, `"rnn"` to freeze recurrent layers, `"linear"` to freeze the linear layer | `List[str]` | `None`        |
+| `train.early_stopping_patience` | Number of validation epochs with no improvement after which training will be stopped.                                                                        | `int`       | `20`          |
+| `train.gpu_stats`               | Whether to include GPU stats in the training progress bar.                                                                                                   | `bool`      | `False`       |
+| `train.augment_training`        | Whether to use data augmentation.                                                                                                                            | `bool`      | `False`       |
+| `train.log_to_wandb`            | Whether to log training metrics and parameters to Weights & Biases.                                                                                          | `bool`      | `False`       |
 
 
 ### Logging arguments
@@ -201,3 +202,21 @@ trainer:
 data:
   reading_order: RTL
 ```
+
+### Train and log to Weights & Biases
+
+By default, PyLaia logs metrics and losses to a local CSV file. You can chose to log into [Weights & Biases](https://wandb.ai/home) instead.
+
+To set up Weights & Biases:
+* Run `pip install pylaia[wandb]` to install the required dependencies
+* Sign in to Weights & Biases using `wandb login`
+
+Then, start training with `pylaia-htr-train-ctc --config config_train_model.yaml --train.log_to_wandb true`.
+
+This will create a project called `PyLaia` in W&B with one run for each training. The following are monitored for each run:
+* Training and validation metrics (losses, CER, WER)
+* Model gradients
+* System metrics (GPU and CPU utilisation, temperature, allocated memory)
+* Hyperparameters (training configuration)
+
+A public dashboard is available [here](https://wandb.ai/starride-teklia/PyLaia%20demo) as an example.

@@ -158,12 +158,19 @@ def run(
     if scheduler.active:
         callbacks.append(LearningRate(logging_interval="epoch"))
 
+    # prepare the logger
+    loggers = [EpochCSVLogger(common.experiment_dirpath)]
+    if train.log_to_wandb:
+        wandb_logger = pl.loggers.WandbLogger(project="PyLaia")
+        wandb_logger.watch(model)
+        loggers.append(wandb_logger)
+
     # prepare the trainer
     trainer = pl.Trainer(
         default_root_dir=common.train_path,
         resume_from_checkpoint=checkpoint_path,
         callbacks=callbacks,
-        logger=EpochCSVLogger(common.experiment_dirpath),
+        logger=loggers,
         checkpoint_callback=True,
         **vars(trainer),
     )
