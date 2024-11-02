@@ -51,7 +51,7 @@ Tracker = "https://gitlab.teklia.com/atr/pylaia/issues/"
 
 [project.optional-dependencies]
 dev = [
-    "pre-commit==3.8.0",
+    "pre-commit==4.0.1",
 ]
 test = [
     "tox==4.18.0",
