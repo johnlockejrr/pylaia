@@ -1,3 +1,7 @@
 name: pylaia-doc
 version: 1
 title: PyLaia documentation
+nav:
+  - modules/ROOT/nav.adoc
+  - modules/get_started/nav.adoc
+  - modules/usage/nav.adoc

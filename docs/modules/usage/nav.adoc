@@ -1,0 +1,8 @@
+* xref:index.adoc[]
+** xref:datasets/index.adoc[]
+*** xref:datasets/format.adoc[]
+** xref:initialization/index.adoc[]
+** xref:language_models/index.adoc[]
+** xref:netout/index.adoc[]
+** xref:prediction/index.adoc[]
+** xref:training/index.adoc[]

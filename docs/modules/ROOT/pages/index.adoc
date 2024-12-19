@@ -19,4 +19,4 @@ Since 2022, three members of https://teklia.com/[TEKLIA] (https://gitlab.teklia.
 
 Click xref:original_paper.adoc[here] to learn more about the original paper.
 
-xref:get_started/index.adoc[Get started with PyLaia] now!
+xref:get_started:index.adoc[Get started with PyLaia] now!
