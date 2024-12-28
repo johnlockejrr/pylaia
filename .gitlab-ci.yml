@@ -198,6 +198,7 @@ antora-generate:
 
   script:
     - teklia-antora
+    - teklia-push-antora-ci
 
   artifacts:
     paths:
