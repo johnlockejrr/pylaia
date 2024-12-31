@@ -34,7 +34,7 @@ dependencies = [
     "textdistance==4.6.3",
     "torch>=1.13,<1.14",
     "torchaudio>=0.13,<0.14",
-    "torchmetrics<0.8.0",
+    "torchmetrics==1.6.1",
     "torchvision>=0.14,<0.15",
     "mdutils==1.6.0",
     "prettytable==3.11.0",
