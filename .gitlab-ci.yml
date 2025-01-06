@@ -212,7 +212,7 @@ antora-build:
     - antora-generate
 
   before_script:
-    - npm install
+    - npm install antora
 
   script:
     - npx antora antora-playbook.yml
