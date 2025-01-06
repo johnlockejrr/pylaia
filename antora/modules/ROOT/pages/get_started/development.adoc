@@ -1,0 +1,49 @@
+[#development]
+= Development
+
+PyLaia uses different tools during its development.
+
+[#linter]
+== Linter
+
+Code syntax is analyzed before submitting the code.
+
+To run the linter tools suite you may use https://pre-commit.com[pre-commit].
+
+[,shell]
+----
+pip install pre-commit
+pre-commit run -a
+----
+
+[#tests]
+== Tests
+
+[#unit-tests]
+=== Unit tests
+
+Tests are executed using https://tox.wiki/en/latest/[tox].
+
+[,shell]
+----
+pip install .[test]
+tox
+----
+
+[#documentation]
+== Documentation
+
+This documentation uses http://www.sphinx-doc.org/[Sphinx] and was generated using https://mkdocs.org/[MkDocs] and https://mkdocstrings.github.io/[mkdocstrings].
+
+[#setup]
+=== Setup
+
+Add the `docs` extra when installing `pylaia`:
+
+[,shell]
+----
+# In a clone of the Git repository
+pip install .[docs]
+----
+
+Build the documentation using `mkdocs serve -v`. You can then write in https://www.markdownguide.org/[Markdown] in the relevant `docs/*.md` files, and see live output on http://localhost:8000.
