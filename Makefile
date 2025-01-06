@@ -1,4 +1,7 @@
-.PHONY: release
+.PHONY: release antora
+
+antora:
+	npx antora antora-playbook.yml
 
 release:
 	# Grep the version from pyproject.toml, squeeze multiple spaces, delete double and single quotes, get 3rd val.
