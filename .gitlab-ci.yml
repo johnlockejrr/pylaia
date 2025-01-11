@@ -191,3 +191,32 @@ docs-stop-surge:
 
   script:
     - surge teardown ${CI_ENVIRONMENT_URL}
+
+antora-generate:
+  stage: build
+  image: registry.gitlab.teklia.com/internal/mkdocs-to-antora:latest
+
+  script:
+    - teklia-antora
+    - teklia-push-antora-ci
+
+  artifacts:
+    paths:
+      - antora
+
+antora-build:
+  stage: deploy
+  image: node:20
+
+  dependencies:
+    - antora-generate
+
+  before_script:
+    - npm install antora
+
+  script:
+    - npx antora antora-playbook.yml
+
+  artifacts:
+    paths:
+      - build
